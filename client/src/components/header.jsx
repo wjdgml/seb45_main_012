@@ -1,4 +1,6 @@
 import "../styles/components/header.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPencil } from "@fortawesome/free-solid-svg-icons";
 
 const Header = () => {
 
@@ -8,7 +10,7 @@ const Header = () => {
     return (
         <div className="header_container">
             <img src={require("../assets/logo.png")} alt="logo" />
-
+            <FontAwesomeIcon icon={faPencil} />
         </div>
     )
 }
