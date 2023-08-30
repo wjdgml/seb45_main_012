@@ -1,0 +1,161 @@
+.signUp-wrapper {
+  display: flex;
+  flex-direction: column;
+  width: fit-content;
+  height: fit-content;
+  align-items: center;
+}
+
+.signUp-title {
+  font-size: 24px;
+}
+
+.signUp-form {
+  width: 395px;
+  height: 575px;
+  border: 1px solid #8DC693;
+  border-top: none;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 6px;
+  box-shadow: 0 8px 5px #8DC693;
+}
+
+.name-input-area, 
+.id-input-area, 
+.password-input-area {
+  margin-top: 33px;
+  font-size: 15px;
+} 
+
+.name-input, 
+.id-input, 
+.password-input {
+  width: 310px;
+  height: 40px;
+  margin-top: 5px;
+  border-radius: 10px;
+  border: 1px solid #8DC693;
+  padding-left: 7px;
+}
+
+.password-infomation {
+  font-size: 8px;
+  margin-top: 5px;
+  margin-left: 5px;
+  color: #40394A;
+}
+
+.password-confirm {
+  width: 350px;
+  height: fit-content;
+  margin-top: 33px;
+}
+
+.password-confirm-Q,
+.password-confirm-A {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 20px 5px;
+  gap: 18px;
+}
+
+.password-confirm-Q-title,
+.password-confirm-A-title {
+  font-size: 12.5px;
+}
+
+.select-box {
+  width: 220px;
+  height: 30px;
+  border: 1px solid #8DC693;
+  position: relative;
+  border-radius: 10px;
+  font-size: 12px;
+  line-height: 30px;
+  padding-left: 12px;
+  box-sizing: border-box;
+
+}
+
+.arrow-after {
+  width: 1px;
+  height: 10px;
+  background-color: black;
+  position: absolute;
+  right: 22px;
+  top: 10px;
+}
+
+.arrow-before {
+  width: 1px;
+  height: 10px;
+  background-color: black;
+  position: absolute;
+  right: 15px;
+  top: 10px;
+}
+
+.select-box > ul {
+  width: 180px;
+  height: 90px;
+  box-sizing: border-box;
+  position: absolute;
+  top: 17px;
+  left: 7px;
+  background-color: #fff;
+}
+
+.select-box li {
+  list-style: none;
+  width: 180px;
+  height: 33px;
+  font-size: 12px;
+  line-height: 33px;
+  text-align: left;
+  box-sizing: border-box;
+  margin-left: -33px;
+  padding-left: 5px;
+  background-color: #fff;
+  border-bottom: 1px solid #d9d9d9;
+  transform: translateX(-7px);
+}
+
+.password-confirm-Q > select {
+  width: 190px;
+  height: 30px;
+  box-sizing: border-box;
+}
+
+.password-confirm-answer-input {
+  width: 220px;
+  height: 30px;
+  box-sizing: border-box;
+  border-radius: 10px;
+  border: 1px solid #8DC693;
+  font-size: 12px;
+  padding-left: 12px;
+}
+
+.signup-complete {
+  width: 220px;
+  height: 50px;
+  background-color: #8DC693;
+  margin-top: 20px;
+  border-radius: 15px;
+  line-height: 50px;
+  text-align: center;
+  font-size: 15px;
+  color: #fff;
+}
+
+.signup-complete:hover {
+  background-color: #82b888;
+}
+
+.signup-complete:active {
+  transform: translateY(1px);
+}
