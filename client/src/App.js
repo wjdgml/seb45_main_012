@@ -1,11 +1,12 @@
-import Header from './components/header';
-
+// import Header from './components/header';
+import Modal from './components/Modal';
 import './App.css';
 
 function App() {
   return (
     <div className="App">
-      <Header />
+      {/* <Header /> */}
+      <Modal/>
     </div>
   );
 }
