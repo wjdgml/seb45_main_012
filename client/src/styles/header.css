@@ -23,6 +23,7 @@
 
 .logo {
     max-width: 300px;
+    flex: 1 0 auto;
 }
 
 .header_icon {
@@ -35,6 +36,7 @@
 
 .black {
     color: 43 43 43;
+    flex: 1 0 auto;
 }
 
 .white {

@@ -18,7 +18,7 @@ const Header = () => {
         <div className="header_container">
             <div className="header_bar">
                 <ul className="header_bar_list">
-                    <li className="header_bar_list lgoo">
+                    <li className="header_item lgoo">
                         <img src={require("../assets/logo.png")} alt="logo" />
                     </li>
                     <li className="header_item black">
@@ -33,10 +33,10 @@ const Header = () => {
         <div className="header_container">
             <div className="header_bar">
                 <ul className="header_bar_list">
-                    <li className="header_bar_list logo">
+                    <li className="header_item logo">
                         <img src={require("../assets/logo.png")} alt="logo" />
                     </li>
-                    <li className="header_item search black">
+                    <li className="header_item search">
                         <FontAwesomeIcon icon={faMagnifyingGlass} />
                     </li>
                     <li className="header_item black">
