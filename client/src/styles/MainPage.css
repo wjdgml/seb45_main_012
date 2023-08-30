@@ -1,0 +1,81 @@
+* {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+    --board-color: rgb(141, 198, 147);
+    --border-color: rgb(43, 43, 43);
+    --text-white: white;
+    --text-black: rgb(43, 43, 43);
+}
+
+.container {
+    display: flex;
+}
+
+.information_board {
+    display: flex;
+    flex-direction: column;
+    flex: 0 1 300px;
+    margin: 5px;
+}
+
+.second_row {
+    display: flex;
+    flex-direction: column;
+    flex: 0 1 300px;
+    margin: 5px;
+}
+
+.top_board {
+    display: flex;
+    flex-direction: column;
+    flex: 0 1 300px;
+    margin: 5px;
+}
+
+.free_board {
+    display: flex;
+    flex-direction: column;
+    margin: 0px 0px 15px;
+}
+
+.board_container {
+    flex: display;
+    background-color: var(--board-color);
+    border-radius: 5px;
+    padding: 5px 5px 5px 10px;
+    color: var(--text-white);
+    margin: 0px 0px 15px 0px;
+    line-height: 30px;
+    text-align: center;
+    align-items: center;
+}
+
+ /* 지금은 left, right 같이 center인데 게시판 이름을 정중앙에 오게 하고 right를 우측으로 보내려면
+    left를 그대로 두고 right display를 float: right로 바꾼다. 근데 이래도 완전 정중앙은 안 되는 듯..*/
+.left {
+    display: inline-block;
+    align-items: center;
+    margin: 0px 15px 0px 0px;
+}
+
+.right {
+    display: inline-block;
+    align-items: center;
+}
+
+.content_container {
+    display: flex;
+    flex-direction: column;
+    padding: 5px;
+    border-radius: 5px;
+    border: 1px solid var(--border-color);
+    color: var(--text-black);
+}
+
+.content {
+    padding: 5px;
+}
+
+.photo {
+}

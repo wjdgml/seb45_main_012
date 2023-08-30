@@ -23,20 +23,16 @@
 
 .logo {
     max-width: 300px;
-    flex: 1 0 auto;
-}
-
-.header_icon {
-    width: 50px;
+    flex: 0 1 auto;
 }
 
 .search {
-    flex: 5 0 auto;
+    flex: 0 5 auto;
 }
 
 .black {
     color: 43 43 43;
-    flex: 1 0 auto;
+    flex: 0 1 auto;
 }
 
 .white {
