@@ -45,8 +45,8 @@ const MainPage = () => {
                     <div className='board_container'>인기 게시글</div>
                     <div className='content_container'>
                         <div className='content title'>게시글 1</div>
-                        <div className='content title'>게시글 1</div>
-                        <div className='content title'>게시글 1</div>
+                        <div className='content title'>게시글 2</div>
+                        <div className='content title'>게시글 3</div>
                     </div>
                 </div>
             </div>
