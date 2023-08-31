@@ -79,7 +79,7 @@
   line-height: 30px;
   padding-left: 12px;
   box-sizing: border-box;
-
+  cursor: pointer;
 }
 
 .arrow_after {
@@ -125,6 +125,10 @@
   transform: translateX(-7px);
 }
 
+.select_box li:hover {
+  background-color: #d9d9d9;
+}
+
 .password_confirm_Q > select {
   width: 190px;
   height: 30px;
@@ -151,6 +155,7 @@
   text-align: center;
   font-size: 15px;
   color: #fff;
+  cursor: pointer;
 }
 
 .signup_complete:hover {
