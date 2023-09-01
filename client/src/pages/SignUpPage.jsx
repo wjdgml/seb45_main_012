@@ -6,7 +6,7 @@ function SignUpPage() {
 
   return (
     <>
-    <div className="signUpPage-wrapper">
+    <div className="signUpPage_wrapper">
       <SignUpForm />
     </div>
       

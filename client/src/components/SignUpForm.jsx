@@ -47,8 +47,8 @@ function SignUpForm() {
             <div className="password_confirm_Q">
               <div className="password_confirm_Q_title">비밀번호 확인 질문</div>
               <div className="select_box" onClick={handleDropdown}>
-              <div className="arrow_before" style={view ? {transform: 'rotate(-45deg)'} : {transform: 'rotate(45deg)'}}></div>
-              <div className="arrow_after" style={view ? {transform: 'rotate(45deg)'} : {transform: 'rotate(-45deg)'}}></div>
+                <div className="arrow_before" style={view ? {transform: 'rotate(-45deg)'} : {transform: 'rotate(45deg)'}}></div>
+                <div className="arrow_after" style={view ? {transform: 'rotate(45deg)'} : {transform: 'rotate(-45deg)'}}></div>
               {selected}
               {view &&
                 <ul>

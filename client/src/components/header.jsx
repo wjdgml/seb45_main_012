@@ -1,4 +1,4 @@
-import "../styles/components/header.css";
+import "../styles/header.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPencil, faRightFromBracket, faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import { createStore } from 'redux';
