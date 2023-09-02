@@ -1,4 +1,4 @@
-import React from 'react';
+// import React, { useState, useEffect } from 'react';
 import '../styles/PostList.css';
 
 const testData = [
@@ -59,20 +59,23 @@ const testData = [
 ];
 
 const PostList = () => {
+  
     return (
-        <div className="post_list_container">
-            {testData.map(post => (
-                <div className="post_item" key={post.id}>
-                    <div className="post_header">
-                        <div className="post_title">{post.title}</div>
-                        <div className="post_date">{new Date(post.createdAt).toLocaleDateString()}</div>
-                    </div>
-                    <p className="post_content">{post.body}</p>
-                    
-                </div>
-            ))}
-        </div>
+      <div className="post_list_container">
+        {testData.map((post) => (
+          <div className="post_item" key={post.id}>
+            <div className="post_header">
+              <div className="post_title">{post.title}</div>
+              <div className="post_date">
+                {new Date(post.createdAt).toLocaleDateString()}
+              </div>
+            </div>
+            <div className="post_content">{post.body}</div>
+          </div>
+        ))}
+        {/* {isLoading && <p>Loading...</p>} */}
+      </div>
     );
-}
-
-export default PostList;
+  };
+  
+  export default PostList;
