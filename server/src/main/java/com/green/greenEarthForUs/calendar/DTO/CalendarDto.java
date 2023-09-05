@@ -25,7 +25,6 @@ public class CalendarDto {
     @Getter
     @Builder
     public static class Response{
-        private long id;
         private String body;
         private long userId;
         private long postId;

@@ -10,7 +10,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/calendar/")
+@RequestMapping("/calendar")
 public class CalendarController {
 
     private final CalendarService calendarService;
@@ -24,14 +24,14 @@ public class CalendarController {
     }
 
     @PostMapping
-    public ResponseEntity postCalendar(@Validated @RequestBody CalendarDto.Post post){
+    public ResponseEntity<CalendarDto.Response> postCalendar(@Validated @RequestBody CalendarDto.Post post){
         Calendar createdCalendar = calendarService.createCalendar(mapper.calendarPostDtoToCalendar(post));
 
-        return new ResponseEntity(mapper.calendarToCalendarResponseDto(createdCalendar), HttpStatus.CREATED);
+        return new ResponseEntity<CalendarDto.Response>(mapper.calendarToCalendarResponseDto(createdCalendar), HttpStatus.CREATED);
     }
 
     @PatchMapping("{user_id}/{calendar_id}")
-    public ResponseEntity patchCalendar(@PathVariable("user_id") long userId,
+    public ResponseEntity<CalendarDto.Response> patchCalendar(@PathVariable("user_id") long userId,
                                         @PathVariable("calendar_id") long calendarId,
                                         @Validated @RequestBody CalendarDto.Patch patch){
         // user 검증 로직 필요
@@ -42,7 +42,7 @@ public class CalendarController {
     }
 
     @GetMapping("{calendar_id}")
-    public ResponseEntity getCalendar(@PathVariable("calendar_id") long calendarId){
+    public ResponseEntity<CalendarDto.Response> getCalendar(@PathVariable("calendar_id") long calendarId){
         Calendar findCalendar = calendarService.findCalendar(calendarId);
 
         return ResponseEntity.ok(mapper.calendarToCalendarResponseDto(findCalendar));

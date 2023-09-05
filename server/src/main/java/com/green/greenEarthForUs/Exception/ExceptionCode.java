@@ -3,6 +3,9 @@ package com.green.greenEarthForUs.Exception;
 import lombok.Getter;
 
 public enum ExceptionCode {
+    IMAGE_NOT_FOUND(404, "Image Not Found"),
+    FILE_UPLOAD_FAIL(404, "File Upload Fail"),
+    IMAGE_NOT_SUPPORT(404, "Image Not Support"),
     USER_NOT_FOUND(404, "User not found"),
     USER_EXISTS(409, "User exists"),
     CALENDAR_NOT_FOUND(404, "Calendar not found"),
