@@ -10,7 +10,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/Vote/")
+@RequestMapping("/vote")
 public class VoteController {
 
     private final VoteService voteService;
@@ -22,15 +22,15 @@ public class VoteController {
         this.mapper = mapper;
     }
 
-    @PostMapping("{post_id}")
-    public ResponseEntity postVote(@PathVariable long postId){
+    @PostMapping("/{post_id}")
+    public ResponseEntity postVote(@PathVariable("post_id") long postId){
         //post가 유효한지 확인하는 로직 필요
         Vote createdVote = voteService.createVote();
 
         return new ResponseEntity(mapper.voteToVoteResponseDto(createdVote), HttpStatus.CREATED);
     }
 
-    @PatchMapping("{post_id}/{user_id}/{vote_id}")
+    @PatchMapping("/{post_id}/{user_id}/{vote_id}")
     public ResponseEntity patchVote(@PathVariable("post_id") long postId,
                                     @PathVariable("user_id") long userId,
                                     @PathVariable("vote_id") long voteId,
@@ -48,7 +48,7 @@ public class VoteController {
         return ResponseEntity.ok(mapper.voteToVoteResponseDto(updateVote));
     }
 
-    @GetMapping("{post_id}/{vote_id}")
+    @GetMapping("/{post_id}/{vote_id}")
     public ResponseEntity getVote(@PathVariable("post_id") long postId,
                                   @PathVariable("vote_id") long voteId){
 
@@ -58,7 +58,7 @@ public class VoteController {
         return ResponseEntity.ok(mapper.voteToVoteResponseDto(findVote));
     }
 
-    @DeleteMapping("{post_id}/{user_id}/{vote_id}")
+    @DeleteMapping("/{post_id}/{user_id}/{vote_id}")
     public ResponseEntity deleteVote(@PathVariable("post_id") long postId,
                                      @PathVariable("user_id") long userId,
                                      @PathVariable("vote_id") long voteId){
