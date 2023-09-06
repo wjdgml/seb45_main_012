@@ -1,7 +1,6 @@
 // 백엔드에서 access token 만료 시간 및 http-only, secure(https://) 정해주면(근데 http-only는 secure도 같이 설정해야 유의미한 보안 설정인 듯) 거기에 따라 설정, 아니면 임의로
 import axios from 'axios';
-import Instance from '../../axiosConfig';
-import Cookie from 'js-cookie';
+import Instance from '../axiosConfig';
 
 const LoginFunc = async ( id, password ) => {
 
@@ -26,27 +25,6 @@ const LoginFunc = async ( id, password ) => {
     catch (err) {
         console.log('err message: ', err)
     }
-}
-
-
-export const refresh = async (config) => {
-
-    const refreshToken = Cookie.get('refreshToken');
-    const expiresAt = localStorage.getItem('expiresAt');
-    const currentTime = Math.floor(Date.now() / 1000);
-
-    if (expiresAt < currentTime) {
-        console.log("토큰 만료, 재발급 요청");
-        const res = await Instance.post("/refresh", {
-            headers: { Refresh: refreshToken, }
-        });
-        const { newAccessToken } = res.data;
-        console.log("accessToken 재발급 성공: ", newAccessToken) // 확인하고 지우기
-        localStorage.setItem('accessToken: ', newAccessToken);
-        localStorage.setItem() // expiresAt 받아오기
-        config.headers["Authorization"] = `Bearer ${newAccessToken}`; // 토큰 교체
-    }
-    return config;     
 }
 
 export default LoginFunc;
