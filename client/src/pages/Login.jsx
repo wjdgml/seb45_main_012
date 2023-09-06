@@ -1,26 +1,55 @@
 import '../styles/Login.css';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-
+import LoginFunc from '../auth/LoginFunc';
 
 const LogIn = () => {
 
+    const [ id, setId ] = useState("");
+    const [ password, setPassword ] = useState("");
+
+    const emailHandler = (e) => {
+        setId(e.target.value);
+    }
+
+    const passwordHandler = (e) => {
+        setPassword(e.target.value);
+    }
+
+    const submitHandler = async (e) => {
+        e.preventDefault();
+        console.log('id: ', id);
+        console.log('password :', password);
+
+        try {
+            const result = await LoginFunc(id, password);
+            if (result) {
+                window.location.href = '메인 주소';
+            }
+        }
+        catch (err) {
+            console.error();
+        }
+    }
+
+    const navigate = useNavigate();
+
     return (
-        <div className='container'>  
+        <div className='page_container'>  
             <div className='logo_container'>
                 <img className="logo_leaf" src={require('../assets/logo_only_image.png')} alt='logo'/>
             </div>
             <div className='form_container'>
-                <form className='login_form'>
+                <form className='login_form' onSubmit={submitHandler}>
                     <div className='id'>
                         <label htmlFor="id">ID</label>
-                        <input id="id"></input>
+                        <input id="id" onChange={emailHandler}></input>
                     </div>
                     <div className='password'>
                         <label htmlFor="password">Password</label>
-                        <input id="password" />
+                        <input id="password" onChange={passwordHandler} />
                     </div>
-                    <div className='submit_button'>
+                    <div className='submit_button' onclick={navigate('/')}>
                         <input className='submit' type="submit" value="로그인" />
                     </div>
                 </form>
