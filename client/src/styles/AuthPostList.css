@@ -1,0 +1,29 @@
+.auth_post_list_container {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    align-items: center;
+    width: 200px;
+    height: 200px;
+    border-radius: 10px;
+    border: 1px solid #9E9E9E;
+    margin: 20px;
+    margin-bottom: 10px;
+}
+
+.auth_post_grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 3개 열로 구성 */
+    grid-gap: 20px; /* 그리드 간격 설정 */
+  }
+
+  .auth_post_item {
+    width: 100%;
+    padding: 20px;
+    box-sizing: border-box; 
+  }
+
+  .auth_post_item img {
+    max-width: 100%;
+    height: auto;
+  }
