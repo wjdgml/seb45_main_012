@@ -1,14 +1,15 @@
 import './App.css';
-// import Header from './components/header';
+import SignUpPage from './pages/SignUpPage';
+import Header from './components/header';
 import NavBar from './components/NavBar';
 
 function App() {
   return (
     <div className="App">
+      {/* <SignUpPage /> */}
       {/* <Header /> */}
-      <NavBar />
-      test
-      <FreeBoardPage/>
+      {/* <NavBar /> */}
+      {/* <FreeBoardPage/> */}
       {/* test */}
     </div>
   );
