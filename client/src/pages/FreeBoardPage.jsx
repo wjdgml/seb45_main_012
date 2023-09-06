@@ -12,7 +12,7 @@ const FreeBoardPage = () => {
                 <button class="custom_board_button confirm_button">자유 게시판</button>
                 {/* <button class="custom_board_button cancel_button">자유 게시판</button> */}
             </div>
-            <div className='free_board_container'>
+            <div className='board_container'>
                 <PostList/>
 
             </div>

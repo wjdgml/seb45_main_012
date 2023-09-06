@@ -5,6 +5,6 @@ const instance = axios.create({
   timeout: 5000,
 });
 
-export const getPosts = (page) => {
+export const getFreePosts = (page) => {
   return instance.get(`/post/free?page=${page}`);
 };

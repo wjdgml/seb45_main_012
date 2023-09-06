@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import '../styles/PostList.css';
-import { getPosts } from '../api/api';
+import { getFreePosts } from '../api/api';
 
 // // 1) 데이터 하드코딩
 // const testData = [
@@ -231,7 +231,7 @@ const PostList = () => {
   // 하여 초기데이터 5개 로딩
   useEffect(() => {
     // 초기 데이터 로딩
-    getPosts(1)
+    getFreePosts(1)
       .then((res) => {
         const initialPosts = res.data.slice(0, 5);
         setVisiblePosts(initialPosts);
@@ -250,7 +250,7 @@ const PostList = () => {
             setIsLoading(true);
             const nextPage = currentPage + 1;
   
-            getPosts(nextPage)
+            getFreePosts(nextPage)
               .then((response) => {
                 const data = response.data;
                 if (data.length > 0) {
