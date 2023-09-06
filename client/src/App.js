@@ -6,8 +6,11 @@ import NavBar from './components/NavBar';
 function App() {
   return (
     <div className="App">
-      <SignUpPage />
-      
+      {/* <SignUpPage /> */}
+      {/* <Header /> */}
+      {/* <NavBar /> */}
+      {/* <FreeBoardPage/> */}
+      {/* test */}
     </div>
   );
 }
