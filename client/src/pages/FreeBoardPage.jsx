@@ -1,5 +1,4 @@
 import '../styles/Button.css';
-// import '../styles/FreeBoardPage.css';
 import '../components/PostList';
 import PostList from '../components/PostList';
 
