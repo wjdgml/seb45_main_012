@@ -32,7 +32,7 @@ const LogIn = () => {
     }
 
     return (
-        <div className='page_container'>  
+        <div >  
             <div className='container'>  
                 <div className='logo_container'>
                     <img className="logo_leaf" src={require('../assets/logo_only_image.png')} alt='logo'/>
