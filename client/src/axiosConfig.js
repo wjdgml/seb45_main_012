@@ -7,7 +7,7 @@ const Instance = axios.create({
     baseURL: '배포 URL',
 });
 
-export const refresh =   async (config) => {
+export const refresh = async (config) => {
 
     const refreshToken = Cookie.get('refreshToken');
     const expiresAt = localStorage.getItem('expiresAt');
