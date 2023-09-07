@@ -1,7 +1,7 @@
 import './App.css';
-import SignUpPage from './pages/SignUpPage';
-import Header from './components/header';
-import NavBar from './components/NavBar';
+// import SignUpPage from './pages/SignUpPage';
+// import Header from './components/header';
+// import NavBar from './components/NavBar';
 
 function App() {
   return (
