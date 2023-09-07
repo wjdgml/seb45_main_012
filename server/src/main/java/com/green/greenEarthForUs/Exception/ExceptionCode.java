@@ -12,7 +12,10 @@ public enum ExceptionCode {
     CALENDAR_EXISTS(409, "Calendar exists"),
     VOTE_NOT_FOUND(404, "Vote not found"),
     NOT_IMPLEMENTATION(501, "Not Implementation"),
-    INVALID_USER_STATUS(400, "Invalid member status");
+    INVALID_USER_STATUS(400, "Invalid member status"),
+    COMMENT_NOT_FOUND(404,"comment not found"),
+
+    INVALID_COMMENT_ACCESS(1001,"You do not have permission to access comments");
 
     @Getter
     private int status;
