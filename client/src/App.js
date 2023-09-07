@@ -7,12 +7,11 @@ import FreeBoardPage from './pages/FreeBoardPage';
 function App() {
   return (
     <div className="App">
-      <SignUpPage />
+      {/* <SignUpPage /> */}
       {/* <Header /> */}
-      {/* <NavBar />
-      <FreeBoardPage/> */}
+      {/* <NavBar /> */}
+      {/* <FreeBoardPage/> */}
       {/* test */}
-      
     </div>
   );
 }
