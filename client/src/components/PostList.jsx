@@ -59,7 +59,9 @@ const PostList = () => {
         {visiblePosts.map((post) => (
           <div className="post_item" key={post.id}>
             <div className="post_header">
-              <div className="post_title">{post.title}</div>
+              <div className="post_title">
+                <Link to={`/post/${post.id}`} className="post_title">{post.title}</Link>
+              </div>
               <div className="post_date">
                 {new Date(post.createdAt).toLocaleDateString()}
               </div>
