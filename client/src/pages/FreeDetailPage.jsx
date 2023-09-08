@@ -24,6 +24,21 @@ const FreeBoardPage = () => {
     "createdAt": "2023-09-04T15:45:02.2870181"
   };
 
+  const vote = {
+    "id": 1,
+    "postId": 1,
+    "userId": 0,
+    "voteType": null,
+    "voteCount": 0
+  }
+
+  const comment = {
+    "id": 1,
+    "userId": 1,
+    "postId": 3,
+    "body": "test comment",
+    "createdAt": "2023-08-29T14:43:27.8032943"
+  }
   return (
   <>
   <div><NavBar /></div>
@@ -41,9 +56,22 @@ const FreeBoardPage = () => {
             <p>{new Date(post.createdAt).toLocaleDateString()}</p>
           </div>
           <p className='post_detail_content'>{post.body}</p>
+          <p className='post_detail_content'>❤️{vote.voteCount}</p>
           </div>
           <div className='free_detail_container'>
-            test
+            <input
+            className='comment_input'
+              type="text"
+              placeholder="내용을 입력해주세요."
+            />
+              <button className='comment_button'>작성</button>
+            <div className="post_detail_header">
+              <div>
+                <p>{user.userGrade} {user.username}</p>
+                <p>댓글 내용이 여기에 들어갑니다. {comment.body}</p>
+              </div>
+              
+            </div>
           </div>
       </div>
   </>
