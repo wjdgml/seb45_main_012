@@ -4,6 +4,7 @@ import './App.css';
 // import FreeDetailPage from './pages/FreeDetailPage.jsx';
 // import Header from './components/header.jsx';
 // import NavBar from './components/NavBar.jsx';
+import MyPageMain from 'pages/MyPageMain.jsx';
 
 function App() {
   return (
@@ -13,7 +14,8 @@ function App() {
       {/* <Header /> */}
       {/* <NavBar /> */}
       {/* <FreeBoardPage/> */}
-      test
+      <MyPageMain />
+      {/* 기존: test */}
     </div>
   );
 }
