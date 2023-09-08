@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import '../styles/PostList.css';
-import { getPosts } from '../api/api';
+import { getPosts } from '../api/api.js';
 
 // 2) API axios사용
 const PostList = () => {

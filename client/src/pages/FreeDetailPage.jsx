@@ -1,6 +1,7 @@
+import React from 'react';
 import '../styles/Button.css';
 import '../styles/PostList.css';
-import NavBar from '../components/NavBar';
+import NavBar from '../components/NavBar.jsx';
 
 const FreeBoardPage = () => {
 
@@ -30,7 +31,7 @@ const FreeBoardPage = () => {
       <div className='page_container'>
           
           <div>
-              <button class="custom_board_button cancel_button">자유 게시판</button>
+              <button className="custom_board_button cancel_button">자유 게시판</button>
           </div>
           
           <div className='free_detail_container'>

@@ -1,6 +1,6 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { selectActiveMenu, setActiveMenu } from '../store/menuSlice';
+import { selectActiveMenu, setActiveMenu } from '../store/menuSlice.js';
 import '../styles/NavBar.css';
 
 const NavBar = () => {
