@@ -1,6 +1,6 @@
+import React, { useState } from 'react';
 import '../styles/Login.css';
-import { useState } from 'react';
-import LoginFunc from '../auth/LoginFunc';
+import LoginFunc from '../auth/LoginFunc.js';
 
 const LogIn = () => {
 
