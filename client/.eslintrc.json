@@ -20,6 +20,9 @@
     "jsx-a11y",
     "import"
   ],
+  "rules": {
+    "no-unused-vars": "warn"
+  },
   "settings": {
     "import/resolver": {
       "node": {

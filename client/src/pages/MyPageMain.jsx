@@ -1,4 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import '../styles/Button.css';
+import '../styles/MyPageMain.css'
 // import Instance from '../axiosConfig';
 // import jwtDecode from 'jwt-decode';
 
@@ -8,8 +10,8 @@ const MyPageMain = () => {
   // const decodedToken = jwtDecode(accessToken);
   // const memberId = accessToken.memberId;
 
-  const [ userData, setUserData ] = useState({});
-  const [ open, setOpen ] = useState(true);
+  // const [ userData, setUserData ] = useState({});
+  // const [ open, setOpen ] = useState(true);
 
   // useEffect(() => {
   //   async function getUserData() {
@@ -26,19 +28,41 @@ const MyPageMain = () => {
   
   //하드코딩
 
+  const [ selectedButton, setSelectedButton ] = useState('전체');
+
+  const handleButtonClick = (buttonName) => {
+    setSelectedButton(buttonName)
+  }
+
   return (
     <main>
       <h6>내가 쓴 글</h6>
       <ul>
         <li>
-          <button>전체</button>
-          <button>공개</button>
-          <button>비공개</button>
+          <button
+            className={`custom_button ${selectedButton === '전체' ? 'active' : ''}`}
+            onClick={() => handleButtonClick('전체')}
+           >
+            전체
+          </button>
         </li>
-        <li>공개</li>
-        <li>비공개</li>
+        <li>
+          <button
+            className={`custom_button ${selectedButton === '공개' ? 'active' : ''}`}
+            onClick={() => handleButtonClick('공개')}
+            >
+            공개
+          </button>
+        </li>
+        <li>
+          <button
+            className={`custom_button ${selectedButton === '비공개' ? 'active' : ''}`}
+            onClick={() => handleButtonClick('비공개')}
+            >
+            비공개
+          </button>
+        </li>
       </ul>
-
     </main>
   )
 }
