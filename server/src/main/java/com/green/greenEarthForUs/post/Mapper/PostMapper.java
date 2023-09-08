@@ -10,7 +10,7 @@ public interface PostMapper {
 
     PostResponseDto postToPostResponseDto(Post post);
 
-    Post PostDtoToPost(PostPostDto postPostDto);
+    Post postPostDtoToPost(PostPostDto postPostDto);
 }
 
 

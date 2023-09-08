@@ -9,7 +9,10 @@ import com.green.greenEarthForUs.post.Service.PostService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import java.io.IOException;
 import java.util.List;
 
 
@@ -28,7 +31,21 @@ public class PostController {
     // 게시글 생성
     @PostMapping("/{user-id}")
     public ResponseEntity<PostResponseDto> createPost(@PathVariable(value = "user-id") Long userId,
-                                                      @RequestBody PostPostDto postPostDto) {
+                                                      @ModelAttribute PostPostDto postPostDto,
+                                                      MultipartHttpServletRequest request) throws IOException {
+
+        // 파일
+        MultipartFile multipartFile = request.getFile("image");
+        if (multipartFile != null && !multipartFile.isEmpty()) {
+            // 파일 이름 가져오기
+            String originalFileName = multipartFile.getOriginalFilename();
+            // 파일 내용(byte 배열) 가져오기
+            byte[] fileContent = multipartFile.getBytes();
+
+            postPostDto.setBodyImageFileName(originalFileName);
+            postPostDto.setBodyImage(fileContent);
+        }
+
         Post createdPost = postService.createPost(userId, postPostDto);
         PostResponseDto responseDto = mapper.postToPostResponseDto(createdPost);
 

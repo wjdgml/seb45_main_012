@@ -18,11 +18,11 @@ public class PostResponseDto {
 
     private String body;
 
-    private String writer;
-
     private String open;
 
-    //private String imagePath;
+    private String bodyImageFileName;
+
+    private byte[] bodyImage;
 
     private LocalDateTime createdAt;
 

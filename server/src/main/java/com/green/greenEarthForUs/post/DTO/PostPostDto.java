@@ -14,9 +14,14 @@ public class PostPostDto { // 생성
 
     private String body;
 
-    //private String imagePath;
-
-    private String writer;
-
     private Boolean open;
+
+    private String bodyImageFileName;
+
+    private byte[] bodyImage;
+
+    public Boolean isOpen() {
+        return open != null && open; // open 필드가 null인 경우나 false인 경우에 구현 이렇게 해주어야함
+    }
 }
+

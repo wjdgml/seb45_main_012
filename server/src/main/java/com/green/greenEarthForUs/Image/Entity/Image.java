@@ -2,6 +2,8 @@ package com.green.greenEarthForUs.Image.Entity;
 
 import com.green.greenEarthForUs.Exception.BusinessLogicException;
 import com.green.greenEarthForUs.Exception.ExceptionCode;
+import com.green.greenEarthForUs.post.Entity.Post;
+import com.green.greenEarthForUs.user.Entity.User;
 import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
@@ -28,6 +30,14 @@ public class Image {
     private String uniqueName;
     @Column
     private byte[] data;
+
+    @ManyToOne
+    @JoinColumn(name= "post_id")
+    private Post post;
+
+    @ManyToOne
+    @JoinColumn(name= "user_id")
+    private User user;
 
     @Builder
     public Image(String originName, String uniqueName, byte[] data){
