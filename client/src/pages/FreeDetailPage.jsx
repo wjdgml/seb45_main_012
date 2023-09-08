@@ -1,6 +1,6 @@
 import React from 'react';
 import '../styles/Button.css';
-import '../styles/PostList.css';
+import '../styles/FreeDetailPage.css';
 import NavBar from '../components/NavBar.jsx';
 
 const FreeBoardPage = () => {
@@ -30,19 +30,20 @@ const FreeBoardPage = () => {
   
       <div className='page_container'>
           
-          <div>
-              <button className="custom_board_button cancel_button">자유 게시판</button>
-          </div>
+        <button className="custom_board_button cancel_button">자유 게시판</button>
           
           <div className='free_detail_container'>
-          <div className="post_header">
-            <div className="post_title">{post.title}</div>
-            <p>Created At: {new Date(post.createdAt).toLocaleDateString()}</p>
+          <div className="post_detail_header">
+            <div>
+              <h3 className="post_detail_title">{post.title}</h3>
+              <p>{user.userGrade} {user.username}</p>
+            </div>
+            <p>{new Date(post.createdAt).toLocaleDateString()}</p>
           </div>
-            
-          <p>{user.userGrade} {user.username}</p>
-          
-          <p>{post.body}</p>
+          <p className='post_detail_content'>{post.body}</p>
+          </div>
+          <div className='free_detail_container'>
+            test
           </div>
       </div>
   </>

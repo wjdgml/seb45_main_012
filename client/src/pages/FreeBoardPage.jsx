@@ -9,9 +9,7 @@ const FreeBoardPage = () => {
     <div><NavBar /></div>
       <div className='page_container'>
           
-          <div>
-            <button className="custom_board_button confirm_button">자유 게시판</button>
-          </div>
+      <button className="custom_board_button confirm_button">자유 게시판</button>
           <div className='free_board_container'>
               <PostList/>
           </div>
