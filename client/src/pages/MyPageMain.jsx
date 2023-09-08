@@ -73,16 +73,16 @@ export default MyPageMain;
 
 
 // // 1) 데이터 하드코딩
-const testData = [
-    {
-        "id": 1,
-        "userId": 1,
-        "type": "free",
-        "title": "Test1입니다.",
-        "body": "Test1입니다.",
-        "open": "open",
-        "createdAt": "2023-08-29T09:22:18.7444354"
-    },
+// const testData = [
+//     {
+//         "id": 1,
+//         "userId": 1,
+//         "type": "free",
+//         "title": "Test1입니다.",
+//         "body": "Test1입니다.",
+//         "open": "open",
+//         "createdAt": "2023-08-29T09:22:18.7444354"
+//     },
     // {
     //     "id": 2,
     //     "userId": 2,
@@ -128,24 +128,24 @@ const testData = [
     //     "open": "open",
     //     "createdAt": "2023-08-29T09:22:18.7444354"
     // },
-    {
-      "id": 1,
-      "userId": 1,
-      "type": "free",
-      "title": "Test1입니다.",
-      "body": "Test1입니다.",
-      "open": "open",
-      "createdAt": "2023-08-29T09:22:18.7444354"
-  },
-  {
-      "id": 1,
-      "userId": 1,
-      "type": "free",
-      "title": "Test1입니다.",
-      "body": "Test1입니다.",
-      "open": "close",
-      "createdAt": "2023-08-29T09:22:18.7444354"
-  },
+  //   {
+  //     "id": 1,
+  //     "userId": 1,
+  //     "type": "free",
+  //     "title": "Test1입니다.",
+  //     "body": "Test1입니다.",
+  //     "open": "open",
+  //     "createdAt": "2023-08-29T09:22:18.7444354"
+  // },
+  // {
+  //     "id": 1,
+  //     "userId": 1,
+  //     "type": "free",
+  //     "title": "Test1입니다.",
+  //     "body": "Test1입니다.",
+  //     "open": "close",
+  //     "createdAt": "2023-08-29T09:22:18.7444354"
+  // },
   // {
   //     "id": 3,
   //     "userId": 3,
@@ -182,15 +182,15 @@ const testData = [
   //     "open": "open",
   //     "createdAt": "2023-08-29T09:22:18.7444354"
   // },
-  {
-    "id": 1,
-    "userId": 1,
-    "type": "free",
-    "title": "Test1입니다.",
-    "body": "Test1입니다.",
-    "open": "open",
-    "createdAt": "2023-08-29T09:22:18.7444354"
-},
+//   {
+//     "id": 1,
+//     "userId": 1,
+//     "type": "free",
+//     "title": "Test1입니다.",
+//     "body": "Test1입니다.",
+//     "open": "open",
+//     "createdAt": "2023-08-29T09:22:18.7444354"
+// },
 // {
 //     "id": 2,
 //     "userId": 2,
@@ -200,15 +200,15 @@ const testData = [
 //     "open": "open",
 //     "createdAt": "2023-08-29T09:22:18.7444354"
 // },
-{
-    "id": 1,
-    "userId": 1,
-    "type": "free",
-    "title": "Test3입니다.",
-    "body": "Test3입니다.",
-    "open": "close",
-    "createdAt": "2023-08-29T09:22:18.7444354"
-},
+// {
+//     "id": 1,
+//     "userId": 1,
+//     "type": "free",
+//     "title": "Test3입니다.",
+//     "body": "Test3입니다.",
+//     "open": "close",
+//     "createdAt": "2023-08-29T09:22:18.7444354"
+// },
 // {
 //     "id": 4,
 //     "userId": 4,
@@ -236,4 +236,4 @@ const testData = [
 //     "open": "open",
 //     "createdAt": "2023-08-29T09:22:18.7444354"
 // }
-];
+// ];

@@ -1,0 +1,26 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+
+
+
+li {
+  list-style: none;
+}
+
+button {
+  background-color: white;
+  border: 1px solid #ccc;
+  color: #333;
+  padding: 10px 20px;
+  cursor: pointer;
+}
+
+/* 활성 버튼 스타일 */
+button.active {
+  background-color: green;
+  color: white;
+}
