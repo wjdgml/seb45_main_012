@@ -4,8 +4,10 @@
   padding: 0;
 }
 
-
-
+ul {
+  display: flex;
+  gap: 10px;
+}
 
 li {
   list-style: none;
@@ -13,14 +15,13 @@ li {
 
 button {
   background-color: white;
-  border: 1px solid #ccc;
-  color: #333;
-  padding: 10px 20px;
+  border: 1px solid #8DC693;
+  color: #2B2B2B;
   cursor: pointer;
 }
 
 /* 활성 버튼 스타일 */
 button.active {
-  background-color: green;
+  background-color: #8DC693;
   color: white;
 }

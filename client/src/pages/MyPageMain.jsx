@@ -63,6 +63,8 @@ const MyPageMain = () => {
           </button>
         </li>
       </ul>
+      <section>
+      </section>
     </main>
   )
 }
