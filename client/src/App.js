@@ -1,19 +1,19 @@
 import React from 'react';
 import './App.css';
-// import SignUpPage from './pages/SignUpPage';
-// import Header from './components/header';
-// import NavBar from './components/NavBar';
-import MyPageMain from './pages/MyPageMain';
+// import SignUpPage from './pages/SignUpPage.jsx';
+// import FreeDetailPage from './pages/FreeDetailPage.jsx';
+// import Header from './components/header.jsx';
+// import NavBar from './components/NavBar.jsx';
 
 function App() {
   return (
     <div className="App">
+      {/* <FreeDetailPage/> */}
       {/* <SignUpPage /> */}
       {/* <Header /> */}
       {/* <NavBar /> */}
       {/* <FreeBoardPage/> */}
-      {/* test */}
-      <MyPageMain />
+      test
     </div>
   );
 }
