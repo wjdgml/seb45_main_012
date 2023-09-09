@@ -7,9 +7,9 @@ ARG JAR_FILE=build/libs/*-SNAPSHOT.jar
 # (3) jar 빌드 파일을 도커 컨테이너로 복사
 COPY ${JAR_FILE} app.jar
 
-COPY env_setting.sh env_setting.sh
+COPY env.sh /env.sh
 
-RUN chmod +x env_setting.sh
+RUN chmod +x /env.sh
 
 # (4) 스크립트 파일을 실행
-ENTRYPOINT ["env_setting.sh"]
+ENTRYPOINT ["/env.sh"]
