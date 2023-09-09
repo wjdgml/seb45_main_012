@@ -43,7 +43,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 
         @Override
         public Collection<? extends GrantedAuthority> getAuthorities(){
-            return authorityUtils.createAuthorities(this.getRole());
+            return authorityUtils.createAuthorities(String.valueOf(this.getRole()));
         }
 
         @Override
