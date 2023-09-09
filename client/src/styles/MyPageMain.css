@@ -49,5 +49,11 @@ button.active {
   display: flex;
   flex-direction: column;
   gap: 5px;
-  flex: 1;
+  flex: 0 1 auto;
+  padding-bottom: 5px;
+  border-bottom: 1px solid #D9D9D9;
+}
+
+.posts_container > article:last-child {
+  border-bottom: 0;
 }
