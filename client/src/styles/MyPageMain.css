@@ -4,6 +4,16 @@
   padding: 0;
 }
 
+.container {
+  display: flex;
+  flex-direction: column;
+  margin-left: 20px;
+}
+
+.my_posts {
+  margin: 20px 0px 15px;
+}
+
 ul {
   display: flex;
   gap: 10px;
@@ -24,4 +34,20 @@ button {
 button.active {
   background-color: #8DC693;
   color: white;
+}
+
+.posts_container {
+  width: 795px;
+  height: 555px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.post {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  flex: 1;
 }

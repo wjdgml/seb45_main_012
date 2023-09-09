@@ -49,8 +49,8 @@ const MyPageMain = () => {
   }
 
   return (
-    <main>
-      <h2>내가 쓴 글</h2>
+    <main className="container">
+      <h2 className="my_posts">내가 쓴 글</h2>
       <ul>
         <li>
           <button
@@ -86,12 +86,17 @@ const MyPageMain = () => {
           </button>
         </li>
       </ul>
-      <section>
-        {filteredPosts.map((post, index) => (
-          <div key={post.id}>
-            <h6>{post.title}</h6>
-            <p>{post.body.slice(0, 100) + "..."}</p>
-          </div>
+      <section className='posts_container'>
+        {filteredPosts.map((post) => (
+          <article className="post" key={post.id}>
+            <h4 className="post_title">{post.title}</h4>
+            <div className='post_detail'>
+              <span className='post_content'>{post.body.slice(0, 50) + " ..."}</span>
+              <span className='post_date'>{
+                new Date(post.createdAt).toISOString().split("T")[0].replace(/-/g, '.')
+              }</span>
+            </div>
+          </article>
         ))}
       </section>
     </main>
