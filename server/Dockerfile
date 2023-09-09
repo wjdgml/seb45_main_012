@@ -5,7 +5,11 @@ FROM openjdk:11
 ARG JAR_FILE=build/libs/*-SNAPSHOT.jar
 
 # (3) jar 빌드 파일을 도커 컨테이너로 복사
-COPY server/build/libs/*.jar app.jar
+COPY ${JAR_FILE} app.jar
 
-# (4) jar 파일 실행
-ENTRYPOINT ["java","-jar","/app.jar"]
+COPY scripts/env_setting.sh /env_setting.sh
+
+RUN chmod +x /env_setting.sh
+
+# (4) 스크립트 파일을 실행
+ENTRYPOINT ["/env_setting.sh"]
