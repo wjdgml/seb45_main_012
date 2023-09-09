@@ -37,7 +37,7 @@ class GreenEarthForUsApplicationTests {
 		ResultActions  actions = mockMvc.perform(MockMvcRequestBuilders.multipart("/image/api")
 				.file(image));
 
-		actions.andExpect(MockMvcResultMatchers.status().isOk());
+		actions.andExpect(MockMvcResultMatchers.status().isCreated());
 
 	}
 
