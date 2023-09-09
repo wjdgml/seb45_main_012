@@ -73,9 +73,7 @@ public class SecurityConfig{
                         .antMatchers(HttpMethod.GET, "/calendar/**").hasAnyRole("ADMIN", "USER")
                         .antMatchers(HttpMethod.PATCH, "/calendar/**").hasAnyRole("ADMIN", "USER")
                         .antMatchers(HttpMethod.DELETE, "/calendar/**").hasAnyRole("ADMIN", "USER")
-                        .antMatchers(HttpMethod.POST, "/image/api").hasAnyRole("ADMIN", "USER")
-                        .antMatchers(HttpMethod.DELETE, "image/api/*").hasAnyRole("ADMIN", "USER")
-                        .anyRequest().authenticated()
+                        .anyRequest().permitAll()
                 );
         return http.build();
     }

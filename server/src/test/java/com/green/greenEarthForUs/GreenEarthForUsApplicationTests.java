@@ -40,11 +40,7 @@ class GreenEarthForUsApplicationTests {
 		actions.andExpect(MockMvcResultMatchers.status().isOk());
 
 	}
-	@Test
-	void Loads() throws Exception{
 
-
-	}
 
 
 }
