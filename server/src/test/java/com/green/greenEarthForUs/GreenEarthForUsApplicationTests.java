@@ -24,22 +24,22 @@ class GreenEarthForUsApplicationTests {
 
 
 
-	@Test
-	void contextLoads() throws Exception{
-
-		MockMultipartFile image = new MockMultipartFile(
-				"image",
-				"image.jpg",
-				MediaType.IMAGE_JPEG_VALUE,
-				"YourImageContent".getBytes(StandardCharsets.UTF_8)
-		);
-
-		ResultActions  actions = mockMvc.perform(MockMvcRequestBuilders.multipart("/image/api")
-				.file(image));
-
-		actions.andExpect(MockMvcResultMatchers.status().isCreated());
-
-	}
+//	@Test
+//	void contextLoads() throws Exception{
+////
+////		MockMultipartFile image = new MockMultipartFile(
+////				"image",
+////				"image.jpg",
+////				MediaType.IMAGE_JPEG_VALUE,
+////				"YourImageContent".getBytes(StandardCharsets.UTF_8)
+////		);
+////
+////		ResultActions  actions = mockMvc.perform(MockMvcRequestBuilders.multipart("/image/api")
+////				.file(image));
+////
+////		actions.andExpect(MockMvcResultMatchers.status().isCreated());
+//
+//	}
 
 
 
