@@ -17,11 +17,11 @@ jobs:
           java-version: '11'
           distribution: 'zulu'
       - name: Grant execute permission for gradlew
-        working-directory: file/server/
+        working-directory: seb45_main_012/server/
         run: chmod +x gradlew
 
       - name: Build with Gradle
-        working-directory: file/server/
+        working-directory: seb45_main_012/server/
         run: ./gradlew build
 
       - name: Docker build
