@@ -30,7 +30,7 @@ public class CalendarController {
         return new ResponseEntity<CalendarDto.Response>(mapper.calendarToCalendarResponseDto(createdCalendar), HttpStatus.CREATED);
     }
 
-    @PatchMapping("{user_id}/{calendar_id}")
+    @PatchMapping("/{user_id}/{calendar_id}")
     public ResponseEntity<CalendarDto.Response> patchCalendar(@PathVariable("user_id") long userId,
                                         @PathVariable("calendar_id") long calendarId,
                                         @Validated @RequestBody CalendarDto.Patch patch){
@@ -41,14 +41,14 @@ public class CalendarController {
         return ResponseEntity.ok(mapper.calendarToCalendarResponseDto(updatedCalendar));
     }
 
-    @GetMapping("{calendar_id}")
+    @GetMapping("/{calendar_id}")
     public ResponseEntity<CalendarDto.Response> getCalendar(@PathVariable("calendar_id") long calendarId){
         Calendar findCalendar = calendarService.findCalendar(calendarId);
 
         return ResponseEntity.ok(mapper.calendarToCalendarResponseDto(findCalendar));
     }
 
-    @DeleteMapping("{calendar_id}")
+    @DeleteMapping("/{calendar_id}")
     public ResponseEntity deleteCalendar(@PathVariable("calendar_id") long calendarId){
         calendarService.deleteCalendar(calendarId);
         return ResponseEntity.noContent().build();

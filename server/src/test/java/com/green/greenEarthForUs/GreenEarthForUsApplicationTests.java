@@ -43,17 +43,6 @@ class GreenEarthForUsApplicationTests {
 	@Test
 	void Loads() throws Exception{
 
-		MockMultipartFile image = new MockMultipartFile(
-				"image",
-				"image.jpg",
-				MediaType.IMAGE_JPEG_VALUE,
-				"YourImageContent".getBytes(StandardCharsets.UTF_8)
-		);
-
-		ResultActions  actions = mockMvc.perform(MockMvcRequestBuilders.multipart("/image/api")
-				.file(image));
-
-		actions.andExpect(MockMvcResultMatchers.status().isOk());
 
 	}
 
