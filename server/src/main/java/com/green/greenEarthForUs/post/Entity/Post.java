@@ -31,8 +31,12 @@ public class Post {
     @Column
     private String title;
 
-    //@Column
-    //private String imagePath;
+    @Column
+    private String bodyImageFileName;
+
+    @Lob
+    @Column
+    private byte[] bodyImage;
 
     @Column(name= "created_at")
     private LocalDateTime createdAt;
@@ -40,4 +44,5 @@ public class Post {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+
 }
