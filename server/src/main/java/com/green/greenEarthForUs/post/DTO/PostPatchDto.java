@@ -1,11 +1,13 @@
 package com.green.greenEarthForUs.post.DTO;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
 
 @Getter @Setter
+@NoArgsConstructor
 public class PostPatchDto {
     private Long id;
 
@@ -15,9 +17,9 @@ public class PostPatchDto {
 
     private String title;
 
-    private String writer;
+    private String bodyImageFileName;
 
-    //private String imagePath;
+    private byte[] bodyImage;
 
     private String body;
 

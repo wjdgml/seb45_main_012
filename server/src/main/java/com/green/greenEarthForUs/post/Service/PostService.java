@@ -9,11 +9,13 @@ import com.green.greenEarthForUs.post.Mapper.PostMapper;
 import com.green.greenEarthForUs.post.Repository.PostRepository;
 import com.green.greenEarthForUs.user.Entity.User;
 import com.green.greenEarthForUs.user.Repository.UserRepository;
+import com.green.greenEarthForUs.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -26,26 +28,34 @@ public class PostService {
     private final PostRepository postsRepository;
     private final UserRepository userRepository;
     private final PostMapper mapper;
+    private final UserService userService;
 
-    @Autowired
-    public PostService(PostRepository postsRepository, UserRepository userRepository, PostMapper mapper) {
+    public PostService(PostRepository postsRepository, UserRepository userRepository, PostMapper mapper, UserService userService) {
         this.postsRepository = postsRepository;
         this.userRepository = userRepository;
         this.mapper = mapper;
+        this.userService = userService;
     }
 
     // 게시글 생성
     @Transactional
-    public Post createPost(Long userId, PostPostDto postPostDto) { // 유저, 게시글
+    public Post createPost(Long userId, PostPostDto postPostDto) throws IOException { // 유저, 게시글
 
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new EntityNotFoundException("User not found with ID: " + userId));
+                .orElseThrow(() -> new EntityNotFoundException("User not found with ID: " + userId)); // 유저 조회
 
-        Post post = mapper.PostDtoToPost(postPostDto);
+        Post post = mapper.postPostDtoToPost(postPostDto);
         post.setUser(user);
-        post.setCreatedAt(LocalDateTime.now());
+        post.setCreatedAt(LocalDateTime.now()); // 게시글 생성
 
-        return postsRepository.save(post);
+        post.setOpen(postPostDto.isOpen());
+
+        Post savedPost = postsRepository.save(post); // 게시글 저장
+
+        // 사용자의 등급을 게시글 수에 따라서 추가 땅 -> 새싹 ...
+        userService.updateGradePostCount(user);
+        return savedPost;
+
     }
 
     // 단일 게시글 조회
