@@ -89,13 +89,13 @@ const MyPageMain = () => {
       <section className='posts_container'>
         {filteredPosts.map((post) => (
           <article className="post" key={post.id}>
-            <h4 className="post_title">{post.title}</h4>
-            <div className='post_detail'>
-              <span className='post_content'>{post.body.slice(0, 50) + " ..."}</span>
-              <span className='post_date'>{
+            <div className='post_info'>
+              <h4 className="post_title">{post.title}</h4>
+              <div className='post_date'>{
                 new Date(post.createdAt).toISOString().split("T")[0].replace(/-/g, '.')
-              }</span>
+              }</div>
             </div>
+            <div className='post_content'>{post.body.slice(0, 50) + " ..."}</div>
           </article>
         ))}
       </section>
@@ -116,7 +116,7 @@ const testData = [
         "userId": 1,
         "type": "free",
         "title": "Test1입니다.",
-        "body": "Test1입니다.",
+        "body": "Test1dsafqdfqafdsdsafqdfqafdsdsafqdfqafdsdsafqdfqafdsdsafqdfqafdsdsafqdfqafdsdsafqdfqafdsdsafqdfqafdsdsafqdfqafdsdsafqdfqafds입니다.",
         "open": true,
         "createdAt": "2023-08-29T09:22:18.7444354"
     },
