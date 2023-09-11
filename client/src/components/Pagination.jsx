@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import '../styles/Pagination.css';
-import { current } from '@reduxjs/toolkit';
 
-const Pagination = ({posts, postsPerPage, pagesPerGroup }) => {
+const Pagination = ({posts, postsPerPage, pagesPerGroup, currentPage, setCurrentPage }) => {
   const totalPosts = posts.length;
   const totalPages = Math.ceil( totalPosts / postsPerPage);
-  const [ currentPage, setCurrentPage] = useState(1);
 
   const getPageNumbers = () => {
     const pageNumbers = [];
@@ -37,29 +36,33 @@ const Pagination = ({posts, postsPerPage, pagesPerGroup }) => {
     ));
   };
 
-  // 페이지별 포스트 보여줌
-  const renderPosts = () => {
-    const startIndex = ( currentPage - 1 ) * postsPerPage;
-    const endIndex = Math.min(startIndex + postsPerPage, totalPosts);
-    
-    return (
-      <div>
-        <div className='pagination'>
-          <button
-            onClick={() => setCurrentPage(Math.max(currentPage -1, 1))}
-            disabled={currentPage === 1}
-          >
-            &lt;
-          </button>
-          {pageButtons}
-          <button
-            onClick={() => setCurrentPage(Math.min(currentPage +1, totalPages))}
-            disabled={currentPage ===totalPages1}
-          >
-            &gt;
-          </button>
-        </div>
+  return (
+    <div>
+      <div className='pagination'>
+        <button
+          onClick={() => setCurrentPage(Math.max(currentPage -1, 1))}
+          disabled={currentPage === 1}
+        >
+          &lt;
+        </button>
+        {pageButtons}
+        <button
+          onClick={() => setCurrentPage(Math.min(currentPage +1, totalPages))}
+          disabled={currentPage ===totalPages}
+        >
+          &gt;
+        </button>
       </div>
-    )
-  }
+    </div>
+  )
 }
+
+Pagination.propTypes = {
+  posts: PropTypes.array.isRequired,
+  postsPerPage: PropTypes.number.isRequired,
+  pagesPerGroup: PropTypes.number.isRequired,
+  currentPage: PropTypes.number.isRequired,
+  setCurrentPage: PropTypes.func.isRequired,
+};
+
+export default Pagination;

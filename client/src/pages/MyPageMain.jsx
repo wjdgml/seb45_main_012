@@ -42,8 +42,13 @@ const MyPageMain = () => {
     else if (filter === 'private') return post.open === false;
   });
 
+  const startPostIndex = ( currentPage - 1 ) * postsPerPage;
+  const endPostIndex = Math.min(startPostIndex + postsPerPage);
+  const currentPosts = filteredPosts.slice(startPostIndex, endPostIndex);
+
   const handleFilterChange = ( newFilter ) => {
     setFilter(newFilter);
+    setCurrentPage(1); //필터 변경 시 페이지를 첫 번째 페이지로 초기화
   }
 
   const [ selectedButton, setSelectedButton ] = useState('전체');
@@ -90,7 +95,7 @@ const MyPageMain = () => {
         </li>
       </ul>
       <section className='posts_container'>
-        {filteredPosts.map((post) => (
+        {currentPosts.map((post) => (
           <article className="post" key={post.id}>
             <div className='post_info'>
               <h4 className="post_title">{post.title}</h4>
@@ -101,6 +106,13 @@ const MyPageMain = () => {
             <div className='post_content'>{post.body.slice(0, 50) + " ..."}</div>
           </article>
         ))}
+        <Pagination
+          posts={filteredPosts}
+          postsPerPage={postsPerPage}
+          pagesPerGroup={5}
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
+        />
       </section>
     </main>
   )
@@ -118,8 +130,8 @@ const testData = [
         "id": 1,
         "userId": 1,
         "type": "free",
-        "title": "Test1입니다.",
-        "body": "Test1dsafqdfqafdsdsafqdfqafdsdsafqdfqafdsdsafqdfqafdsdsafqdfqafdsdsafqdfqafdsdsafqdfqafdsdsafqdfqafdsdsafqdfqafdsdsafqdfqafds입니다.",
+        "title": "1",
+        "body": "공개1",
         "open": true,
         "createdAt": "2023-08-29T09:22:18.7444354"
     },
@@ -127,8 +139,8 @@ const testData = [
       "id": 1,
       "userId": 1,
       "type": "free",
-      "title": "Test1입니다.",
-      "body": "Test1입니다.",
+      "title": "2입니다.",
+      "body": "공개2입니다.",
       "open": true,
       "createdAt": "2023-08-29T09:22:18.7444354"
   },
@@ -136,8 +148,8 @@ const testData = [
       "id": 1,
       "userId": 1,
       "type": "free",
-      "title": "Test1입니다.",
-      "body": "Test1입니다.",
+      "title": "비공개1니다.",
+      "body": "비공개1입니다.",
       "open": false,
       "createdAt": "2023-08-29T09:22:18.7444354"
   },
@@ -145,8 +157,8 @@ const testData = [
     "id": 1,
     "userId": 1,
     "type": "free",
-    "title": "Test1입니다.",
-    "body": "Test1입니다.",
+    "title": "비공개2입니다.",
+    "body": "비공개2입니다.",
     "open": false,
     "createdAt": "2023-08-29T09:22:18.7444354"
 },
@@ -154,8 +166,8 @@ const testData = [
     "id": 1,
     "userId": 1,
     "type": "free",
-    "title": "Test3입니다.",
-    "body": "Test3입니다.",
+    "title": "공개3입니다.",
+    "body": "공개3입니다.",
     "open": true,
     "createdAt": "2023-08-29T09:22:18.7444354"
 },
@@ -163,8 +175,8 @@ const testData = [
   "id": 1,
   "userId": 1,
   "type": "free",
-  "title": "Test3입니다.",
-  "body": "Test3입니다.",
+  "title": "공개4입니다.",
+  "body": "공개4입니다.",
   "open": true,
   "createdAt": "2023-08-29T09:22:18.7444354"
 },
@@ -172,8 +184,8 @@ const testData = [
   "id": 1,
   "userId": 1,
   "type": "free",
-  "title": "Test3입니다.",
-  "body": "Test3입니다.",
+  "title": "공개5입니다.",
+  "body": "공개5입니다.",
   "open": true,
   "createdAt": "2023-08-29T09:22:18.7444354"
 },
@@ -181,8 +193,8 @@ const testData = [
   "id": 1,
   "userId": 1,
   "type": "free",
-  "title": "Test3입니다.",
-  "body": "Test3입니다.",
+  "title": "공개5.5입니다.",
+  "body": "공개5.5입니다.",
   "open": true,
   "createdAt": "2023-08-29T09:22:18.7444354"
 },
@@ -190,8 +202,8 @@ const testData = [
   "id": 1,
   "userId": 1,
   "type": "free",
-  "title": "Test3입니다.",
-  "body": "Test3입니다.",
+  "title": "공개6입니다.",
+  "body": "공개6입니다.",
   "open": true,
   "createdAt": "2023-08-29T09:22:18.7444354"
 },
@@ -199,8 +211,8 @@ const testData = [
   "id": 1,
   "userId": 1,
   "type": "free",
-  "title": "Test4입니다.",
-  "body": "Test4입니다.",
+  "title": "공개7입니다.",
+  "body": "공개7입니다.",
   "open": true,
   "createdAt": "2023-08-29T09:22:18.7444354"
 },
@@ -208,8 +220,8 @@ const testData = [
   "id": 1,
   "userId": 1,
   "type": "free",
-  "title": "Test3입니다.",
-  "body": "Test3입니다.",
+  "title": "비공개3입니다.",
+  "body": "비공개3입니다.",
   "open": false,
   "createdAt": "2023-08-29T09:22:18.7444354"
 },
@@ -217,8 +229,8 @@ const testData = [
   "id": 1,
   "userId": 1,
   "type": "free",
-  "title": "Test3입니다.",
-  "body": "Test3입니다.",
+  "title": "비공개4입니다.",
+  "body": "비공개4입니다.",
   "open": false,
   "createdAt": "2023-08-29T09:22:18.7444354"
 },
@@ -226,8 +238,8 @@ const testData = [
   "id": 1,
   "userId": 1,
   "type": "free",
-  "title": "Test3입니다.",
-  "body": "Test3입니다.",
+  "title": "비공개5입니다.",
+  "body": "비공개5입니다.",
   "open": false,
   "createdAt": "2023-08-29T09:22:18.7444354"
 },
@@ -235,8 +247,8 @@ const testData = [
   "id": 1,
   "userId": 1,
   "type": "free",
-  "title": "Test3입니다.",
-  "body": "Test3입니다.",
+  "title": "비공개6입니다.",
+  "body": "비공개6입니다.",
   "open": false,
   "createdAt": "2023-08-29T09:22:18.7444354"
 }
