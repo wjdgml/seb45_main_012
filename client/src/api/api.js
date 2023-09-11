@@ -8,3 +8,4 @@ const instance = axios.create({
 export const getPosts = (page) => {
   return instance.get(`/post/free?page=${page}`);
 };
+
