@@ -1,5 +1,6 @@
 package com.green.greenEarthForUs.calendar.Controller;
 
+import com.green.greenEarthForUs.Image.Service.ImageService;
 import com.green.greenEarthForUs.calendar.Entity.Calendar;
 import com.green.greenEarthForUs.calendar.DTO.CalendarDto;
 import com.green.greenEarthForUs.calendar.Mapper.CalendarMapper;
@@ -8,6 +9,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")
@@ -18,14 +22,19 @@ public class CalendarController {
 
     private final CalendarMapper mapper;
 
+    private final ImageService imageService;
+
     public CalendarController(CalendarService calendarService,
-                              CalendarMapper mapper){
+                              CalendarMapper mapper,
+                              ImageService imageService){
         this.calendarService = calendarService;
         this.mapper = mapper;
+        this.imageService = imageService;
     }
 
     @PostMapping
     public ResponseEntity<CalendarDto.Response> postCalendar(@Validated @RequestBody CalendarDto.Post post){
+
         Calendar createdCalendar = calendarService.createCalendar(mapper.calendarPostDtoToCalendar(post));
 
         return new ResponseEntity<CalendarDto.Response>(mapper.calendarToCalendarResponseDto(createdCalendar), HttpStatus.CREATED);

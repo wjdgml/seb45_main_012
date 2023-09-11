@@ -23,10 +23,4 @@ public class Calendar {
     @Column
     private LocalDateTime localDateTime;
 
-//    @OneToMany
-//    public Post post;
-//
-//    @ManyToOne
-//    public User user;
-
 }
