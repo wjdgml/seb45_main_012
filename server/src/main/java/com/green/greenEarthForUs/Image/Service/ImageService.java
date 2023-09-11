@@ -1,12 +1,15 @@
 package com.green.greenEarthForUs.Image.Service;
 
 import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.UUID;
@@ -25,7 +28,8 @@ public class ImageService {
 
 
     public String uploadImage(MultipartFile file) throws IOException{
-        String fileName = UUID.randomUUID().toString() + "-" + file.getOriginalFilename();
+        String filePath = "images/";
+        String fileName = filePath + UUID.randomUUID().toString() + "-" + file.getOriginalFilename();
 
         ObjectMetadata metadata = new ObjectMetadata();
         metadata.setContentType(file.getContentType());
@@ -37,5 +41,13 @@ public class ImageService {
         return amazonS3.getUrl(bucketName, fileName).toString();
     }
 
+    public void deleteImage(String imageUrl) throws Exception {
+        URL url = new URL(imageUrl);
+        String host = url.getHost();
+        String path = url.getPath();
+
+        String filePath = path.substring(bucketName.length()+2);
+        amazonS3.deleteObject(new DeleteObjectRequest(bucketName, filePath));
+    }
 
 }

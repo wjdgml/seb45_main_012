@@ -1,7 +1,6 @@
 package com.green.greenEarthForUs.Image.Controller;
 
 import com.green.greenEarthForUs.Image.Service.ImageService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,6 +24,12 @@ public class ImageController {
         String imageUrl = imageService.uploadImage(image);
 
         return new ResponseEntity<String>(imageUrl, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{image_url}")
+    public ResponseEntity imageDelete(@PathVariable("image_url") String imageUrl) throws Exception {
+        imageService.deleteImage(imageUrl);
+        return ResponseEntity.noContent().build();
     }
 
 
