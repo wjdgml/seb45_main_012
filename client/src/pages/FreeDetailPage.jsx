@@ -1,47 +1,54 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import '../styles/Button.css';
 import '../styles/FreeDetailPage.css';
 import NavBar from '../components/NavBar.jsx';
-import { createComment } from '../api/api.js';
+import { getPost, getUser, getVote, getComment, postComment } from '../api/api.js';
 
 const FreeDetailPage = () => {
 
-  const post = {
-    id: 1,
-    userId: 0,
-    type: "free",
-    title: "Test입니다.",
-    body: "Test입니다.",
-    open: "open",
-    createdAt: "2023-08-29T09:20:00.0014474"
-  };
-
-  const user = {
-    "userId": "testID",
-    "username": "test",
-    "userStatus": "USER",
-    "userGrade": "seed",
-    "passwordQuestion": "Test Question",
-    "createdAt": "2023-09-04T15:45:02.2870181"
-  };
-
-  const vote = {
-    "id": 1,
-    "postId": 1,
-    "userId": 0,
-    "voteType": null,
-    "voteCount": 0
-  }
-
-  const comment = {
-    "id": 1,
-    "userId": 1,
-    "postId": 3,
-    "body": "test comment",
-    "createdAt": "2023-08-29T14:43:27.8032943"
-  }
-
+  const [post, setPost] = useState({});
+  const [user, setUser] = useState({});
+  const [vote, setVote] = useState({});
+  const [comment, setComment] = useState({});
   const [commentText, setCommentText] = useState('');
+
+  useEffect(() => {
+    // 포스트 데이터 가져오기
+    getPost(1)
+      .then((response) => {
+        setPost(response.data);
+      })
+      .catch((error) => {
+        console.error('포스트 데이터 가져오기 오류:', error);
+      });
+
+    // 유저 데이터 가져오기
+    getUser('testID')
+      .then((response) => {
+        setUser(response.data);
+      })
+      .catch((error) => {
+        console.error('유저 데이터 가져오기 오류:', error);
+      });
+
+    // 투표 데이터 가져오기
+    getVote(1, 1)
+      .then((response) => {
+        setVote(response.data);
+      })
+      .catch((error) => {
+        console.error('투표 데이터 가져오기 오류:', error);
+      });
+
+    // 댓글 데이터 가져오기
+    getComment(3, 1)
+      .then((response) => {
+        setComment(response.data);
+      })
+      .catch((error) => {
+        console.error('댓글 데이터 가져오기 오류:', error);
+      });
+  }, []);
 
   const handleCommentTextChange = (event) => {
     setCommentText(event.target.value);
@@ -50,7 +57,7 @@ const FreeDetailPage = () => {
   const handleSubmitComment = () => {
     console.log('댓글 내용:', commentText);
 
-    createComment(post.id, user.userId, commentText)
+    postComment(post.id, user.userId, commentText)
       .then((response) => {
         console.log('댓글 작성 완료:', response.data);
       })

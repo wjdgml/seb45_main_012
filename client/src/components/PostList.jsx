@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import '../styles/PostList.css';
 import { Link } from 'react-router-dom';
-import { getPosts } from '../api/api.js';
+import { getAllPosts } from '../api/api.js';
 
 // 2) API axios사용
 const PostList = () => {
@@ -12,11 +12,11 @@ const PostList = () => {
   // 하여 초기데이터 5개 로딩
   useEffect(() => {
     // 초기 데이터 로딩
-    getPosts(currentPage)
+    getAllPosts(1)
       .then((res) => {
         const initialPosts = res.data.slice(0, 5);
         setVisiblePosts(initialPosts);
-        // setCurrentPage(currentPage);
+        setCurrentPage(1);
       })
       .catch((error) => console.error('Error:', error));
   }, []);
@@ -31,7 +31,7 @@ const PostList = () => {
             setIsLoading(true);
             const nextPage = currentPage + 1;
   
-            getPosts(nextPage)
+            getAllPosts(nextPage)
               .then((response) => {
                 const data = response.data;
                 if (data.length > 0) {
