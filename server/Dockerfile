@@ -7,9 +7,5 @@ ARG JAR_FILE=build/libs/*-SNAPSHOT.jar
 # (3) jar 빌드 파일을 도커 컨테이너로 복사
 COPY server/build/libs/*.jar app.jar
 
-COPY server/scripts/env.sh /env.sh
-RUN chmod +x /env.sh
-RUN /env.sh
-
 # (4) jar 파일 실행
 ENTRYPOINT ["java","-jar","/app.jar"]
