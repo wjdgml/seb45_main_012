@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import '../styles/Button.css';
 import '../styles/MyPageMain.css'
+import Pagination from 'components/Pagination.jsx';
 // import Instance from '../axiosConfig';
 // import jwtDecode from 'jwt-decode';
 
@@ -28,6 +29,8 @@ const MyPageMain = () => {
 
   const [ posts, setPosts ] = useState([]);
   const [ filter, setFilter ] = useState('all');
+  const [ currentPage, setCurrentPage ] = useState(1);
+  const postsPerPage = 5;
 
   useEffect(() => {
     setPosts(testData);
