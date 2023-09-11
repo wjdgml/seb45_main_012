@@ -90,6 +90,7 @@ public class SecurityConfig{
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PATCH", "DELETE"));
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
+        source.registerCorsConfiguration("http://localhost:3000/**", configuration);
         return source;
     }
 

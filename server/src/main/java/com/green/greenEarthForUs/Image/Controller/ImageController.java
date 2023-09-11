@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping("/image")
 public class ImageController {
 
