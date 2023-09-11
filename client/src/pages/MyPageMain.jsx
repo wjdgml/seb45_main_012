@@ -108,7 +108,7 @@ const MyPageMain = () => {
         ))}
         <Pagination
           posts={filteredPosts}
-          postsPerPage={postsPerPage}
+          postsPerPage={5}
           pagesPerGroup={5}
           currentPage={currentPage}
           setCurrentPage={setCurrentPage}
@@ -136,7 +136,7 @@ const testData = [
         "createdAt": "2023-08-29T09:22:18.7444354"
     },
     {
-      "id": 1,
+      "id": 2,
       "userId": 1,
       "type": "free",
       "title": "2입니다.",
@@ -145,7 +145,7 @@ const testData = [
       "createdAt": "2023-08-29T09:22:18.7444354"
   },
   {
-      "id": 1,
+      "id": 3,
       "userId": 1,
       "type": "free",
       "title": "비공개1니다.",
@@ -154,7 +154,7 @@ const testData = [
       "createdAt": "2023-08-29T09:22:18.7444354"
   },
   {
-    "id": 1,
+    "id": 14,
     "userId": 1,
     "type": "free",
     "title": "비공개2입니다.",
@@ -163,7 +163,7 @@ const testData = [
     "createdAt": "2023-08-29T09:22:18.7444354"
 },
 {
-    "id": 1,
+    "id": 4,
     "userId": 1,
     "type": "free",
     "title": "공개3입니다.",
@@ -172,7 +172,7 @@ const testData = [
     "createdAt": "2023-08-29T09:22:18.7444354"
 },
 {
-  "id": 1,
+  "id": 5,
   "userId": 1,
   "type": "free",
   "title": "공개4입니다.",
@@ -181,7 +181,7 @@ const testData = [
   "createdAt": "2023-08-29T09:22:18.7444354"
 },
 {
-  "id": 1,
+  "id": 6,
   "userId": 1,
   "type": "free",
   "title": "공개5입니다.",
@@ -190,7 +190,7 @@ const testData = [
   "createdAt": "2023-08-29T09:22:18.7444354"
 },
 {
-  "id": 1,
+  "id": 7,
   "userId": 1,
   "type": "free",
   "title": "공개5.5입니다.",
@@ -199,7 +199,7 @@ const testData = [
   "createdAt": "2023-08-29T09:22:18.7444354"
 },
 {
-  "id": 1,
+  "id": 8,
   "userId": 1,
   "type": "free",
   "title": "공개6입니다.",
@@ -208,7 +208,7 @@ const testData = [
   "createdAt": "2023-08-29T09:22:18.7444354"
 },
 {
-  "id": 1,
+  "id": 9,
   "userId": 1,
   "type": "free",
   "title": "공개7입니다.",
@@ -217,7 +217,7 @@ const testData = [
   "createdAt": "2023-08-29T09:22:18.7444354"
 },
 {
-  "id": 1,
+  "id": 10, 
   "userId": 1,
   "type": "free",
   "title": "비공개3입니다.",
@@ -226,7 +226,7 @@ const testData = [
   "createdAt": "2023-08-29T09:22:18.7444354"
 },
 {
-  "id": 1,
+  "id": 11,
   "userId": 1,
   "type": "free",
   "title": "비공개4입니다.",
@@ -235,7 +235,7 @@ const testData = [
   "createdAt": "2023-08-29T09:22:18.7444354"
 },
 {
-  "id": 1,
+  "id": 12,
   "userId": 1,
   "type": "free",
   "title": "비공개5입니다.",
@@ -244,7 +244,7 @@ const testData = [
   "createdAt": "2023-08-29T09:22:18.7444354"
 },
 {
-  "id": 1,
+  "id": 13,
   "userId": 1,
   "type": "free",
   "title": "비공개6입니다.",

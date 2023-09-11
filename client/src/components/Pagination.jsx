@@ -25,15 +25,16 @@ const Pagination = ({posts, postsPerPage, pagesPerGroup, currentPage, setCurrent
     const startIndex = groupIndex * pagesPerGroup + 1;
     const endIndex = Math.min(startIndex + pagesPerGroup - 1, pageNumbers.length);
     
-    return pageNumbers.slice(startIndex-1, endIndex).map((number) => (
-      <button
-        key={number}
-        className={currentPage === number ? 'active' : ''}
-        onClick={() => setCurrentPage(number)}
-      >
-        {number}
-      </button>
-    ));
+    return (
+      pageNumbers.slice(startIndex-1, endIndex).map((number) => (
+        <button
+          key={number}
+          className={currentPage === number ? 'active' : ''}
+          onClick={() => setCurrentPage(number)}
+        >
+          {number}
+        </button>
+      )))
   };
 
   return (
@@ -45,7 +46,7 @@ const Pagination = ({posts, postsPerPage, pagesPerGroup, currentPage, setCurrent
         >
           &lt;
         </button>
-        {pageButtons}
+        {pageButtons()}
         <button
           onClick={() => setCurrentPage(Math.min(currentPage +1, totalPages))}
           disabled={currentPage ===totalPages}
