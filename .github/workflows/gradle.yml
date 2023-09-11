@@ -57,6 +57,6 @@ jobs:
               'fi',
               'sudo docker pull strkawk/green:${GITHUB_SHA::7}',
               'sudo docker tag strkawk/green:${GITHUB_SHA::7} green',
-              'sudo docker run -d --name server -p 8080:8080 green'
+              'sudo docker run -d --name server -p 8080:8080 -e JWT_SECRET_KEY=${{ secrets.JWT_SECRET_KEY }} -e MYSQL_PASSWORD=${{ secrets.MYSQL_PASSWORD }}'
             ]" \
             --output text
