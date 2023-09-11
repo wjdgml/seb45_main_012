@@ -24,8 +24,8 @@ function EditerPage() {
 
       <div className="page_container editCenter">
         <div className="board_btn_container">
-          <button onClick={handleSelectFreeBoard} className={`free_board_btn ${selectFreeBoard ? '' : 'unselected'}`}>자유 게시판</button>
-          <button onClick={handleSelectPhotoBoard} className={`photo_board_btn ${selectPhotoBoard ? 'selected' : ''}`}>인증 게시판</button>
+          <button  onClick={handleSelectFreeBoard} className={`free_board_btn ${selectFreeBoard ? '' : 'unselected'}`}>자유 게시판</button>
+          <button  onClick={handleSelectPhotoBoard} className={`photo_board_btn ${selectPhotoBoard ? 'selected' : ''}`}>인증 게시판</button>
         </div>
 
         {selectFreeBoard ? <PostEditer/>: <PostEditerWithImage/>}
