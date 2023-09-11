@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import '../styles/Button.css';
 import '../styles/FreeDetailPage.css';
 import NavBar from '../components/NavBar.jsx';
+import { createComment } from '../api/api.js';
 
-const FreeBoardPage = () => {
+const FreeDetailPage = () => {
 
   const post = {
     id: 1,
@@ -39,6 +40,25 @@ const FreeBoardPage = () => {
     "body": "test comment",
     "createdAt": "2023-08-29T14:43:27.8032943"
   }
+
+  const [commentText, setCommentText] = useState('');
+
+  const handleCommentTextChange = (event) => {
+    setCommentText(event.target.value);
+  };
+
+  const handleSubmitComment = () => {
+    console.log('댓글 내용:', commentText);
+
+    createComment(post.id, user.userId, commentText)
+      .then((response) => {
+        console.log('댓글 작성 완료:', response.data);
+      })
+      .catch((error) => {
+        console.error('댓글 작성 오류:', error);
+      });
+  };
+
   return (
   <>
   <div><NavBar /></div>
@@ -63,8 +83,12 @@ const FreeBoardPage = () => {
             className='comment_input'
               type="text"
               placeholder="내용을 입력해주세요."
+              value={commentText}
+              onChange={handleCommentTextChange}
             />
-              <button className='comment_button'>작성</button>
+              <button className='comment_button' onClick={handleSubmitComment}>
+                작성
+              </button>
             <div className="post_detail_header">
               <div>
                 <p>{user.userGrade} {user.username}</p>
@@ -78,4 +102,4 @@ const FreeBoardPage = () => {
   )
 }
 
-export default FreeBoardPage;
+export default FreeDetailPage;
