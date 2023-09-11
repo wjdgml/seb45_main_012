@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import '../styles/PostList.css';
+import { Link } from 'react-router-dom';
 import { getPosts } from '../api/api.js';
 
 // 2) API axios사용
@@ -11,11 +12,11 @@ const PostList = () => {
   // 하여 초기데이터 5개 로딩
   useEffect(() => {
     // 초기 데이터 로딩
-    getPosts(1)
+    getPosts(currentPage)
       .then((res) => {
         const initialPosts = res.data.slice(0, 5);
         setVisiblePosts(initialPosts);
-        setCurrentPage(1);
+        // setCurrentPage(currentPage);
       })
       .catch((error) => console.error('Error:', error));
   }, []);
