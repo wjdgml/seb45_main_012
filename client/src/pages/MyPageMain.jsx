@@ -48,7 +48,7 @@ const MyPageMain = () => {
 
   const handleFilterChange = ( newFilter ) => {
     setFilter(newFilter);
-    setCurrentPage(1); //필터 변경 시 페이지를 첫 번째 페이지로 초기화
+    setCurrentPage(1);
   }
 
   const [ selectedButton, setSelectedButton ] = useState('전체');
@@ -108,7 +108,7 @@ const MyPageMain = () => {
         ))}
         <Pagination
           posts={filteredPosts}
-          postsPerPage={5}
+          postsPerPage={postsPerPage}
           pagesPerGroup={5}
           currentPage={currentPage}
           setCurrentPage={setCurrentPage}
@@ -118,138 +118,4 @@ const MyPageMain = () => {
   )
 }
 
-
 export default MyPageMain;
-
-
-
-
-// // 1) 데이터 하드코딩
-const testData = [
-    {
-        "id": 1,
-        "userId": 1,
-        "type": "free",
-        "title": "1",
-        "body": "공개1",
-        "open": true,
-        "createdAt": "2023-08-29T09:22:18.7444354"
-    },
-    {
-      "id": 2,
-      "userId": 1,
-      "type": "free",
-      "title": "2입니다.",
-      "body": "공개2입니다.",
-      "open": true,
-      "createdAt": "2023-08-29T09:22:18.7444354"
-  },
-  {
-      "id": 3,
-      "userId": 1,
-      "type": "free",
-      "title": "비공개1니다.",
-      "body": "비공개1입니다.",
-      "open": false,
-      "createdAt": "2023-08-29T09:22:18.7444354"
-  },
-  {
-    "id": 14,
-    "userId": 1,
-    "type": "free",
-    "title": "비공개2입니다.",
-    "body": "비공개2입니다.",
-    "open": false,
-    "createdAt": "2023-08-29T09:22:18.7444354"
-},
-{
-    "id": 4,
-    "userId": 1,
-    "type": "free",
-    "title": "공개3입니다.",
-    "body": "공개3입니다.",
-    "open": true,
-    "createdAt": "2023-08-29T09:22:18.7444354"
-},
-{
-  "id": 5,
-  "userId": 1,
-  "type": "free",
-  "title": "공개4입니다.",
-  "body": "공개4입니다.",
-  "open": true,
-  "createdAt": "2023-08-29T09:22:18.7444354"
-},
-{
-  "id": 6,
-  "userId": 1,
-  "type": "free",
-  "title": "공개5입니다.",
-  "body": "공개5입니다.",
-  "open": true,
-  "createdAt": "2023-08-29T09:22:18.7444354"
-},
-{
-  "id": 7,
-  "userId": 1,
-  "type": "free",
-  "title": "공개5.5입니다.",
-  "body": "공개5.5입니다.",
-  "open": true,
-  "createdAt": "2023-08-29T09:22:18.7444354"
-},
-{
-  "id": 8,
-  "userId": 1,
-  "type": "free",
-  "title": "공개6입니다.",
-  "body": "공개6입니다.",
-  "open": true,
-  "createdAt": "2023-08-29T09:22:18.7444354"
-},
-{
-  "id": 9,
-  "userId": 1,
-  "type": "free",
-  "title": "공개7입니다.",
-  "body": "공개7입니다.",
-  "open": true,
-  "createdAt": "2023-08-29T09:22:18.7444354"
-},
-{
-  "id": 10, 
-  "userId": 1,
-  "type": "free",
-  "title": "비공개3입니다.",
-  "body": "비공개3입니다.",
-  "open": false,
-  "createdAt": "2023-08-29T09:22:18.7444354"
-},
-{
-  "id": 11,
-  "userId": 1,
-  "type": "free",
-  "title": "비공개4입니다.",
-  "body": "비공개4입니다.",
-  "open": false,
-  "createdAt": "2023-08-29T09:22:18.7444354"
-},
-{
-  "id": 12,
-  "userId": 1,
-  "type": "free",
-  "title": "비공개5입니다.",
-  "body": "비공개5입니다.",
-  "open": false,
-  "createdAt": "2023-08-29T09:22:18.7444354"
-},
-{
-  "id": 13,
-  "userId": 1,
-  "type": "free",
-  "title": "비공개6입니다.",
-  "body": "비공개6입니다.",
-  "open": false,
-  "createdAt": "2023-08-29T09:22:18.7444354"
-}
-];

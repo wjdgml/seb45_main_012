@@ -19,7 +19,6 @@ const Pagination = ({posts, postsPerPage, pagesPerGroup, currentPage, setCurrent
 
   const pageNumbers = getPageNumbers();
   
-  // 페이지네이션 선택 버튼 보여줌
   const pageButtons = () => {
     const groupIndex = Math.ceil(currentPage / pagesPerGroup) - 1;
     const startIndex = groupIndex * pagesPerGroup + 1;
