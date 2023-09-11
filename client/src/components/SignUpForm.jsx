@@ -115,15 +115,15 @@ function SignUpForm() {
 
             <div className="password_confirm_Q">
               <div className="password_confirm_Q_title">비밀번호 확인 질문</div>
-              <div className="select_box" onClick={handleDropdown}>
+              <div className="select_box" onClick={handleDropdown} aria-hidden="true">
                 <div className="arrow_before" style={view ? {transform: 'rotate(-45deg)'} : {transform: 'rotate(45deg)'}}></div>
                 <div className="arrow_after" style={view ? {transform: 'rotate(45deg)'} : {transform: 'rotate(-45deg)'}}></div>
               {selected}
               {view &&
                 <ul>
-                  <li onClick={handleSelectedMessagePlace}>기억에 남는 추억의 장소는?</li>
-                  <li onClick={handleSelectedMessagePet}>반려동물의 이름은?</li>
-                  <li onClick={handleSelectedMessageDate}>추억하고 싶은 날짜가 있다면?</li>
+                  <li onClick={handleSelectedMessagePlace} aria-hidden="true">기억에 남는 추억의 장소는?</li>
+                  <li onClick={handleSelectedMessagePet} aria-hidden="true">반려동물의 이름은?</li>
+                  <li onClick={handleSelectedMessageDate} aria-hidden="true">추억하고 싶은 날짜가 있다면?</li>
                 </ul>
               }
               </div>
@@ -146,6 +146,7 @@ function SignUpForm() {
           <div 
             className="signup_complete" 
             onClick={handleSubmit}
+            aria-hidden="true"
           >회원가입
           </div>
           {showWarning && 
