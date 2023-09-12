@@ -35,7 +35,7 @@ public class UserService {
 
         // 이미지 업로드
         user.setImageUrl(imageUrl);
-        user.setCreateAt(LocalDateTime.now());
+        user.setCreatedAt(LocalDateTime.now());
         user.setRole(USER);
         user.setGrade(LAND);
 
