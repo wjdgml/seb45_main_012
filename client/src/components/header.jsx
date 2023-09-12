@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import "../styles/Header.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPencil, faRightFromBracket, faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
+import { faPencil, faRightToBracket, faRightFromBracket, faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import PropTypes from 'prop-types';
 import Cookies from 'js-cookie';
 // import { Link } from 'react-router-dom';
@@ -35,7 +35,7 @@ const LogoutHeader = ( {fakeLogin}) => {
             </div>
             <div className="header_icon black">
               {/* <Link to={'/logout'}> */}
-                <FontAwesomeIcon icon={faRightFromBracket} className="header_icon" onClick={fakeLogin}/>
+                <FontAwesomeIcon icon={faRightToBracket} className="header_icon" onClick={fakeLogin}/>
               {/* </Link> */}
             </div>
           </div>
