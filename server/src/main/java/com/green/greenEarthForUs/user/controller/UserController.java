@@ -3,6 +3,7 @@ package com.green.greenEarthForUs.user.controller;
 
 import com.green.greenEarthForUs.Image.Service.ImageService;
 import com.green.greenEarthForUs.user.Entity.User;
+import com.green.greenEarthForUs.user.dto.UserAnswerDto;
 import com.green.greenEarthForUs.user.dto.UserPatchDto;
 import com.green.greenEarthForUs.user.dto.UserPostDto;
 import com.green.greenEarthForUs.user.dto.UserResponseDto;
@@ -58,7 +59,7 @@ public class UserController { // 이미지 데이터를 바이너리 형태로 �
     //사용자 질문 답변 확인
     @GetMapping("/{user-id}/verify")
     public ResponseEntity<String> verifyAnswer(@PathVariable(name = "user-id") Long userId,
-                                               @RequestParam String answer) {
+                                               @RequestPart(value = "String") String answer) {
         boolean isAnswerCorrect = userService.verifyAnswer(userId, answer);
 
         // 입력한 답변과 실제 저장된 답변이 같아야 함.

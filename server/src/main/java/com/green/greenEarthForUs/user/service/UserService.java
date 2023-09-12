@@ -3,6 +3,7 @@ import com.green.greenEarthForUs.Exception.BusinessLogicException;
 import com.green.greenEarthForUs.Exception.ExceptionCode;
 import com.green.greenEarthForUs.user.Entity.User;
 import com.green.greenEarthForUs.user.Repository.UserRepository;
+import com.green.greenEarthForUs.user.dto.UserAnswerDto;
 import com.green.greenEarthForUs.user.dto.UserPatchDto;
 import com.green.greenEarthForUs.user.dto.UserPostDto;
 import com.green.greenEarthForUs.user.mapper.UserMapper;
