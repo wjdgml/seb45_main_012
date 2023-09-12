@@ -38,7 +38,7 @@ public class PostController {
     // 게시글 생성
     @PostMapping("/{user-id}")
     public ResponseEntity<PostResponseDto> createPost(@PathVariable(value = "user-id") Long userId,
-                                                      @RequestParam("image") MultipartFile image,
+                                                      @RequestPart("image") MultipartFile image,
                                                       @RequestBody PostPostDto postPostDto) throws IOException {
 
         String imageUrl = imageService.uploadImage(image); // 이미지 업로드하고
