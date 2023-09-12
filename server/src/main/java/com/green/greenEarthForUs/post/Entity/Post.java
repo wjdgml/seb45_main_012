@@ -8,7 +8,8 @@ import lombok.*;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
-@Getter @Setter
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
@@ -25,7 +26,7 @@ public class Post {
     private Boolean open;
 
     @Column
-    private String writer;
+    private String imageUrl;
 
     @Column
     private String type; // type 게시글의 유형
@@ -33,14 +34,8 @@ public class Post {
     @Column
     private String title;
 
-    @Column
-    private String bodyImageFileName;
 
-    @Lob
-    @Column
-    private byte[] bodyImage;
-
-    @Column(name= "created_at")
+    @Column(name = "created_at")
     private LocalDateTime createdAt;
 
     @ManyToOne

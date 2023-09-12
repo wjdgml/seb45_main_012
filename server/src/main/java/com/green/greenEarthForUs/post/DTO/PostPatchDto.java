@@ -17,9 +17,7 @@ public class PostPatchDto {
 
     private String title;
 
-    private String bodyImageFileName;
-
-    private byte[] bodyImage;
+    private String imageUrl;
 
     private String body;
 

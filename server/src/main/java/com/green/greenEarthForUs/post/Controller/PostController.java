@@ -1,11 +1,14 @@
 package com.green.greenEarthForUs.post.Controller;
 
+import com.green.greenEarthForUs.Exception.ImageDeletionException;
+import com.green.greenEarthForUs.Image.Service.ImageService;
 import com.green.greenEarthForUs.post.DTO.PostPatchDto;
 import com.green.greenEarthForUs.post.DTO.PostPostDto;
 import com.green.greenEarthForUs.post.DTO.PostResponseDto;
 import com.green.greenEarthForUs.post.Entity.Post;
 import com.green.greenEarthForUs.post.Mapper.PostMapper;
 import com.green.greenEarthForUs.post.Service.PostService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,30 +27,25 @@ public class PostController {
     final PostService postService;
     private final PostMapper mapper;
 
-    public PostController(PostService postService, PostMapper mapper) {
+    private final ImageService imageService;
+    @Autowired
+    public PostController(PostService postService, PostMapper mapper, ImageService imageService) {
         this.postService = postService;
         this.mapper = mapper;
+        this.imageService = imageService;
     }
 
     // 게시글 생성
     @PostMapping("/{user-id}")
     public ResponseEntity<PostResponseDto> createPost(@PathVariable(value = "user-id") Long userId,
-                                                      @ModelAttribute PostPostDto postPostDto,
-                                                      MultipartHttpServletRequest request) throws IOException {
+                                                      @RequestParam("image") MultipartFile image,
+                                                      @RequestBody PostPostDto postPostDto) throws IOException {
 
-        // 파일
-        MultipartFile multipartFile = request.getFile("image");
-        if (multipartFile != null && !multipartFile.isEmpty()) {
-            // 파일 이름 가져오기
-            String originalFileName = multipartFile.getOriginalFilename();
-            // 파일 내용(byte 배열) 가져오기
-            byte[] fileContent = multipartFile.getBytes();
+        String imageUrl = imageService.uploadImage(image); // 이미지 업로드하고
 
-            postPostDto.setBodyImageFileName(originalFileName);
-            postPostDto.setBodyImage(fileContent);
-        }
+        Post createdPost = postService.createPost(userId, postPostDto, image);
+        createdPost.setImageUrl(imageUrl);
 
-        Post createdPost = postService.createPost(userId, postPostDto);
         PostResponseDto responseDto = mapper.postToPostResponseDto(createdPost);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
@@ -99,7 +97,7 @@ public class PostController {
     // 게시글 삭제
     @DeleteMapping("/{user-id}/{post-id}")
     public ResponseEntity<Void> deletePost(@PathVariable(value = "user-id") Long userId,
-                                           @PathVariable(value = "post-id") Long postId) {
+                                           @PathVariable(value = "post-id") Long postId) throws ImageDeletionException {
         postService.deletePost(postId, userId);
 
         return ResponseEntity.noContent().build();
