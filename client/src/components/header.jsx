@@ -25,7 +25,7 @@ const LogoutHeader = ( {fakeLogin}) => {
           <div className='header_bar user'>
             <div className="header_icon black disabled">
               {/* <Link to={'/member-id'}> */}
-                <img src={require("../assets/user_shadow.png")} className="white" width="70" alt="user profile" />
+                <img src={require("../assets/user_shadow.png")} className="w70" alt="user profile" />
               {/* </Link> */}
             </div>
             <div className="header_icon black">
@@ -67,7 +67,7 @@ const LoginHeader = ( {fakeLogout}) => {
           <div className='header_bar user'>
             <div className="header_icon black">
               {/* <Link to={'/member-id'}> */}
-                <img src={require("../assets/user_shadow.png")} className="white" width="70" alt="user profile" />
+                <img src={require("../assets/user_shadow.png")} className="w70" alt="user profile" />
               {/* </Link> */}
             </div>
             <div className="header_icon black">

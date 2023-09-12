@@ -16,37 +16,20 @@
 .header_bar {
   display: flex;
   flex-direction: row;
+  width: 1200px;
   justify-content: center;
   align-items: center;
 }
 
 .logo {
-  flex: 0 0 310px;
-}
-
-.logo_image {
-  max-width: 200px;
-}
-
-.search {
-  flex: 0 0 620px;
-}
-
-.user {
   display: flex;
-  flex: 0 0 200px;
   flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  list-style: none;
+  flex: 1 1 260px;
+  padding: 0px 130px 0px 0px;
 }
 
-.pencil {
-  flex: 1 1 70;
-}
-
-.login {
-  flex: 1 1 70;
+.logo_img {
+  max-width: 260px;
 }
 
 .disabled {
@@ -54,11 +37,23 @@
   pointer-events: none;
   cursor: not-allowed;
 }
-.black {
-  color: 43 43 43;
-  flex: 1 0 auto;
+
+.serarch {
+  display: flex;
+  flex-direction: row;
+  justify-content: left;
+  flex: 1 1 500px;
 }
 
-.white {
-  color: white;
+.w70 {
+  max-width: 70px;
+}
+
+.user {
+  display: flex;
+  flex-direction: row;
+  flex: 1 1 auto;
+  justify-content: right;
+  gap: 30px;
+  color: 43 43 43;
 }
