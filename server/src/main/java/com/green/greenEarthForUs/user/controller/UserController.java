@@ -35,7 +35,7 @@ public class UserController { // 이미지 데이터를 바이너리 형태로 �
     // 사용자 등록
     @PostMapping
     public ResponseEntity<UserResponseDto> createUser(@RequestPart("image") MultipartFile image,
-                                                      @RequestPart UserPostDto userPostDto) throws IOException {
+                                                      @RequestPart("json") UserPostDto userPostDto) throws IOException {
 
         String imageUrl = imageService.uploadImage(image);
 
