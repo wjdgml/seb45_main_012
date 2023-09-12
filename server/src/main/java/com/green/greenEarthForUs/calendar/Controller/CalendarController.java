@@ -33,9 +33,13 @@ public class CalendarController {
     }
 
     @PostMapping
-    public ResponseEntity<CalendarDto.Response> postCalendar(@Validated @RequestBody CalendarDto.Post post){
+    public ResponseEntity<CalendarDto.Response> postCalendar(@RequestParam MultipartFile image,
+            @Validated @RequestBody CalendarDto.Post post)throws Exception{
+
+        String url = imageService.uploadImage(image);
 
         Calendar createdCalendar = calendarService.createCalendar(mapper.calendarPostDtoToCalendar(post));
+        createdCalendar.setDoImage(url);
 
         return new ResponseEntity<CalendarDto.Response>(mapper.calendarToCalendarResponseDto(createdCalendar), HttpStatus.CREATED);
     }

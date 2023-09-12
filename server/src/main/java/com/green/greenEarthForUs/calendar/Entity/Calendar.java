@@ -24,6 +24,9 @@ public class Calendar {
     private String body;
 
     @Column
+    private String doImage;
+
+    @Column
     private LocalDateTime localDateTime;
 
     @OneToOne

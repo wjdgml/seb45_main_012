@@ -28,6 +28,7 @@ public class CalendarDto {
         private String body;
         private long userId;
         private long postId;
+        private String doImage;
         private LocalDateTime postCreatedAt;
     }
 
