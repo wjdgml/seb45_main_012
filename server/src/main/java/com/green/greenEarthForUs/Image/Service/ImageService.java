@@ -1,32 +1,53 @@
 package com.green.greenEarthForUs.Image.Service;
 
-import com.green.greenEarthForUs.Exception.BusinessLogicException;
-import com.green.greenEarthForUs.Exception.ExceptionCode;
-import com.green.greenEarthForUs.Image.Entity.Image;
-import com.green.greenEarthForUs.Image.Repository.ImageRepository;
-import lombok.RequiredArgsConstructor;
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.model.DeleteObjectRequest;
+import com.amazonaws.services.s3.model.ObjectMetadata;
+import com.amazonaws.services.s3.model.PutObjectRequest;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.UUID;
 
 @Service
-@RequiredArgsConstructor
 public class ImageService {
-    private final ImageRepository imageRepository;
 
-    public Image saveImage(Image image) throws IOException {
+    private final AmazonS3 amazonS3;
 
-        return imageRepository.save(image);
+    @Value("${aws.s3.bucketName}")
+    private String bucketName;
+
+    public ImageService(AmazonS3 amazonS3){
+        this.amazonS3 = amazonS3;
     }
 
-    public Image findImage(long imageId) {
-       return imageRepository.findById(imageId)
-               .orElseThrow(() -> new BusinessLogicException(ExceptionCode.IMAGE_NOT_FOUND));
+
+    public String uploadImage(MultipartFile file) throws IOException{
+        String filePath = "images/";
+        String fileName = filePath + UUID.randomUUID().toString() + "-" + file.getOriginalFilename();
+
+        ObjectMetadata metadata = new ObjectMetadata();
+        metadata.setContentType(file.getContentType());
+        metadata.setContentLength(file.getSize());
+
+        InputStream inputStream = file.getInputStream();
+        amazonS3.putObject(new PutObjectRequest(bucketName, fileName, inputStream, metadata));
+
+        return amazonS3.getUrl(bucketName, fileName).toString();
     }
 
-    public void deleteImage(long imageId){
-        imageRepository.delete(findImage(imageId));
-    }
+    public void deleteImage(String imageUrl) throws Exception {
+        URL url = new URL(imageUrl);
+        String host = url.getHost();
+        String path = url.getPath();
 
+        String filePath = path.substring(bucketName.length()+2);
+        amazonS3.deleteObject(new DeleteObjectRequest(bucketName, filePath));
+    }
 
 }

@@ -1,6 +1,5 @@
 package com.green.greenEarthForUs.user.Entity;
 
-import com.green.greenEarthForUs.Image.Entity.Image;
 import com.green.greenEarthForUs.post.Entity.Post; // javax.persistence.*(
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -57,10 +56,6 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     // 사용자를 삭제할 때 관련 게시물, 이미지도 자동적으로 삭제됨
     private List<Post> posts;
-
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    // 사용자를 삭제할 때 관련 게시물, 이미지도 자동적으로 삭제됨
-    private List<Image> images;
 
     public enum Role {
         USER("회원"), ADMIN("관리자");
