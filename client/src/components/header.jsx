@@ -1,59 +1,121 @@
-import React from 'react';
-import "../styles/header.css";
+import React, { useState, useEffect } from 'react';
+import "../styles/Header.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPencil, faRightFromBracket, faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
-import { createStore } from 'redux';
+import PropTypes from 'prop-types';
+import Cookies from 'js-cookie';
+// import { Link } from 'react-router-dom';
+
+const LogoutHeader = ( {fakeLogin}) => {
+
+  return (
+    <>
+      <div className="header_container">
+        <div className="header_bar">
+          <div className="logo">
+            {/* <Link to='/'> */}
+            <img src={require("../assets/logo.png")} alt="logo" />
+            {/* </Link> */}
+          </div>
+          <div className="header_icon search disabled">
+              {/* <Link to={'/search'}> */}
+                <FontAwesomeIcon icon={faMagnifyingGlass} />
+              {/* </Link> */}
+          </div>
+          <div className='header_bar user'>
+            <div className="header_icon black disabled">
+              {/* <Link to={'/member-id'}> */}
+                <img src={require("../assets/user_shadow.png")} className="white" width="70" alt="user profile" />
+              {/* </Link> */}
+            </div>
+            <div className="header_icon black">
+              {/* <Link to={'/post/write'}> */}
+                <FontAwesomeIcon icon={faPencil} className="header_icon" />
+              {/* </Link> */}
+            </div>
+            <div className="header_icon black">
+              {/* <Link to={'/logout'}> */}
+                <FontAwesomeIcon icon={faRightFromBracket} className="header_icon" onClick={fakeLogin}/>
+              {/* </Link> */}
+            </div>
+          </div>
+        </div>
+      </div>
+    </>
+  )
+}
+
+LogoutHeader.propTypes = {
+  fakeLogin: PropTypes.func.isRequired
+}
+
+const LoginHeader = ( {fakeLogout}) => {
+  return (
+    <>
+      <div className="header_container">
+        <div className="header_bar">
+          <div className="logo">
+            {/* <Link to='/'> */}
+            <img src={require("../assets/logo.png")} alt="logo" />
+            {/* </Link> */}
+          </div>
+          <div className="header_icon search">
+              {/* <Link to={'/search'}> */}
+                <FontAwesomeIcon icon={faMagnifyingGlass} />
+              {/* </Link> */}
+          </div>
+          <div className='header_bar user'>
+            <div className="header_icon black">
+              {/* <Link to={'/member-id'}> */}
+                <img src={require("../assets/user_shadow.png")} className="white" width="70" alt="user profile" />
+              {/* </Link> */}
+            </div>
+            <div className="header_icon black">
+              {/* <Link to={'/post/write'}> */}
+                <FontAwesomeIcon icon={faPencil} className="header_icon" />
+              {/* </Link> */}
+            </div>
+            <div className="header_icon black">
+              {/* <Link to={'/logout'}> */}
+                <FontAwesomeIcon icon={faRightFromBracket} className="header_icon" onClick={fakeLogout}/>
+              {/* </Link> */}
+            </div>
+          </div>
+        </div>
+      </div>
+    </>
+  )
+}
+
+LoginHeader.propTypes = {
+  fakeLogout: PropTypes.func.isRequired
+}
 
 const Header = () => {
+  const [ isLoggedIn, setIsLoggedIn ] = useState(false);
+  
+  const fakeLogin = () => {
+    setIsLoggedIn(true);
+  }
 
-    // 로그인 여부에 따라 달라지는 상태)
-    // function logIn(state = false, action) {
-    //     switch (action.type) {
-    //         case 'LOGIN':
-    //             return state 
-    //     }
-    // }
+  const fakeLogout= () => {
+    setIsLoggedIn(false);
+  }
 
-    return (
-        <>
-        <div className="header_container">
-            <div className="header_bar">
-                <ul className="header_bar_list">
-                    <li className="header_item lgoo">
-                        <img src={require("../assets/logo.png")} alt="logo" />
-                    </li>
-                    <li className="header_item black">
-                        <FontAwesomeIcon icon={faPencil} />
-                    </li>
-                    <li className="header_item black">
-                        <FontAwesomeIcon icon={faRightFromBracket} />
-                    </li>
-                </ul>
-            </div>
-        </div>
-        <div className="header_container">
-            <div className="header_bar">
-                <ul className="header_bar_list">
-                    <li className="header_item logo">
-                        <img src={require("../assets/logo.png")} alt="logo" />
-                    </li>
-                    <li className="header_item search">
-                        <FontAwesomeIcon icon={faMagnifyingGlass} />
-                    </li>
-                    <li className="header_item black">
-                        <img src={require("../assets/user_shadow.png")} className="white" width="70" alt="user profile" />
-                    </li>
-                    <li className="header_item black">
-                        <FontAwesomeIcon icon={faPencil} className="header_icon" />
-                    </li>
-                    <li className="header_item black">
-                        <FontAwesomeIcon icon={faRightFromBracket} className="header_icon" />
-                    </li>
-                </ul>
-            </div>
-        </div>
-        /</>
-    )
+  // useEffect(() => {
+  //   const cookie = Cookies.get('쿠키이름');
+  //   console.log(cookie); // 쿠키 확인 후 지우기
+  //   if (cookie) {
+  //     setIsLoggedIn(true)
+  //   } else {
+  //     setIsLoggedIn(false);
+  //   }
+  // }, []);
+
+  return (
+    (isLoggedIn) ? <LoginHeader fakeLogout={fakeLogout} /> : <LogoutHeader fakeLogin={fakeLogin}/> 
+  )
+  
 }
 
 export default Header;
