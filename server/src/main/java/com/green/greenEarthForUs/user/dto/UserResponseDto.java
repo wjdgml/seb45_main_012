@@ -9,6 +9,8 @@ public class UserResponseDto {
 
     private Long userId;
 
+    private String userUseId;
+
     private String userName;
 
     private String role;

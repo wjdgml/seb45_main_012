@@ -1,6 +1,7 @@
 package com.green.greenEarthForUs;
 
 import com.green.greenEarthForUs.login.handler.UserAccessDeniedHandler;
+import com.green.greenEarthForUs.login.userdetails.CustomUserDetailsService;
 import com.green.greenEarthForUs.login.util.UserAuthenticationEntryPoint;
 import com.green.greenEarthForUs.login.util.CustomAuthorityUtils;
 import com.green.greenEarthForUs.login.filter.JwtAuthenticationFilter;
@@ -30,11 +31,14 @@ import static org.springframework.security.config.Customizer.withDefaults;
 public class SecurityConfig{
     private final JwtTokenizer jwtTokenizer;
     private final CustomAuthorityUtils authorityUtils;
+    private final CustomUserDetailsService userDetailsService;
 
     public SecurityConfig(JwtTokenizer jwtTokenizer,
-                          CustomAuthorityUtils authorityUtils){
+                          CustomAuthorityUtils authorityUtils,
+                          CustomUserDetailsService userDetailsService){
         this.jwtTokenizer = jwtTokenizer;
         this.authorityUtils = authorityUtils;
+        this.userDetailsService = userDetailsService;
     }
 
     @Bean
@@ -81,6 +85,7 @@ public class SecurityConfig{
 
     @Bean
     public PasswordEncoder passwordEncoder(){
+
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
 
@@ -103,7 +108,7 @@ public class SecurityConfig{
             AuthenticationManager aUthenticationManager = builder.getSharedObject(AuthenticationManager.class);
             JwtAuthenticationFilter jwtAuthenticationFilter =
                     new JwtAuthenticationFilter(aUthenticationManager, jwtTokenizer);
-            jwtAuthenticationFilter.setFilterProcessesUrl("/auth/login");
+            jwtAuthenticationFilter.setFilterProcessesUrl("/auth/api");
 
             JwtVerificationFilter jwtVerificationFilter = new JwtVerificationFilter(jwtTokenizer, authorityUtils);
 

@@ -6,6 +6,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class UserPostDto { // 가입
+    private String userUseId;
 
     private String userName;
 
