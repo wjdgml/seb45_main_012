@@ -8,6 +8,6 @@ public class UserAnswerDto { // 회원이 입력한 정보와 일치하는지 �
 
     private String userId;
 
-    private String answer;
+    private String passwordAnswer;
 
 }

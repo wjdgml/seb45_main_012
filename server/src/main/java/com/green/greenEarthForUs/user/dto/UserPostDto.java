@@ -9,7 +9,7 @@ public class UserPostDto { // 가입
 
     //private Long userId;
 
-    private String username;
+    private String userName;
 
     private String password;
 

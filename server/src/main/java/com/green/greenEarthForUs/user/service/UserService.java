@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
@@ -39,7 +40,7 @@ public class UserService {
         // 이미지 업로드
         user.setImageUrl(imageUrl);
         user.setCreateAt(LocalDateTime.now());
-
+        user.setRole(User.Role.USER);
         user.setGrade(User.UserGrade.LAND);
 
         return userRepository.save(user);
@@ -69,7 +70,7 @@ public class UserService {
 
         User existing = getUser(userId);
 
-        Optional.ofNullable(userPatchDto.getUsername()).ifPresent(username -> existing.setUserName(username));
+        Optional.ofNullable(userPatchDto.getUserName()).ifPresent(userName -> existing.setUserName(userName));
         Optional.ofNullable(userPatchDto.getPassword()).ifPresent(password -> existing.setPassword(password));
         Optional.ofNullable(userPatchDto.getPasswordQuestion()).ifPresent(passwordQuestion -> existing.setPasswordQuestion(passwordQuestion));
         Optional.ofNullable(userPatchDto.getPasswordAnswer()).ifPresent(passwordAnswer -> existing.setPasswordAnswer(passwordAnswer));
