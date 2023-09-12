@@ -21,7 +21,6 @@ public class Vote {
     @Column
     private String voteType;
 
-
     @OneToOne
     private Post post;
 
