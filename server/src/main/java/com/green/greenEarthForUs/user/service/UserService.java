@@ -1,5 +1,7 @@
 package com.green.greenEarthForUs.user.service;
 
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.green.greenEarthForUs.Exception.BusinessLogicException;
 import com.green.greenEarthForUs.Exception.ExceptionCode;
 import com.green.greenEarthForUs.user.Entity.User;
@@ -7,36 +9,35 @@ import com.green.greenEarthForUs.user.Repository.UserRepository;
 import com.green.greenEarthForUs.user.dto.UserPatchDto;
 import com.green.greenEarthForUs.user.dto.UserPostDto;
 import com.green.greenEarthForUs.user.mapper.UserMapper;
+import org.hibernate.procedure.spi.ParameterRegistrationImplementor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class UserService {
     private final UserRepository userRepository;
     private final UserMapper mapper;
 
+
     public UserService(UserRepository userRepository, UserMapper mapper) {
         this.userRepository = userRepository;
         this.mapper = mapper;
     }
 
+
     // 사용자 등록
-    public User createUser(UserPostDto userPostDto, MultipartFile imageFile) throws IOException {
-
-        // 이미지 파일 업로드 처리
-        if (imageFile != null && !imageFile.isEmpty()) {
-            String originalFileName = imageFile.getOriginalFilename();
-            byte[] fileContent = imageFile.getBytes();
-
-            userPostDto.setImageFileName(originalFileName);
-            userPostDto.setImage(fileContent);
-        }
+    public User createUser(UserPostDto userPostDto, String imageUrl) {
 
         User user = mapper.userPostDtoToUser(userPostDto);
+
+        // 이미지 업로드
+        user.setImageUrl(imageUrl);
+
         return userRepository.save(user);
     }
 
@@ -63,7 +64,7 @@ public class UserService {
         existing.setPassword(userPatchDto.getPassword());
         existing.setPasswordQuestion(userPatchDto.getPasswordQuestion());
         existing.setPasswordAnswer(userPatchDto.getPasswordAnswer());
-        existing.setProfileImage(userPatchDto.getFileImage());
+        existing.setImageUrl(userPatchDto.getImageUrl());
 
         return userRepository.save(existing);
     }
@@ -106,6 +107,7 @@ public class UserService {
         }
 
     }
+
     private User.UserGrade calculateUserGrade(int postCount) {
         if (postCount == 0) {
             return User.UserGrade.LAND;
@@ -118,7 +120,6 @@ public class UserService {
         } else {
             return User.UserGrade.FLOWER;
         }
+
     }
 }
-
-
