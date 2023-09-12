@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 import static com.green.greenEarthForUs.user.Entity.User.Role.USER;
@@ -34,7 +35,7 @@ public class UserService {
 
         // 이미지 업로드
         user.setImageUrl(imageUrl);
-        user.setCreateAt(Instant.now());
+        user.setCreateAt(LocalDateTime.now());
         user.setRole(USER);
         user.setGrade(LAND);
 
@@ -69,7 +70,6 @@ public class UserService {
         Optional.ofNullable(userPatchDto.getPassword()).ifPresent(password -> existing.setPassword(password));
         Optional.ofNullable(userPatchDto.getPasswordQuestion()).ifPresent(passwordQuestion -> existing.setPasswordQuestion(passwordQuestion));
         Optional.ofNullable(userPatchDto.getPasswordAnswer()).ifPresent(passwordAnswer -> existing.setPasswordAnswer(passwordAnswer));
-        Optional.ofNullable(userPatchDto.getImageUrl()).ifPresent(imageUrl -> existing.setImageUrl(imageUrl));
 
         updateGradePostCount(existing);
 
@@ -81,7 +81,6 @@ public class UserService {
     public void deleteUser(Long userId) {
         User existing = getUser(userId);
         userRepository.delete(existing);
-
     }
 
     @Transactional
@@ -95,22 +94,22 @@ public class UserService {
         // 등급에 따른 이미지 URL 설정 -> 상태값 던져주면 fe에서 받아서 쓰는것도 ... /
         switch (newGrade) {
             case LAND:
-                user.setImageUrl("url_for_land_image");
+                user.setGradeImageFile("url_for_land_image");
                 break;
             case SPROUT:
-                user.setImageUrl("url_for_sprout_image");
+                user.setGradeImageFile("url_for_sprout_image");
                 break;
             case GROWING_SPROUT:
-                user.setImageUrl("url_for_growing_sprout_image");
+                user.setGradeImageFile("url_for_growing_sprout_image");
                 break;
             case BUD:
-                user.setImageUrl("url_for_bud_image");
+                user.setGradeImageFile("url_for_bud_image");
                 break;
             case FLOWER:
-                user.setImageUrl("url_for_flower_image");
+                user.setGradeImageFile("url_for_flower_image");
                 break;
             default:
-                user.setImageUrl("default_image_url");
+                user.setGradeImageFile("default_image_url");
                 break;
         }
 

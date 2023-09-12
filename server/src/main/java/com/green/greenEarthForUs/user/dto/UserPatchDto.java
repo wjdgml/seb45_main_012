@@ -14,5 +14,4 @@ public class UserPatchDto {
 
     private String passwordAnswer;
 
-    private String imageUrl;
 }

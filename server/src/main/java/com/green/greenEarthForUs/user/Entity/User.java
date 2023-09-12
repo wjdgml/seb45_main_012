@@ -38,6 +38,8 @@ public class User {
 
     private String imageUrl; // 이미지 저장할 필드 추가하기
 
+    private String gradeImageFile;
+
     @Column
     private String password;
 
@@ -48,7 +50,7 @@ public class User {
     private String passwordAnswer; // 비밀번호 초기화 질문에 대한 답변  ex. 꼬미
 
     @Column
-    private Instant createAt;
+    private LocalDateTime createdAt;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     // 사용자를 삭제할 때 관련 게시물, 이미지도 자동적으로 삭제됨

@@ -71,7 +71,9 @@ public class UserController { // 이미지 데이터를 바이너리 형태로 �
     // 사용자 정보 변경
     @PatchMapping("/{user-id}")
     public ResponseEntity<UserResponseDto> updateUser(@PathVariable(name = "user-id") Long userId,
-                                                      @RequestBody UserPatchDto userPatchDto) {
+                                                      @RequestPart(value = "image") MultipartFile image,
+                                                      @RequestPart(value = "json") UserPatchDto userPatchDto) throws IOException {
+        String imageUrl = imageService.uploadImage(image);
 
         User updateUser = userService.updateUser(userId, userPatchDto);
         UserResponseDto responseDto = mapper.userToUserResponseDto(updateUser);
