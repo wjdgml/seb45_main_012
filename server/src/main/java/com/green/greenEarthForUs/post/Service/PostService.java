@@ -1,6 +1,8 @@
 package com.green.greenEarthForUs.post.Service;
 
+import com.green.greenEarthForUs.Exception.ImageDeletionException;
 import com.green.greenEarthForUs.Exception.UnauthorizedException;
+import com.green.greenEarthForUs.Image.Service.ImageService;
 import com.green.greenEarthForUs.post.DTO.PostPatchDto;
 import com.green.greenEarthForUs.post.DTO.PostPostDto;
 import com.green.greenEarthForUs.post.DTO.PostResponseDto;
@@ -13,6 +15,7 @@ import com.green.greenEarthForUs.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.EntityNotFoundException;
 import java.io.IOException;
@@ -30,23 +33,30 @@ public class PostService {
     private final PostMapper mapper;
     private final UserService userService;
 
-    public PostService(PostRepository postsRepository, UserRepository userRepository, PostMapper mapper, UserService userService) {
+    private final ImageService imageService;
+    @Autowired
+    public PostService(PostRepository postsRepository, UserRepository userRepository, PostMapper mapper,
+                       UserService userService, ImageService imageService) {
         this.postsRepository = postsRepository;
         this.userRepository = userRepository;
         this.mapper = mapper;
         this.userService = userService;
+        this.imageService = imageService;
     }
 
     // 게시글 생성
     @Transactional
-    public Post createPost(Long userId, PostPostDto postPostDto) throws IOException { // 유저, 게시글
-
+    public Post createPost(Long userId, PostPostDto postPostDto, MultipartFile image) throws IOException { // 유저, 게시글
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("User not found with ID: " + userId)); // 유저 조회
 
+        String imageUrl = imageService.uploadImage(image);
+
         Post post = mapper.postPostDtoToPost(postPostDto);
         post.setUser(user);
-        post.setCreatedAt(LocalDateTime.now()); // 게시글 생성
+        post.setCreatedAt(LocalDateTime.now()); // 게시글 생성하고
+
+        post.setImageUrl(imageUrl); // 이미지 url 넣고
 
         post.setOpen(postPostDto.isOpen());
 
@@ -121,9 +131,19 @@ public class PostService {
 
     // 게시글 삭제
     @Transactional
-    public void deletePost(Long userId, Long postId) {
+    public void deletePost(Long userId, Long postId) throws ImageDeletionException {
         Post existingPost = postsRepository.findById(postId)
                 .orElseThrow(() -> new EntityNotFoundException("Post not found with ID: " + postId));
+
+        //이미지 삭제하기
+        String imageUrl = existingPost.getImageUrl();
+        if(imageUrl != null) {
+            try {
+                imageService.deleteImage(imageUrl);
+            } catch (Exception e) {
+                throw new ImageDeletionException("Failed to delete image: " + imageUrl, e);
+            }
+        }
 
         // 작성자 요청자 일치하는지
         User user = existingPost.getUser();
@@ -134,16 +154,5 @@ public class PostService {
         postsRepository.delete(existingPost);
     }
 
-
-//    페이지네이션
-//    @Transactional
-//    public Page<Post> getLatestPosts(int page) {
-//
-//        int pageNumber = page > 0 ? page - 1 : 0;
-//
-//        Pageable pageable = PageRequest.of(pageNumber, 10, Sort.by("createdAt").descending());
-//
-//        return postsRepository.findAll(pageable);
-//    }
 }
 

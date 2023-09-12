@@ -14,9 +14,7 @@ public class PostDto { // 엔티티 조회, 내용 수정
 
     private String body;
 
-    private String bodyImageFileName;
-
-    private byte[] bodyImage;
+    private String imageUrl;
 
     private Boolean open;
 

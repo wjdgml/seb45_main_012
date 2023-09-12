@@ -19,8 +19,6 @@ public class UserResponseDto {
 
     private LocalDateTime createdAt;
 
-    private String profileImageFileName;
-
-    private byte[] profileImage;
+    private String imageUrl;
 
 }

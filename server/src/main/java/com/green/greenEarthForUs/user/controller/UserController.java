@@ -1,12 +1,14 @@
 package com.green.greenEarthForUs.user.controller;
 
 
+import com.green.greenEarthForUs.Image.Service.ImageService;
 import com.green.greenEarthForUs.user.Entity.User;
 import com.green.greenEarthForUs.user.dto.UserPatchDto;
 import com.green.greenEarthForUs.user.dto.UserPostDto;
 import com.green.greenEarthForUs.user.dto.UserResponseDto;
 import com.green.greenEarthForUs.user.mapper.UserMapper;
 import com.green.greenEarthForUs.user.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,27 +24,24 @@ public class UserController { // 이미지 데이터를 바이너리 형태로 �
 
     private UserService userService;
     private UserMapper mapper;
-
-    public UserController(UserService userService, UserMapper mapper) {
+    private final ImageService imageService;
+    @Autowired
+    public UserController(UserService userService, UserMapper mapper, ImageService imageService) {
         this.userService = userService;
         this.mapper = mapper;
+        this.imageService = imageService;
     }
 
     // 사용자 등록
-    @PostMapping("/")
-    public ResponseEntity<UserResponseDto> createUser(@ModelAttribute UserPostDto userPostDto,
-                                                      @RequestParam("image") MultipartFile imageFile) throws IOException {
-        // 이미지 파일 업로드
-        if (imageFile != null && !imageFile.isEmpty()) {
-            String originalFileName = imageFile.getOriginalFilename();
-            byte[] fileContent = imageFile.getBytes();
+    @PostMapping()
+    public ResponseEntity<UserResponseDto> createUser(@RequestParam("image") MultipartFile image,
+                                                      @RequestBody UserPostDto userPostDto) throws IOException {
 
-            userPostDto.setImageFileName(originalFileName);
-            userPostDto.setImage(fileContent);
-        }
+        String imageUrl = imageService.uploadImage(image);
 
-        User createdUser = userService.createUser(userPostDto, imageFile);
-        UserResponseDto responseDto = mapper.userToUserResponseDto(createdUser);
+        User createUser = userService.createUser(userPostDto, imageUrl);
+
+        UserResponseDto responseDto = mapper.userToUserResponseDto(createUser);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
     }

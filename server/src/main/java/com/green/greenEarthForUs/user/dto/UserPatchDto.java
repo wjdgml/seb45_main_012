@@ -14,7 +14,5 @@ public class UserPatchDto {
 
     private String passwordAnswer;
 
-    private String ImageFileName;
-
-    private byte[] fileImage;
+    private String imageUrl;
 }

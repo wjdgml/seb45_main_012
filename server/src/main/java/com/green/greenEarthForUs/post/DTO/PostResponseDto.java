@@ -20,9 +20,7 @@ public class PostResponseDto {
 
     private String open;
 
-    private String bodyImageFileName;
-
-    private byte[] bodyImage;
+    private String imageUrl;
 
     private LocalDateTime createdAt;
 
