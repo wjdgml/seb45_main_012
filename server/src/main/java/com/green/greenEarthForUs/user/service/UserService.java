@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -37,6 +38,9 @@ public class UserService {
 
         // 이미지 업로드
         user.setImageUrl(imageUrl);
+        user.setCreateAt(LocalDateTime.now());
+
+        updateGradePostCount(user);
 
         return userRepository.save(user);
     }
@@ -44,8 +48,12 @@ public class UserService {
     // 사용자 조회
     public User getUser(Long userId) {
 
-        Optional<User> userOptional = userRepository.findById(userId);
-        return userOptional.orElseThrow(() -> new BusinessLogicException(ExceptionCode.USER_NOT_FOUND));
+        User findUser = userRepository.findById(userId)
+                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.USER_NOT_FOUND));
+
+        updateGradePostCount(findUser);
+
+        return findUser;
 
     }
 
@@ -58,13 +66,17 @@ public class UserService {
 
     // 사용자 수정
     public User updateUser(Long userId, UserPatchDto userPatchDto) {
+
         User existing = getUser(userId);
 
-        existing.setUserName(userPatchDto.getUsername());
-        existing.setPassword(userPatchDto.getPassword());
-        existing.setPasswordQuestion(userPatchDto.getPasswordQuestion());
-        existing.setPasswordAnswer(userPatchDto.getPasswordAnswer());
-        existing.setImageUrl(userPatchDto.getImageUrl());
+        Optional.ofNullable(userPatchDto.getUsername()).ifPresent(username -> existing.setUserName(username));
+        Optional.ofNullable(userPatchDto.getPassword()).ifPresent(password -> existing.setPassword(password));
+        Optional.ofNullable(userPatchDto.getPasswordQuestion()).ifPresent(passwordQuestion -> existing.setPasswordQuestion(passwordQuestion));
+        Optional.ofNullable(userPatchDto.getPasswordAnswer()).ifPresent(passwordAnswer -> existing.setPasswordAnswer(passwordAnswer));
+        Optional.ofNullable(userPatchDto.getImageUrl()).ifPresent(imageUrl -> existing.setImageUrl(imageUrl));
+
+        updateGradePostCount(existing);
+
 
         return userRepository.save(existing);
     }

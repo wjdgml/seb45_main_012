@@ -6,7 +6,7 @@ import lombok.Setter;
 @Getter @Setter
 public class PostPostDto { // 생성
 
-    private Long userId;
+    //private Long userId;
 
     private String type;
 
