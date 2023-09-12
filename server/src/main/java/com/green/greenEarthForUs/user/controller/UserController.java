@@ -74,9 +74,13 @@ public class UserController { // 이미지 데이터를 바이너리 형태로 �
     public ResponseEntity<UserResponseDto> updateUser(@PathVariable(name = "user-id") Long userId,
                                                       @RequestPart(value = "image", required = false) MultipartFile image,
                                                       @RequestPart(value = "json") UserPatchDto userPatchDto) throws IOException {
-        String imageUrl = imageService.uploadImage(image);
 
         User updateUser = userService.updateUser(userId, userPatchDto);
+        if(image!=null) {
+            String imageUrl = imageService.uploadImage(image);
+            updateUser.setImageUrl(imageUrl);
+        }
+
         UserResponseDto responseDto = mapper.userToUserResponseDto(updateUser);
 
         return ResponseEntity.ok(responseDto);
