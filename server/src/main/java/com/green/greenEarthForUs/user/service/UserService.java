@@ -1,7 +1,4 @@
 package com.green.greenEarthForUs.user.service;
-
-import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.green.greenEarthForUs.Exception.BusinessLogicException;
 import com.green.greenEarthForUs.Exception.ExceptionCode;
 import com.green.greenEarthForUs.user.Entity.User;
@@ -9,16 +6,14 @@ import com.green.greenEarthForUs.user.Repository.UserRepository;
 import com.green.greenEarthForUs.user.dto.UserPatchDto;
 import com.green.greenEarthForUs.user.dto.UserPostDto;
 import com.green.greenEarthForUs.user.mapper.UserMapper;
-import org.hibernate.procedure.spi.ParameterRegistrationImplementor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.time.Instant;
-import java.time.LocalDateTime;
 import java.util.Optional;
-import java.util.UUID;
+
+import static com.green.greenEarthForUs.user.Entity.User.Role.USER;
+import static com.green.greenEarthForUs.user.Entity.User.UserGrade.LAND;
 
 @Service
 public class UserService {
@@ -39,9 +34,9 @@ public class UserService {
 
         // 이미지 업로드
         user.setImageUrl(imageUrl);
-        user.setCreateAt(LocalDateTime.now());
-        user.setRole(User.Role.USER);
-        user.setGrade(User.UserGrade.LAND);
+        user.setCreateAt(Instant.now());
+        user.setRole(USER);
+        user.setGrade(LAND);
 
         return userRepository.save(user);
     }
@@ -123,7 +118,7 @@ public class UserService {
 
     private User.UserGrade calculateUserGrade(int postCount) {
         if (postCount == 0) {
-            return User.UserGrade.LAND;
+            return LAND;
         } else if (postCount >= 1 && postCount < 5) {
             return User.UserGrade.SPROUT;
         } else if (postCount >= 5 && postCount < 10) {

@@ -10,6 +10,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 
+import java.time.Instant;
 import java.util.List;
 
 import java.time.LocalDateTime;
@@ -47,7 +48,7 @@ public class User {
     private String passwordAnswer; // 비밀번호 초기화 질문에 대한 답변  ex. 꼬미
 
     @Column
-    private LocalDateTime createAt;
+    private Instant createAt;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     // 사용자를 삭제할 때 관련 게시물, 이미지도 자동적으로 삭제됨
