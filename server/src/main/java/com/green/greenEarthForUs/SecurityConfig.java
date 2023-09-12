@@ -43,7 +43,8 @@ public class SecurityConfig{
                 .headers().frameOptions().sameOrigin()
                 .and()
                 .csrf().disable()
-                .cors(withDefaults())
+                .cors()
+                .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .formLogin().disable()
@@ -56,23 +57,23 @@ public class SecurityConfig{
                 .and()
                 .authorizeHttpRequests(authorize -> authorize
                         .antMatchers(HttpMethod.POST, "/user/").permitAll()
-                        .antMatchers(HttpMethod.GET, "/user/*").hasAnyRole("ADMIN", "USER")
-                        .antMatchers(HttpMethod.PATCH, "/user/*").hasAnyRole("ADMIN", "USER")
-                        .antMatchers(HttpMethod.DELETE, "/user/*").hasAnyRole("ADMIN", "USER")
-                        .antMatchers(HttpMethod.POST, "/post/*").hasAnyRole("ADMIN", "USER")
-                        .antMatchers(HttpMethod.PATCH, "/post/**").hasAnyRole("ADMIN", "USER")
-                        .antMatchers(HttpMethod.DELETE, "/post/**").hasAnyRole("ADMIN", "USER")
-                        .antMatchers(HttpMethod.POST, "/comment/**").hasAnyRole("ADMIN", "USER")
-                        .antMatchers(HttpMethod.PATCH, "/comment/**").hasAnyRole("ADMIN", "USER")
-                        .antMatchers(HttpMethod.DELETE, "/comment/**").hasAnyRole("ADMIN", "USER")
-                        .antMatchers(HttpMethod.POST, "/vote/*").hasRole("ADMIN")
-                        .antMatchers(HttpMethod.GET, "vote/**").hasAnyRole("ADMIN", "USER")
-                        .antMatchers(HttpMethod.PATCH, "/vote/**").hasAnyRole("ADMIN", "USER")
-                        .antMatchers(HttpMethod.DELETE, "/vote/**").hasRole("ADMIN")
-                        .antMatchers(HttpMethod.POST, "/calendar/**").hasAnyRole("ADMIN", "USER")
-                        .antMatchers(HttpMethod.GET, "/calendar/**").hasAnyRole("ADMIN", "USER")
-                        .antMatchers(HttpMethod.PATCH, "/calendar/**").hasAnyRole("ADMIN", "USER")
-                        .antMatchers(HttpMethod.DELETE, "/calendar/**").hasAnyRole("ADMIN", "USER")
+//                        .antMatchers(HttpMethod.GET, "/user/*").hasAnyRole("ADMIN", "USER")
+//                        .antMatchers(HttpMethod.PATCH, "/user/*").hasAnyRole("ADMIN", "USER")
+//                        .antMatchers(HttpMethod.DELETE, "/user/*").hasAnyRole("ADMIN", "USER")
+//                        .antMatchers(HttpMethod.POST, "/post/*").hasAnyRole("ADMIN", "USER")
+//                        .antMatchers(HttpMethod.PATCH, "/post/**").hasAnyRole("ADMIN", "USER")
+//                        .antMatchers(HttpMethod.DELETE, "/post/**").hasAnyRole("ADMIN", "USER")
+//                        .antMatchers(HttpMethod.POST, "/comment/**").hasAnyRole("ADMIN", "USER")
+//                        .antMatchers(HttpMethod.PATCH, "/comment/**").hasAnyRole("ADMIN", "USER")
+//                        .antMatchers(HttpMethod.DELETE, "/comment/**").hasAnyRole("ADMIN", "USER")
+//                        .antMatchers(HttpMethod.POST, "/vote/*").hasRole("ADMIN")
+//                        .antMatchers(HttpMethod.GET, "vote/**").hasAnyRole("ADMIN", "USER")
+//                        .antMatchers(HttpMethod.PATCH, "/vote/**").hasAnyRole("ADMIN", "USER")
+//                        .antMatchers(HttpMethod.DELETE, "/vote/**").hasRole("ADMIN")
+//                        .antMatchers(HttpMethod.POST, "/calendar/**").hasAnyRole("ADMIN", "USER")
+//                        .antMatchers(HttpMethod.GET, "/calendar/**").hasAnyRole("ADMIN", "USER")
+//                        .antMatchers(HttpMethod.PATCH, "/calendar/**").hasAnyRole("ADMIN", "USER")
+//                        .antMatchers(HttpMethod.DELETE, "/calendar/**").hasAnyRole("ADMIN", "USER")
                         .anyRequest().permitAll()
                 );
         return http.build();
@@ -86,11 +87,12 @@ public class SecurityConfig{
     @Bean
     CorsConfigurationSource corsConfigurationSource(){
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("*"));
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000"));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PATCH", "DELETE"));
+        configuration.setAllowedHeaders(Arrays.asList("Origin", "Content-Type", "Accept"));
+        configuration.setAllowCredentials(true);
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
-        source.registerCorsConfiguration("http://localhost:3000/**", configuration);
         return source;
     }
 
