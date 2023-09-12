@@ -40,7 +40,7 @@ public class UserService {
         user.setImageUrl(imageUrl);
         user.setCreateAt(LocalDateTime.now());
 
-        updateGradePostCount(user);
+        user.setGrade(User.UserGrade.LAND);
 
         return userRepository.save(user);
     }
