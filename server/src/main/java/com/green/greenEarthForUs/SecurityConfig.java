@@ -60,6 +60,7 @@ public class SecurityConfig{
                 .apply(new CustomFilterConfigurer())
                 .and()
                 .authorizeHttpRequests(authorize -> authorize
+                                .antMatchers("/login").permitAll()
                         .antMatchers(HttpMethod.POST, "/user/").permitAll()
 //                        .antMatchers(HttpMethod.GET, "/user/*").hasAnyRole("ADMIN", "USER")
 //                        .antMatchers(HttpMethod.PATCH, "/user/*").hasAnyRole("ADMIN", "USER")
@@ -108,7 +109,7 @@ public class SecurityConfig{
             AuthenticationManager aUthenticationManager = builder.getSharedObject(AuthenticationManager.class);
             JwtAuthenticationFilter jwtAuthenticationFilter =
                     new JwtAuthenticationFilter(aUthenticationManager, jwtTokenizer);
-            jwtAuthenticationFilter.setFilterProcessesUrl("/auth/api");
+            jwtAuthenticationFilter.setFilterProcessesUrl("/auth/login");
 
             JwtVerificationFilter jwtVerificationFilter = new JwtVerificationFilter(jwtTokenizer, authorityUtils);
 
