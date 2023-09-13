@@ -7,11 +7,11 @@ import axios from "axios";
 
 function PostEditer() {
   const [formData, setFormData] = useState({
-    type: 'justTextBoard',
+    type: 'free',
     title: '',
     body: '',
     file: null,
-    open: true
+    open: 'open'
   });
 
   const handleInputChange = (e) => {
@@ -20,20 +20,15 @@ function PostEditer() {
   };
 
   const handleCreatePost = () => {
-    axios.get('http://52.78.145.37:8080/user')
-      .then((resp) => {
-        let userId = resp.data.userId;
-        return postPosts(formData.type, formData.title, formData.body, formData.file, formData.open, userId)
-        .then((response) => {
-          console.log('성공!!', response.data);
-        })
-        .catch((err) => {
-          console.error('실패!!...', err);
-        });
-      })
-      .catch((error) => {
-        console.error('실패.....ㅠㅠ', error);
-      })
+
+
+    postPosts(formData.type, formData.title, formData.body, formData.file, formData.open, )
+    .then((resp) => {
+      console.log('성공~!!', resp.data);
+    })
+    .catch((err) => {
+      console.error('실패ㅠㅠ', err);
+    });
   }
 
   return (
