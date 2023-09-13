@@ -64,7 +64,7 @@ public class PostController {
     }
 
     // 모든 게시글 조회
-    @GetMapping("/")
+    @GetMapping("/all")
     public ResponseEntity<List<PostResponseDto>> getPostAll() {
         List<PostResponseDto> postList = postService.getAllPosts();
         return new ResponseEntity<>(postList, HttpStatus.OK);
@@ -72,13 +72,13 @@ public class PostController {
 
     // 게시판 별 게시글 조회
     @GetMapping("/type/{type}")
-    public ResponseEntity<List<PostResponseDto>> getPostByType(@PathVariable String type) {
+    public ResponseEntity<List<PostResponseDto>> getPostByType(@PathVariable("type") String type) {
         List<PostResponseDto> postList = postService.getPostsByType(type);
         return new ResponseEntity<>(postList, HttpStatus.OK);
     }
 
     // 사용자 별 조회
-    @GetMapping("/user/{user-id}")
+    @GetMapping("/{user-id}")
     public ResponseEntity<List<PostResponseDto>> getPostsByUserId(@PathVariable(value = "user-id") Long userId) {
         List<PostResponseDto> posts = postService.getPostsByUserId(userId);
         return ResponseEntity.ok(posts);
