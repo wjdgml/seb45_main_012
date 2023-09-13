@@ -38,6 +38,9 @@ public class Post {
     @Column
     private String title;
 
+    @Column
+    private Long userId;
+
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;

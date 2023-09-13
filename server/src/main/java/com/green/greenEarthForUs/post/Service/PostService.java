@@ -54,9 +54,8 @@ public class PostService {
         Post post = mapper.postPostDtoToPost(postPostDto);
         post.setUser(user);
         post.setCreatedAt(LocalDateTime.now()); // 게시글 생성하고
-
-
         post.setOpen(postPostDto.isOpen());
+        post.setUserId(userId);
 
         Post savedPost = postsRepository.save(post); // 게시글 저장
 
