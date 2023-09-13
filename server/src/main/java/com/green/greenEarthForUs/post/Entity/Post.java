@@ -6,7 +6,10 @@ import com.green.greenEarthForUs.vote.Entity.Vote;
 import lombok.*;
 
 import javax.persistence.*;
+import java.awt.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -26,7 +29,8 @@ public class Post {
     private Boolean open;
 
     @Column
-    private String imageUrl;
+    @ElementCollection
+    private List<String> imageUrls;
 
     @Column
     private String type; // type 게시글의 유형
@@ -34,8 +38,7 @@ public class Post {
     @Column
     private String title;
 
-
-    @Column(name = "created_at")
+    @Column
     private LocalDateTime createdAt;
 
     @ManyToOne

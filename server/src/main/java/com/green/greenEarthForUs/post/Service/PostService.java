@@ -20,7 +20,9 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.persistence.EntityNotFoundException;
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 
@@ -46,24 +48,28 @@ public class PostService {
 
     // 게시글 생성
     @Transactional
-    public Post createPost(Long userId, PostPostDto postPostDto, MultipartFile image) throws IOException { // 유저, 게시글
+    public Post createPost(Long userId, PostPostDto postPostDto, List<MultipartFile> image) throws IOException { // 유저, 게시글
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("User not found with ID: " + userId)); // 유저 조회
-
-        String imageUrl = imageService.uploadImage(image);
 
         Post post = mapper.postPostDtoToPost(postPostDto);
         post.setUser(user);
         post.setCreatedAt(LocalDateTime.now()); // 게시글 생성하고
-
-        post.setImageUrl(imageUrl); // 이미지 url 넣고
-
         post.setOpen(postPostDto.isOpen());
+
+        if(image != null){
+            List<String> images = new ArrayList<>();
+            for(MultipartFile file : image) {
+                String imageUrl = imageService.uploadImage(file);
+                images.add(imageUrl);
+            }
+            post.setImageUrls(images);
+        }
 
         Post savedPost = postsRepository.save(post); // 게시글 저장
 
         // 사용자의 등급을 게시글 수에 따라서 추가 땅 -> 새싹 ...
-        userService.updateGradePostCount(user);
+        userService.getUser(user.getUserId());
         return savedPost;
 
     }
@@ -72,8 +78,10 @@ public class PostService {
     @Transactional
     public PostResponseDto getPost(Long postId) {
         Post post = postsRepository.findById(postId).orElseThrow(() -> new EntityNotFoundException("Post not found" + postId));
+        PostResponseDto responseDto = mapper.postToPostResponseDto(post);
 
-        return mapper.postToPostResponseDto(post);
+        responseDto.setUserId(post.getUser().getUserId());
+        return responseDto;
     }
 
     // 모든 게시글 조회
@@ -106,7 +114,7 @@ public class PostService {
     }
     // 게시글 수정
     @Transactional
-    public PostResponseDto updatePost(Long userId, Long postId, PostPatchDto postPatchDto) {
+    public PostResponseDto updatePost(Long userId, Long postId, PostPatchDto postPatchDto, List<MultipartFile> image) throws Exception{
 
         Post existingPost = postsRepository.findById(postId)
                 .orElseThrow(() -> new EntityNotFoundException("Post not found with ID: " + postId));
@@ -116,12 +124,23 @@ public class PostService {
         if (!user.getUserId().equals(userId)) {
             throw new UnauthorizedException("You are not authorized to update this post.");
         }
-
+        if(image != null){
+            List<String> images = existingPost.getImageUrls();
+            for(MultipartFile file : image) {
+                String imageUrl = imageService.uploadImage(file);
+                images.add(imageUrl);
+            }
+            existingPost.setImageUrls(images);
+        }
         // 새로운 내용으로 게시글 업데이트
-        existingPost.setType(postPatchDto.getType());
-        existingPost.setTitle(postPatchDto.getTitle());
-        existingPost.setBody(postPatchDto.getBody());
-        existingPost.setOpen(postPatchDto.getOpen());
+        Optional.ofNullable(postPatchDto.getTitle())
+                        .ifPresent(title -> existingPost.setTitle(title));
+        Optional.ofNullable(postPatchDto.getType())
+                        .ifPresent(type -> existingPost.setType(type));
+        Optional.ofNullable(postPatchDto.getOpen())
+                        .ifPresent(open -> existingPost.setOpen(open));
+        Optional.ofNullable(postPatchDto.getBody())
+                        .ifPresent(body -> existingPost.setBody(body));
 
         // 업데이트된 게시글 저장
         Post updatedPost = postsRepository.save(existingPost);
@@ -131,23 +150,25 @@ public class PostService {
 
     // 게시글 삭제
     @Transactional
-    public void deletePost(Long userId, Long postId) throws ImageDeletionException {
+    public void deletePost(Long postId, Long userId) throws ImageDeletionException {
         Post existingPost = postsRepository.findById(postId)
                 .orElseThrow(() -> new EntityNotFoundException("Post not found with ID: " + postId));
 
         //이미지 삭제하기
-        String imageUrl = existingPost.getImageUrl();
+        List<String> imageUrl = existingPost.getImageUrls();
         if(imageUrl != null) {
-            try {
-                imageService.deleteImage(imageUrl);
-            } catch (Exception e) {
-                throw new ImageDeletionException("Failed to delete image: " + imageUrl, e);
+            for(String image : imageUrl) {
+                try {
+                    imageService.deleteImage(image);
+                } catch (Exception e) {
+                    throw new ImageDeletionException("Failed to delete image: " + imageUrl, e);
+                }
             }
         }
 
         // 작성자 요청자 일치하는지
-        User user = existingPost.getUser();
-        if (!user.getUserId().equals(userId)) {
+        Long id = existingPost.getUser().getUserId();
+        if (id != userId) {
             throw new UnauthorizedException("You are not authorized to delete this post");
         }
 

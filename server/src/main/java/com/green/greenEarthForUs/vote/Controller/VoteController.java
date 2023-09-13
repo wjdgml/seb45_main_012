@@ -38,8 +38,10 @@ public class VoteController {
     public ResponseEntity postVote(@PathVariable("post_id") long postId){
         postService.getPost(postId);   //post가 유효한지 확인하는 로직
         Vote createdVote = voteService.createVote();
+        VoteDto.Response vote = mapper.voteToVoteResponseDto(createdVote);
+        vote.setPostId(postId);
 
-        return new ResponseEntity(mapper.voteToVoteResponseDto(createdVote), HttpStatus.CREATED);
+        return new ResponseEntity(vote, HttpStatus.CREATED);
     }
 
     @PatchMapping("/{post_id}/{user_id}/{vote_id}")
@@ -49,6 +51,7 @@ public class VoteController {
                                     @Validated @RequestBody VoteDto.Patch patch){
         postService.getPost(postId);   //post가 유효한지 확인하는 로직
 
+
         //이전에 좋아요를 투표했는지 확인 후 좋아요가 중복이면 count를 하나 빼는 로직.
         long count = voteService.findVoteCount(voteId).getVoteCount();
         String type = verifiedVoteUserId(userId, voteId);
@@ -56,7 +59,10 @@ public class VoteController {
 
         patch.addVoteId(voteId);
         Vote updateVote = voteService.updateVote(mapper.votePatchDToToVote(patch));
-        return ResponseEntity.ok(mapper.voteToVoteResponseDto(updateVote));
+        VoteDto.Response response = mapper.voteToVoteResponseDto(updateVote);
+        response.setPostId(postId);
+        response.setUserId(userId);
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/{post_id}/{vote_id}")
@@ -65,8 +71,9 @@ public class VoteController {
 
         postService.getPost(postId);   //post가 유효한지 확인하는 로직
         Vote findVote = voteService.findVoteCount(voteId);
-
-        return ResponseEntity.ok(mapper.voteToVoteResponseDto(findVote));
+        VoteDto.Response response = mapper.voteToVoteResponseDto(findVote);
+        response.setPostId(postId);
+        return ResponseEntity.ok(response);
     }
 
     @DeleteMapping("/{post_id}/{user_id}/{vote_id}")
@@ -75,6 +82,7 @@ public class VoteController {
                                      @PathVariable("vote_id") long voteId){
 
         postService.getPost(postId);   //post가 유효한지 확인하는 로직
+        userService.getUser(userId);
 
         voteService.deleteVote(voteId);
         return ResponseEntity.noContent().build();

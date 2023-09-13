@@ -2,9 +2,11 @@ package com.green.greenEarthForUs.vote.DTO;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
 
 public class VoteDto {
     @Getter
+    @Setter
     public static class Patch{
         private String voteType;
         private long voteId;
@@ -12,6 +14,7 @@ public class VoteDto {
         public void addVoteId(long voteId){this.voteId = voteId;}
     }
     @Getter
+    @Setter
     @Builder
     public static class Response{
         private long voteId;
