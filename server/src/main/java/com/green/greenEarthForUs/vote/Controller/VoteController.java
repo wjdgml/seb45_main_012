@@ -71,8 +71,9 @@ public class VoteController {
 
         postService.getPost(postId);   //post가 유효한지 확인하는 로직
         Vote findVote = voteService.findVoteCount(voteId);
-
-        return ResponseEntity.ok(mapper.voteToVoteResponseDto(findVote));
+        VoteDto.Response response = mapper.voteToVoteResponseDto(findVote);
+        response.setPostId(postId);
+        return ResponseEntity.ok(response);
     }
 
     @DeleteMapping("/{post_id}/{user_id}/{vote_id}")
