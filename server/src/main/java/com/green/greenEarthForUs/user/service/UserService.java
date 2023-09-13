@@ -35,13 +35,11 @@ public class UserService {
 
 
     // 사용자 등록
-    public User createUser(UserPostDto userPostDto, String imageUrl) {
+    public User createUser(UserPostDto userPostDto) {
 
         User user = mapper.userPostDtoToUser(userPostDto);
         String password = passwordEncoder.encode(user.getPassword());
         user.setPassword(password);//password 인코딩 후 저장.
-        // 이미지 업로드
-        user.setImageUrl(imageUrl);
         user.setCreatedAt(LocalDateTime.now());
         user.setRole(USER);
         user.setGrade(LAND);
