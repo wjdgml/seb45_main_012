@@ -85,7 +85,7 @@ public class PostController {
     }
 
     // 사용자 별 조회
-    @GetMapping("/{user-id}")
+    @GetMapping("/customer/{user-id}")
     public ResponseEntity<List<PostResponseDto>> getPostsByUserId(@PathVariable(value = "user-id") Long userId) {
         List<PostResponseDto> posts = postService.getPostsByUserId(userId);
         return ResponseEntity.ok(posts);
