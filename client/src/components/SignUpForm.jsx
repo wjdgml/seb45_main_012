@@ -53,10 +53,10 @@ function SignUpForm() {
       // 회원가입 로직 
       postSignUp(formData.username, formData.userid, formData.password, selected, formData.passwordConfirm)
       .then((resp) => {
-        console.log('회원가입 완료!!', resp.data);
+        console.log('회원가입 완료!!');
       })
       .catch((err) => {
-        console.error('회원가입 실패...', err);
+        console.error('회원가입 실패...');
       });
 
     } else {
