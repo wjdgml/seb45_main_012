@@ -11,10 +11,11 @@ export const getPosts = (page) => {
 
 export const postSignUp = (username, userId, password, password_question, password_answer) => {
   return instance.post('/user', {
-    userId: userId,
-    username: username,
+    userUseId: userId,
+    userName: username,
     password: password,
-    password_question: password_question,
-    password_answer: password_answer
+    passwordQuestion: password_question,
+    passwordAnswer: password_answer
   });
 }
+
