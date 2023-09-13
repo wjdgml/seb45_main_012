@@ -1,15 +1,18 @@
 package com.green.greenEarthForUs.user.service;
 import com.green.greenEarthForUs.Exception.BusinessLogicException;
 import com.green.greenEarthForUs.Exception.ExceptionCode;
+import com.green.greenEarthForUs.Image.Service.ImageService;
 import com.green.greenEarthForUs.user.Entity.User;
 import com.green.greenEarthForUs.user.Repository.UserRepository;
 import com.green.greenEarthForUs.user.dto.UserAnswerDto;
 import com.green.greenEarthForUs.user.dto.UserPatchDto;
 import com.green.greenEarthForUs.user.dto.UserPostDto;
 import com.green.greenEarthForUs.user.mapper.UserMapper;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -19,23 +22,17 @@ import static com.green.greenEarthForUs.user.Entity.User.Role.USER;
 import static com.green.greenEarthForUs.user.Entity.User.UserGrade.LAND;
 
 @Service
+@RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
     private final UserMapper mapper;
-
+    private final ImageService imageService;
     private final PasswordEncoder passwordEncoder;
 
 
-    public UserService(UserRepository userRepository, UserMapper mapper,
-                       PasswordEncoder passwordEncoder) {
-        this.userRepository = userRepository;
-        this.mapper = mapper;
-        this.passwordEncoder = passwordEncoder;
-    }
-
 
     // 사용자 등록
-    public User createUser(UserPostDto userPostDto) {
+    public User createUser(UserPostDto userPostDto, MultipartFile image) {
 
         User user = mapper.userPostDtoToUser(userPostDto);
         String password = passwordEncoder.encode(user.getPassword());
@@ -43,6 +40,7 @@ public class UserService {
         user.setCreatedAt(LocalDateTime.now());
         user.setRole(USER);
         user.setGrade(LAND);
+        user.setImageUrl(imageUpload(image));
 
         return userRepository.save(user);
     }
@@ -53,7 +51,6 @@ public class UserService {
         User findUser = userRepository.findById(userId)
                 .orElseThrow(() -> new BusinessLogicException(ExceptionCode.USER_NOT_FOUND));
 
-        updateGradePostCount(findUser);
 
         return findUser;
 
@@ -67,7 +64,7 @@ public class UserService {
     }
 
     // 사용자 수정
-    public User updateUser(Long userId, UserPatchDto userPatchDto) {
+    public User updateUser(Long userId, UserPatchDto userPatchDto, MultipartFile image) {
 
         User existing = getUser(userId);
 
@@ -75,7 +72,7 @@ public class UserService {
         Optional.ofNullable(userPatchDto.getPassword()).ifPresent(password -> existing.setPassword(passwordEncoder.encode(password)));
         Optional.ofNullable(userPatchDto.getPasswordQuestion()).ifPresent(passwordQuestion -> existing.setPasswordQuestion(passwordQuestion));
         Optional.ofNullable(userPatchDto.getPasswordAnswer()).ifPresent(passwordAnswer -> existing.setPasswordAnswer(passwordAnswer));
-
+        imageUpload(image);
         updateGradePostCount(existing);
 
 
@@ -134,4 +131,13 @@ public class UserService {
         }
 
     }
+
+    private String imageUpload(MultipartFile image){
+        if(image!=null) {
+            String imageUrl = imageService.uploadImage(image);
+            return imageUrl;
+        }
+        return null;
+    }
+
 }

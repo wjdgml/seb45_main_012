@@ -9,6 +9,7 @@ import com.green.greenEarthForUs.user.dto.UserPostDto;
 import com.green.greenEarthForUs.user.dto.UserResponseDto;
 import com.green.greenEarthForUs.user.mapper.UserMapper;
 import com.green.greenEarthForUs.user.service.UserService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,17 +22,12 @@ import java.io.IOException;
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping("/user")
+@RequiredArgsConstructor
 public class UserController { // 이미지 데이터를 바이너리 형태로 저장 -< DB에 사진 그냥 넣는거
 
     private UserService userService;
     private UserMapper mapper;
-    private final ImageService imageService;
-    @Autowired
-    public UserController(UserService userService, UserMapper mapper, ImageService imageService) {
-        this.userService = userService;
-        this.mapper = mapper;
-        this.imageService = imageService;
-    }
+
 
     // 사용자 등록
     @PostMapping
@@ -39,12 +35,8 @@ public class UserController { // 이미지 데이터를 바이너리 형태로 �
                                                       @RequestPart(value = "json") UserPostDto userPostDto) throws IOException {
 
 
-        User createUser = userService.createUser(userPostDto);
+        User createUser = userService.createUser(userPostDto, image);
 
-        if(image != null){
-            String imageUrl = imageService.uploadImage(image);
-            createUser.setImageUrl(imageUrl);
-        }
 
         UserResponseDto responseDto = mapper.userToUserResponseDto(createUser);
 
@@ -80,11 +72,8 @@ public class UserController { // 이미지 데이터를 바이너리 형태로 �
                                                       @RequestPart(value = "image", required = false) MultipartFile image,
                                                       @RequestPart(value = "json") UserPatchDto userPatchDto) throws IOException {
 
-        User updateUser = userService.updateUser(userId, userPatchDto);
-        if(image!=null) {
-            String imageUrl = imageService.uploadImage(image);
-            updateUser.setImageUrl(imageUrl);
-        }
+        User updateUser = userService.updateUser(userId, userPatchDto, image);
+
 
         UserResponseDto responseDto = mapper.userToUserResponseDto(updateUser);
 
