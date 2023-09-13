@@ -10,9 +10,6 @@ import java.util.List;
 @Getter @Setter
 @NoArgsConstructor
 public class PostPatchDto {
-    private Long id;
-
-    private String userId;
 
     private String type;
 
@@ -24,5 +21,4 @@ public class PostPatchDto {
 
     private Boolean open;
 
-    private LocalDateTime createdAt;
 }

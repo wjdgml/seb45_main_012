@@ -90,15 +90,8 @@ public class PostController {
                                                       @RequestPart(value = "json") PostPatchDto postPatchDto) throws Exception{
 
 
-        PostResponseDto updatedPost = postService.updatePost(userId, postId, postPatchDto);
-        if(image != null){
-            List<String> images = new ArrayList<>();
-            for(MultipartFile file : image) {
-                String imageUrl = imageService.uploadImage(file);
-                images.add(imageUrl);
-            }
-            updatedPost.setImageUrls(images);
-        }
+        PostResponseDto updatedPost = postService.updatePost(userId, postId, postPatchDto, image);
+
 
         return ResponseEntity.ok(updatedPost);
     }
