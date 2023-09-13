@@ -168,7 +168,7 @@ public class PostService {
 
         // 작성자 요청자 일치하는지
         User user = existingPost.getUser();
-        if (!user.getUserId().equals(userId)) {
+        if (!(user.getUserId().equals(userId))) {
             throw new UnauthorizedException("You are not authorized to delete this post");
         }
 
