@@ -14,7 +14,6 @@ const LoginFunc = async ( id, password ) => {
               }
         });
         const auth = res.headers['authorization'];
-        // const refreshToken = res.headers['authorization'];
         const accessToken = auth.substring(6);
         const refreshValue = res.headers['refresh'];
         Cookies.set('refreshToken', refreshValue, { httpOnly: true, expires: 7 });

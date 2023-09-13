@@ -24,7 +24,7 @@ const LogIn = () => {
             }
         }
         catch (err) {
-            console.error();
+            console.error()
         }
     }
 
