@@ -150,7 +150,7 @@ public class PostService {
 
     // 게시글 삭제
     @Transactional
-    public void deletePost(Long userId, Long postId) throws ImageDeletionException {
+    public void deletePost(Long postId, Long userId) throws ImageDeletionException {
         Post existingPost = postsRepository.findById(postId)
                 .orElseThrow(() -> new EntityNotFoundException("Post not found with ID: " + postId));
 
