@@ -20,7 +20,7 @@ const LogIn = () => {
         try {
             const result = await LoginFunc(id, password);
             if (result) {
-                window.location.href='/';
+                window.location.href = '/';
             }
         }
         catch (err) {
