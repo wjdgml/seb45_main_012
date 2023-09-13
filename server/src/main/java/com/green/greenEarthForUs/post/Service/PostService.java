@@ -55,7 +55,7 @@ public class PostService {
         post.setUser(user);
         post.setCreatedAt(LocalDateTime.now()); // 게시글 생성하고
         post.setOpen(postPostDto.isOpen());
-        post.setUserId(userId);
+
 
         Post savedPost = postsRepository.save(post); // 게시글 저장
 
@@ -69,8 +69,9 @@ public class PostService {
     @Transactional
     public PostResponseDto getPost(Long postId) {
         Post post = postsRepository.findById(postId).orElseThrow(() -> new EntityNotFoundException("Post not found" + postId));
-
-        return mapper.postToPostResponseDto(post);
+        PostResponseDto responseDto = mapper.postToPostResponseDto(post);
+        responseDto.setUserId(post.getUser().getUserId());
+        return responseDto;
     }
 
     // 모든 게시글 조회

@@ -39,10 +39,6 @@ public class Post {
     private String title;
 
     @Column
-    private Long userId;
-
-
-    @Column(name = "created_at")
     private LocalDateTime createdAt;
 
     @ManyToOne
