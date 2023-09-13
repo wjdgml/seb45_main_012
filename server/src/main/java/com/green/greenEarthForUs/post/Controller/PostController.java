@@ -71,7 +71,7 @@ public class PostController {
     }
 
     // 게시판 별 게시글 조회
-    @GetMapping("/{type}")
+    @GetMapping("/type/{type}")
     public ResponseEntity<List<PostResponseDto>> getPostByType(@PathVariable("type") String type) {
         List<PostResponseDto> postList = postService.getPostsByType(type);
         return new ResponseEntity<>(postList, HttpStatus.OK);
