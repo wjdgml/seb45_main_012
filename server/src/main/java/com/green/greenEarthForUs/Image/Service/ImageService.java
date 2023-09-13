@@ -42,6 +42,7 @@ public class ImageService {
     }
 
     public void deleteImage(String imageUrl) throws Exception {
+        imageUrl = "http://"+imageUrl;
         URL url = new URL(imageUrl);
         String host = url.getHost();
         String path = url.getPath();
