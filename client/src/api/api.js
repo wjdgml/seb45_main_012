@@ -5,8 +5,12 @@ const instance = axios.create({
   timeout: 5000,
 });
 
-export const getAllPosts = (page) => {
-  return instance.get(`/post/free?page=${page}`);
+export const getAllPosts = () => {
+  return instance.get(`/post/all`);
+};
+
+export const getAlltypePosts = (type_name) => {
+  return instance.get(`/post/type/${type_name}`);
 };
 
 export const getPost = (postId) => {
@@ -25,8 +29,14 @@ export const getVote = (postId, voteId) => {
   return instance.get(`/vote/${postId}/${voteId}`);
 };
 
-export const getComment = (postId, userId) => {
-  return instance.get(`/comment/${postId}/${userId}`);
+// export const getComment = (postId, userId) => {
+//   return instance.get(`/comment/${postId}/${userId}`);
+// };
+
+export const getComment = (postId, userId, page) => {
+  return instance.get(`/comment/${postId}/${userId}`, {
+    params: { page }
+  });
 };
 
 export const postComment = (postId, userId, commentText) => {

@@ -1,54 +1,55 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import { useParams } from 'react-router-dom';
 import '../styles/Button.css';
 import '../styles/FreeDetailPage.css';
 import NavBar from '../components/NavBar.jsx';
 import { getPost, getUser, getVote, getComment, postComment } from '../api/api.js';
 
 const FreeDetailPage = () => {
+  const { postId, userId } = useParams();
+  console.log(postId, userId);
 
   const [post, setPost] = useState({});
   const [user, setUser] = useState({});
   const [vote, setVote] = useState({});
-  const [comment, setComment] = useState({});
+  // const [comment, setComment] = useState({});
   const [commentText, setCommentText] = useState('');
 
-  useEffect(() => {
-    // 포스트 데이터 가져오기
-    getPost(1)
-      .then((response) => {
-        setPost(response.data);
-      })
-      .catch((error) => {
-        console.error('포스트 데이터 가져오기 오류:', error);
-      });
+  const [comments, setComments] = useState([]);
+  const [page, setPage] = useState(1);
+  const [hasMoreData, setHasMoreData] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
+  const observerRef = useRef(null);
 
-    // 유저 데이터 가져오기
-    getUser('testID')
-      .then((response) => {
-        setUser(response.data);
-      })
-      .catch((error) => {
-        console.error('유저 데이터 가져오기 오류:', error);
-      });
+  // 추가 데이터 가져오기 함수
+  const loadMoreComments = () => {
+    if (isLoading || !hasMoreData) {
+      // 이미 데이터를 로딩 중이거나 더 이상 데이터가 없으면 무시
+      return;
+    }
 
-    // 투표 데이터 가져오기
-    getVote(1, 1)
-      .then((response) => {
-        setVote(response.data);
-      })
-      .catch((error) => {
-        console.error('투표 데이터 가져오기 오류:', error);
-      });
+    setIsLoading(true);
+    const nextPage = page + 1;
 
-    // 댓글 데이터 가져오기
-    getComment(3, 1)
-      .then((response) => {
-        setComment(response.data);
-      })
-      .catch((error) => {
-        console.error('댓글 데이터 가져오기 오류:', error);
-      });
-  }, []);
+    // 댓글 데이터 가져오기 (페이지네이션 또는 무한 스크롤 방식으로 가져옴)
+    // 페이지 번호를 전달
+    getComment(postId, userId, nextPage)
+    .then((response) => {
+      if (response.data.length === 0) {
+        // 더 이상 데이터가 없으면 무한 스크롤 중단
+        setHasMoreData(false);
+      } else {
+        // 추가 데이터를 가져와서 표시
+        setComments((prevComment) => [...prevComment, ...response.data]);
+        setPage(nextPage);
+      }
+      setIsLoading(false);
+    })
+    .catch((error) => {
+      console.error('댓글 데이터 가져오기 오류:', error);
+      setIsLoading(false);
+    });
+};
 
   const handleCommentTextChange = (event) => {
     setCommentText(event.target.value);
@@ -57,7 +58,7 @@ const FreeDetailPage = () => {
   const handleSubmitComment = () => {
     console.log('댓글 내용:', commentText);
 
-    postComment(post.id, user.userId, commentText)
+    postComment(postId, userId, commentText)
       .then((response) => {
         console.log('댓글 작성 완료:', response.data);
       })
@@ -65,6 +66,71 @@ const FreeDetailPage = () => {
         console.error('댓글 작성 오류:', error);
       });
   };
+
+
+  useEffect(() => {
+    // 포스트 데이터 가져오기
+    getPost(postId)
+      .then((response) => {
+        setPost(response.data);
+      })
+      .catch((error) => {
+        console.error('포스트 데이터 가져오기 오류:', error);
+      });
+
+    // 유저 데이터 가져오기
+    getUser(userId)
+      .then((response) => {
+        setUser(response.data);
+      })
+      .catch((error) => {
+        console.error('유저 데이터 가져오기 오류:', error);
+      });
+
+    // 투표 데이터 가져오기
+    getVote(postId, postId)
+      .then((response) => {
+        const voteData = response.data;
+        const voteCount = voteData.voteCount;
+        setVote(voteCount);
+      })
+      .catch((error) => {
+        console.error('투표 데이터 가져오기 오류:', error);
+      });
+
+    // 댓글 데이터 가져오기
+    getComment(postId, userId)
+      .then((response) => {
+        setComments(response.data);
+      })
+      .catch((error) => {
+        console.error('댓글 데이터 가져오기 오류:', error);
+      });
+  // }, []);
+      // Intersection Observer 초기화
+    observerRef.current = new IntersectionObserver((entries) => {
+      const entry = entries[0];
+      if (entry.isIntersecting && !isLoading && hasMoreData) {
+        // 스크롤이 화면에 표시되고 이전 요청이 완료되지 않은 경우
+        // 추가 데이터를 가져오는 함수 호출
+        loadMoreComments();
+      }
+    });
+
+    // Intersection Observer를 post_detail_content 요소에 연결
+    if (observerRef.current) {
+      observerRef.current.observe(document.querySelector('.post_detail_content'));
+    }
+    return () => {
+      // 컴포넌트가 언마운트될 때 Intersection Observer 해제
+      if (observerRef.current) {
+        observerRef.current.disconnect();
+      }
+    };
+  }, []);
+
+
+
 
   return (
   <>
@@ -96,17 +162,19 @@ const FreeDetailPage = () => {
               <button className='comment_button' onClick={handleSubmitComment}>
                 작성
               </button>
-            <div className="post_detail_header">
+              {comments.map((comment) => (
+            <div key={comment.id} className='post_detail_header'>
               <div>
-                <p>{user.userGrade} {user.username}</p>
-                <p>댓글 내용이 여기에 들어갑니다. {comment.body}</p>
+                <p>
+                  {user.userGrade} {user.username}
+                </p>
+                <p>{comment.body}</p>
               </div>
-              
             </div>
-          </div>
+          ))}
+        </div>
       </div>
-  </>
-  )
-}
-
+    </>
+  );
+};
 export default FreeDetailPage;
