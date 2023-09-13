@@ -64,7 +64,7 @@ public class PostController {
     }
 
     // 모든 게시글 조회
-    @GetMapping("/")
+    @GetMapping("/all")
     public ResponseEntity<List<PostResponseDto>> getPostAll() {
         List<PostResponseDto> postList = postService.getAllPosts();
         return new ResponseEntity<>(postList, HttpStatus.OK);
