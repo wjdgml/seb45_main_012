@@ -54,7 +54,7 @@ public class PostController {
         }
 
         PostResponseDto responseDto = mapper.postToPostResponseDto(createdPost);
-        responseDto.setUserId(createdPost.getUser().getUserId());
+
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
     }
 
@@ -108,7 +108,7 @@ public class PostController {
             }
             updatedPost.setImageUrls(images);
         }
-        updatedPost.setUserId(userId);
+
         return ResponseEntity.ok(updatedPost);
     }
 
