@@ -19,8 +19,8 @@ public class ImageController {
         this.imageService = imageService;
     }
 
-    @PostMapping("/api")
-    public ResponseEntity<String> imageUpload(@RequestParam(name = "image") MultipartFile image) throws IOException {
+    @PostMapping("/upload")
+    public ResponseEntity<String> imageUpload(@RequestPart(name = "image") MultipartFile image) throws IOException {
         String imageUrl = imageService.uploadImage(image);
 
         return new ResponseEntity<String>(imageUrl, HttpStatus.OK);
