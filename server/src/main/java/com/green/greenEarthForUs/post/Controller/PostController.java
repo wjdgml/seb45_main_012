@@ -42,8 +42,6 @@ public class PostController {
                                                       @RequestPart(value = "image", required = false) List<MultipartFile> image,
                                                       @RequestPart(value = "json") PostPostDto postPostDto) throws IOException {
 
-
-
         Post createdPost = postService.createPost(userId, postPostDto);
 
         if(image != null){
@@ -55,9 +53,8 @@ public class PostController {
             createdPost.setImageUrls(images);
         }
 
-
         PostResponseDto responseDto = mapper.postToPostResponseDto(createdPost);
-
+        responseDto.setUserId(createdPost.getUser().getUserId());
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
     }
 
@@ -111,7 +108,7 @@ public class PostController {
             }
             updatedPost.setImageUrls(images);
         }
-
+        updatedPost.setUserId(userId);
         return ResponseEntity.ok(updatedPost);
     }
 
