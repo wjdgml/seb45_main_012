@@ -46,17 +46,15 @@ public class PostService {
 
     // 게시글 생성
     @Transactional
-    public Post createPost(Long userId, PostPostDto postPostDto, MultipartFile image) throws IOException { // 유저, 게시글
+    public Post createPost(Long userId, PostPostDto postPostDto) throws IOException { // 유저, 게시글
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("User not found with ID: " + userId)); // 유저 조회
 
-        String imageUrl = imageService.uploadImage(image);
 
         Post post = mapper.postPostDtoToPost(postPostDto);
         post.setUser(user);
         post.setCreatedAt(LocalDateTime.now()); // 게시글 생성하고
 
-        post.setImageUrl(imageUrl); // 이미지 url 넣고
 
         post.setOpen(postPostDto.isOpen());
 
@@ -136,10 +134,11 @@ public class PostService {
                 .orElseThrow(() -> new EntityNotFoundException("Post not found with ID: " + postId));
 
         //이미지 삭제하기
-        String imageUrl = existingPost.getImageUrl();
+        List<String> imageUrl = existingPost.getImageUrls();
         if(imageUrl != null) {
+            for(String image : imageUrl)
             try {
-                imageService.deleteImage(imageUrl);
+                imageService.deleteImage(image);
             } catch (Exception e) {
                 throw new ImageDeletionException("Failed to delete image: " + imageUrl, e);
             }

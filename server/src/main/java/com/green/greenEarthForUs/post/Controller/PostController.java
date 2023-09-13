@@ -16,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -38,13 +39,22 @@ public class PostController {
     // 게시글 생성
     @PostMapping("/{user-id}")
     public ResponseEntity<PostResponseDto> createPost(@PathVariable(value = "user-id") Long userId,
-                                                      @RequestPart("image") MultipartFile image,
-                                                      @RequestBody PostPostDto postPostDto) throws IOException {
+                                                      @RequestPart(value = "image", required = false) List<MultipartFile> image,
+                                                      @RequestPart(value = "json") PostPostDto postPostDto) throws IOException {
 
-        String imageUrl = imageService.uploadImage(image); // 이미지 업로드하고
 
-        Post createdPost = postService.createPost(userId, postPostDto, image);
-        createdPost.setImageUrl(imageUrl);
+
+        Post createdPost = postService.createPost(userId, postPostDto);
+
+        if(image != null){
+            List<String> images = new ArrayList<>();
+            for(MultipartFile file : image) {
+                String imageUrl = imageService.uploadImage(file);
+                images.add(imageUrl);
+            }
+            createdPost.setImageUrls(images);
+        }
+
 
         PostResponseDto responseDto = mapper.postToPostResponseDto(createdPost);
 
@@ -88,9 +98,20 @@ public class PostController {
     @PatchMapping("/{user-id}/{post-id}")
     public ResponseEntity<PostResponseDto> updatePost(@PathVariable(value = "user-id") Long userId,
                                                       @PathVariable(value = "post-id") Long postId,
-                                                      @RequestBody PostPatchDto postPatchDto) {
+                                                      @RequestPart(value = "image", required = false) List<MultipartFile> image,
+                                                      @RequestPart(value = "json") PostPatchDto postPatchDto) throws Exception{
+
 
         PostResponseDto updatedPost = postService.updatePost(userId, postId, postPatchDto);
+        if(image != null){
+            List<String> images = new ArrayList<>();
+            for(MultipartFile file : image) {
+                String imageUrl = imageService.uploadImage(file);
+                images.add(imageUrl);
+            }
+            updatedPost.setImageUrls(images);
+        }
+
         return ResponseEntity.ok(updatedPost);
     }
 

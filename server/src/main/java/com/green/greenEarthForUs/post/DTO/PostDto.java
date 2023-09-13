@@ -4,6 +4,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter @Setter
 @NoArgsConstructor
 public class PostDto { // 엔티티 조회, 내용 수정
@@ -14,7 +16,7 @@ public class PostDto { // 엔티티 조회, 내용 수정
 
     private String body;
 
-    private String imageUrl;
+    private List<String> imageUrls;
 
     private Boolean open;
 
