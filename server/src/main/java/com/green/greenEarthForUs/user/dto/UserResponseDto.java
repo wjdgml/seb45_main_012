@@ -9,16 +9,20 @@ public class UserResponseDto {
 
     private Long userId;
 
-    private String username;
+    private String userUseId;
 
-    private String userStatus;
+    private String userName;
 
-    private String userGrade;
+    private String role;
+
+    private String grade;
 
     private String passwordQuestion;
 
     private LocalDateTime createdAt;
 
     private String imageUrl;
+
+    private String gradeImageFile;
 
 }

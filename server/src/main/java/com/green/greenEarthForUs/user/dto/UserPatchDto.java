@@ -6,7 +6,7 @@ import lombok.Setter;
 @Getter @Setter
 public class UserPatchDto {
 
-    private String username;
+    private String userName;
 
     private String password;
 
@@ -14,5 +14,4 @@ public class UserPatchDto {
 
     private String passwordAnswer;
 
-    private String imageUrl;
 }

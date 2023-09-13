@@ -1,33 +1,36 @@
 package com.green.greenEarthForUs.user.service;
-
-import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.green.greenEarthForUs.Exception.BusinessLogicException;
 import com.green.greenEarthForUs.Exception.ExceptionCode;
 import com.green.greenEarthForUs.user.Entity.User;
 import com.green.greenEarthForUs.user.Repository.UserRepository;
+import com.green.greenEarthForUs.user.dto.UserAnswerDto;
 import com.green.greenEarthForUs.user.dto.UserPatchDto;
 import com.green.greenEarthForUs.user.dto.UserPostDto;
 import com.green.greenEarthForUs.user.mapper.UserMapper;
-import org.hibernate.procedure.spi.ParameterRegistrationImplementor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.Optional;
-import java.util.UUID;
+
+import static com.green.greenEarthForUs.user.Entity.User.Role.USER;
+import static com.green.greenEarthForUs.user.Entity.User.UserGrade.LAND;
 
 @Service
 public class UserService {
     private final UserRepository userRepository;
     private final UserMapper mapper;
 
+    private final PasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository userRepository, UserMapper mapper) {
+
+    public UserService(UserRepository userRepository, UserMapper mapper,
+                       PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.mapper = mapper;
+        this.passwordEncoder = passwordEncoder;
     }
 
 
@@ -35,12 +38,13 @@ public class UserService {
     public User createUser(UserPostDto userPostDto, String imageUrl) {
 
         User user = mapper.userPostDtoToUser(userPostDto);
-
+        String password = passwordEncoder.encode(user.getPassword());
+        user.setPassword(password);//password 인코딩 후 저장.
         // 이미지 업로드
         user.setImageUrl(imageUrl);
-        user.setCreateAt(LocalDateTime.now());
-
-        updateGradePostCount(user);
+        user.setCreatedAt(LocalDateTime.now());
+        user.setRole(USER);
+        user.setGrade(LAND);
 
         return userRepository.save(user);
     }
@@ -69,11 +73,10 @@ public class UserService {
 
         User existing = getUser(userId);
 
-        Optional.ofNullable(userPatchDto.getUsername()).ifPresent(username -> existing.setUserName(username));
-        Optional.ofNullable(userPatchDto.getPassword()).ifPresent(password -> existing.setPassword(password));
+        Optional.ofNullable(userPatchDto.getUserName()).ifPresent(userName -> existing.setUserName(userName));
+        Optional.ofNullable(userPatchDto.getPassword()).ifPresent(password -> existing.setPassword(passwordEncoder.encode(password)));
         Optional.ofNullable(userPatchDto.getPasswordQuestion()).ifPresent(passwordQuestion -> existing.setPasswordQuestion(passwordQuestion));
         Optional.ofNullable(userPatchDto.getPasswordAnswer()).ifPresent(passwordAnswer -> existing.setPasswordAnswer(passwordAnswer));
-        Optional.ofNullable(userPatchDto.getImageUrl()).ifPresent(imageUrl -> existing.setImageUrl(imageUrl));
 
         updateGradePostCount(existing);
 
@@ -85,7 +88,6 @@ public class UserService {
     public void deleteUser(Long userId) {
         User existing = getUser(userId);
         userRepository.delete(existing);
-
     }
 
     @Transactional
@@ -99,22 +101,22 @@ public class UserService {
         // 등급에 따른 이미지 URL 설정 -> 상태값 던져주면 fe에서 받아서 쓰는것도 ... /
         switch (newGrade) {
             case LAND:
-                user.setImageUrl("url_for_land_image");
+                user.setGradeImageFile("url_for_land_image");
                 break;
             case SPROUT:
-                user.setImageUrl("url_for_sprout_image");
+                user.setGradeImageFile("url_for_sprout_image");
                 break;
             case GROWING_SPROUT:
-                user.setImageUrl("url_for_growing_sprout_image");
+                user.setGradeImageFile("url_for_growing_sprout_image");
                 break;
             case BUD:
-                user.setImageUrl("url_for_bud_image");
+                user.setGradeImageFile("url_for_bud_image");
                 break;
             case FLOWER:
-                user.setImageUrl("url_for_flower_image");
+                user.setGradeImageFile("url_for_flower_image");
                 break;
             default:
-                user.setImageUrl("default_image_url");
+                user.setGradeImageFile("default_image_url");
                 break;
         }
 
@@ -122,7 +124,7 @@ public class UserService {
 
     private User.UserGrade calculateUserGrade(int postCount) {
         if (postCount == 0) {
-            return User.UserGrade.LAND;
+            return LAND;
         } else if (postCount >= 1 && postCount < 5) {
             return User.UserGrade.SPROUT;
         } else if (postCount >= 5 && postCount < 10) {

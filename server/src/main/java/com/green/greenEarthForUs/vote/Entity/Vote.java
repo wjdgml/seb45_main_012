@@ -1,5 +1,7 @@
 package com.green.greenEarthForUs.vote.Entity;
 
+import com.green.greenEarthForUs.post.Entity.Post;
+import com.green.greenEarthForUs.user.Entity.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -19,11 +21,10 @@ public class Vote {
     @Column
     private String voteType;
 
-// 관계매핑용
-//    @OneToOne
-//    private Post post;
-//
-//    @ManyToOne
-//    private VoteUser voteUser;
+    @OneToOne
+    private Post post;
+
+    @ManyToOne
+    private User User;
 
 }

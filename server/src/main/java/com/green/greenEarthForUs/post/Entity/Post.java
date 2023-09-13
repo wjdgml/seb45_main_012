@@ -1,6 +1,8 @@
 package com.green.greenEarthForUs.post.Entity;
 
+import com.green.greenEarthForUs.calendar.Entity.Calendar;
 import com.green.greenEarthForUs.user.Entity.User;
+import com.green.greenEarthForUs.vote.Entity.Vote;
 import lombok.*;
 
 import javax.persistence.*;
@@ -40,4 +42,9 @@ public class Post {
     @JoinColumn(name = "user_id")
     private User user;
 
+    @OneToOne
+    private Vote vote;
+
+    @ManyToOne
+    private Calendar calendar;
 }

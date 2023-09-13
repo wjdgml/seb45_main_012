@@ -1,6 +1,7 @@
 package com.green.greenEarthForUs;
 
 import com.green.greenEarthForUs.login.handler.UserAccessDeniedHandler;
+import com.green.greenEarthForUs.login.userdetails.CustomUserDetailsService;
 import com.green.greenEarthForUs.login.util.UserAuthenticationEntryPoint;
 import com.green.greenEarthForUs.login.util.CustomAuthorityUtils;
 import com.green.greenEarthForUs.login.filter.JwtAuthenticationFilter;
@@ -30,11 +31,14 @@ import static org.springframework.security.config.Customizer.withDefaults;
 public class SecurityConfig{
     private final JwtTokenizer jwtTokenizer;
     private final CustomAuthorityUtils authorityUtils;
+    private final CustomUserDetailsService userDetailsService;
 
     public SecurityConfig(JwtTokenizer jwtTokenizer,
-                          CustomAuthorityUtils authorityUtils){
+                          CustomAuthorityUtils authorityUtils,
+                          CustomUserDetailsService userDetailsService){
         this.jwtTokenizer = jwtTokenizer;
         this.authorityUtils = authorityUtils;
+        this.userDetailsService = userDetailsService;
     }
 
     @Bean
@@ -43,7 +47,8 @@ public class SecurityConfig{
                 .headers().frameOptions().sameOrigin()
                 .and()
                 .csrf().disable()
-                .cors(withDefaults())
+                .cors()
+                .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .formLogin().disable()
@@ -56,23 +61,23 @@ public class SecurityConfig{
                 .and()
                 .authorizeHttpRequests(authorize -> authorize
                         .antMatchers(HttpMethod.POST, "/user/").permitAll()
-                        .antMatchers(HttpMethod.GET, "/user/*").hasAnyRole("ADMIN", "USER")
-                        .antMatchers(HttpMethod.PATCH, "/user/*").hasAnyRole("ADMIN", "USER")
-                        .antMatchers(HttpMethod.DELETE, "/user/*").hasAnyRole("ADMIN", "USER")
-                        .antMatchers(HttpMethod.POST, "/post/*").hasAnyRole("ADMIN", "USER")
-                        .antMatchers(HttpMethod.PATCH, "/post/**").hasAnyRole("ADMIN", "USER")
-                        .antMatchers(HttpMethod.DELETE, "/post/**").hasAnyRole("ADMIN", "USER")
-                        .antMatchers(HttpMethod.POST, "/comment/**").hasAnyRole("ADMIN", "USER")
-                        .antMatchers(HttpMethod.PATCH, "/comment/**").hasAnyRole("ADMIN", "USER")
-                        .antMatchers(HttpMethod.DELETE, "/comment/**").hasAnyRole("ADMIN", "USER")
-                        .antMatchers(HttpMethod.POST, "/vote/*").hasRole("ADMIN")
-                        .antMatchers(HttpMethod.GET, "vote/**").hasAnyRole("ADMIN", "USER")
-                        .antMatchers(HttpMethod.PATCH, "/vote/**").hasAnyRole("ADMIN", "USER")
-                        .antMatchers(HttpMethod.DELETE, "/vote/**").hasRole("ADMIN")
-                        .antMatchers(HttpMethod.POST, "/calendar/**").hasAnyRole("ADMIN", "USER")
-                        .antMatchers(HttpMethod.GET, "/calendar/**").hasAnyRole("ADMIN", "USER")
-                        .antMatchers(HttpMethod.PATCH, "/calendar/**").hasAnyRole("ADMIN", "USER")
-                        .antMatchers(HttpMethod.DELETE, "/calendar/**").hasAnyRole("ADMIN", "USER")
+//                        .antMatchers(HttpMethod.GET, "/user/*").hasAnyRole("ADMIN", "USER")
+//                        .antMatchers(HttpMethod.PATCH, "/user/*").hasAnyRole("ADMIN", "USER")
+//                        .antMatchers(HttpMethod.DELETE, "/user/*").hasAnyRole("ADMIN", "USER")
+//                        .antMatchers(HttpMethod.POST, "/post/*").hasAnyRole("ADMIN", "USER")
+//                        .antMatchers(HttpMethod.PATCH, "/post/**").hasAnyRole("ADMIN", "USER")
+//                        .antMatchers(HttpMethod.DELETE, "/post/**").hasAnyRole("ADMIN", "USER")
+//                        .antMatchers(HttpMethod.POST, "/comment/**").hasAnyRole("ADMIN", "USER")
+//                        .antMatchers(HttpMethod.PATCH, "/comment/**").hasAnyRole("ADMIN", "USER")
+//                        .antMatchers(HttpMethod.DELETE, "/comment/**").hasAnyRole("ADMIN", "USER")
+//                        .antMatchers(HttpMethod.POST, "/vote/*").hasRole("ADMIN")
+//                        .antMatchers(HttpMethod.GET, "vote/**").hasAnyRole("ADMIN", "USER")
+//                        .antMatchers(HttpMethod.PATCH, "/vote/**").hasAnyRole("ADMIN", "USER")
+//                        .antMatchers(HttpMethod.DELETE, "/vote/**").hasRole("ADMIN")
+//                        .antMatchers(HttpMethod.POST, "/calendar/**").hasAnyRole("ADMIN", "USER")
+//                        .antMatchers(HttpMethod.GET, "/calendar/**").hasAnyRole("ADMIN", "USER")
+//                        .antMatchers(HttpMethod.PATCH, "/calendar/**").hasAnyRole("ADMIN", "USER")
+//                        .antMatchers(HttpMethod.DELETE, "/calendar/**").hasAnyRole("ADMIN", "USER")
                         .anyRequest().permitAll()
                 );
         return http.build();
@@ -80,17 +85,19 @@ public class SecurityConfig{
 
     @Bean
     public PasswordEncoder passwordEncoder(){
+
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
 
     @Bean
     CorsConfigurationSource corsConfigurationSource(){
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("*"));
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000"));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PATCH", "DELETE"));
+        configuration.setAllowedHeaders(Arrays.asList("Origin", "Content-Type", "Accept"));
+        configuration.setAllowCredentials(true);
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
-        source.registerCorsConfiguration("http://localhost:3000/**", configuration);
         return source;
     }
 
@@ -101,7 +108,7 @@ public class SecurityConfig{
             AuthenticationManager aUthenticationManager = builder.getSharedObject(AuthenticationManager.class);
             JwtAuthenticationFilter jwtAuthenticationFilter =
                     new JwtAuthenticationFilter(aUthenticationManager, jwtTokenizer);
-            jwtAuthenticationFilter.setFilterProcessesUrl("/auth/login");
+            jwtAuthenticationFilter.setFilterProcessesUrl("/auth/api");
 
             JwtVerificationFilter jwtVerificationFilter = new JwtVerificationFilter(jwtTokenizer, authorityUtils);
 

@@ -3,6 +3,7 @@ package com.green.greenEarthForUs.user.controller;
 
 import com.green.greenEarthForUs.Image.Service.ImageService;
 import com.green.greenEarthForUs.user.Entity.User;
+import com.green.greenEarthForUs.user.dto.UserAnswerDto;
 import com.green.greenEarthForUs.user.dto.UserPatchDto;
 import com.green.greenEarthForUs.user.dto.UserPostDto;
 import com.green.greenEarthForUs.user.dto.UserResponseDto;
@@ -33,9 +34,9 @@ public class UserController { // 이미지 데이터를 바이너리 형태로 �
     }
 
     // 사용자 등록
-    @PostMapping()
-    public ResponseEntity<UserResponseDto> createUser(@RequestPart("image") MultipartFile image,
-                                                      @RequestBody UserPostDto userPostDto) throws IOException {
+    @PostMapping
+    public ResponseEntity<UserResponseDto> createUser(@RequestPart(value = "image", required = false) MultipartFile image,
+                                                      @RequestPart(value = "json") UserPostDto userPostDto) throws IOException {
 
         String imageUrl = imageService.uploadImage(image);
 
@@ -57,7 +58,8 @@ public class UserController { // 이미지 데이터를 바이너리 형태로 �
 
     //사용자 질문 답변 확인
     @GetMapping("/{user-id}/verify")
-    public ResponseEntity<String> verifyAnswer(@PathVariable(name = "user-id") Long userId, @RequestParam String answer) {
+    public ResponseEntity<String> verifyAnswer(@PathVariable(name = "user-id") Long userId,
+                                               @RequestPart(value = "String") String answer) {
         boolean isAnswerCorrect = userService.verifyAnswer(userId, answer);
 
         // 입력한 답변과 실제 저장된 답변이 같아야 함.
@@ -71,9 +73,15 @@ public class UserController { // 이미지 데이터를 바이너리 형태로 �
     // 사용자 정보 변경
     @PatchMapping("/{user-id}")
     public ResponseEntity<UserResponseDto> updateUser(@PathVariable(name = "user-id") Long userId,
-                                                      @RequestBody UserPatchDto userPatchDto) {
+                                                      @RequestPart(value = "image", required = false) MultipartFile image,
+                                                      @RequestPart(value = "json") UserPatchDto userPatchDto) throws IOException {
 
         User updateUser = userService.updateUser(userId, userPatchDto);
+        if(image!=null) {
+            String imageUrl = imageService.uploadImage(image);
+            updateUser.setImageUrl(imageUrl);
+        }
+
         UserResponseDto responseDto = mapper.userToUserResponseDto(updateUser);
 
         return ResponseEntity.ok(responseDto);

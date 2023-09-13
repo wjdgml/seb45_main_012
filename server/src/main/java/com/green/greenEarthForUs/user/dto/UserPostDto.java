@@ -6,17 +6,14 @@ import lombok.Setter;
 @Getter
 @Setter
 public class UserPostDto { // 가입
+    private String userUseId;
 
-    //private Long userId;
-
-    private String username;
+    private String userName;
 
     private String password;
 
     private String passwordQuestion;
 
     private String passwordAnswer;
-
-    private String imageUrl;
 
 }

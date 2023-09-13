@@ -6,8 +6,6 @@ import lombok.Setter;
 @Getter @Setter
 public class UserAnswerDto { // 회원이 입력한 정보와 일치하는지 답변
 
-    private String userId;
-
-    private String answer;
+    private String passwordAnswer;
 
 }
