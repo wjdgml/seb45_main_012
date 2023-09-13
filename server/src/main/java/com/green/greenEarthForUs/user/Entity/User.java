@@ -10,6 +10,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 
+import java.time.Instant;
 import java.util.List;
 
 import java.time.LocalDateTime;
@@ -19,11 +20,13 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "users")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
+
+    @Column(nullable = false)
+    private String userUseId;
 
     @Column
     private String userName;
@@ -35,8 +38,9 @@ public class User {
     @Enumerated(EnumType.STRING) // Post 횟수에 따라서 땅(0개) → 새싹(1개) → 조금 더 자란 새싹(5개) → 꽃봉오리(10개) → 꽃(20개)
     private UserGrade grade; // 씨앗 -> 새싹 -> 점점 자라는 느낌 누적 게시글 기준 ..
 
-
     private String imageUrl; // 이미지 저장할 필드 추가하기
+
+    private String gradeImageFile;
 
     @Column
     private String password;
@@ -48,7 +52,7 @@ public class User {
     private String passwordAnswer; // 비밀번호 초기화 질문에 대한 답변  ex. 꼬미
 
     @Column
-    private LocalDateTime createAt;
+    private LocalDateTime createdAt;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     // 사용자를 삭제할 때 관련 게시물, 이미지도 자동적으로 삭제됨
