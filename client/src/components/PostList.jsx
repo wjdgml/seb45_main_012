@@ -1,20 +1,21 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import '../styles/PostList.css';
 import { Link } from 'react-router-dom';
 import { getAllPosts, getAlltypePosts } from '../api/api.js';
 import PropTypes from 'prop-types';
 
 const PostList = (props) => {
-  const [allPosts, setAllPosts] = useState([]); 
-  const [visiblePosts, setVisiblePosts] = useState([]); 
+  const [allPosts, setAllPosts] = useState([]);
+  const [visiblePosts, setVisiblePosts] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [loading, setLoading] = useState(false);
+
+  const intersectionRef = useRef(null);
 
   useEffect(() => {
     if (props.type === 'all') {
       getAllPosts()
         .then((res) => {
-          console.log(res);
           const sortedData = res.data.sort((a, b) => {
             return new Date(b.createdAt) - new Date(a.createdAt);
           });
@@ -25,7 +26,6 @@ const PostList = (props) => {
     } else {
       getAlltypePosts(props.type)
         .then((res) => {
-          console.log(res);
           const sortedData = res.data.sort((a, b) => {
             return new Date(b.createdAt) - new Date(a.createdAt);
           });
@@ -36,59 +36,63 @@ const PostList = (props) => {
     }
   }, [props.type]);
 
-  const handleScroll = () => {
-    if (
-      window.innerHeight + window.scrollY >=
-      document.body.offsetHeight - 100
-    ) {
-      const nextPage = currentPage + 1;
-      const endIndex = nextPage * 5; // 페이지당 5개의 데이터 보여주기
-      if (endIndex <= allPosts.length) {
-        setLoading(true); 
-        setTimeout(() => {
-          setVisiblePosts(allPosts.slice(0, endIndex));
-          setCurrentPage(nextPage);
-          setLoading(false);
-        }, 1000); 
-      }
+  const handleIntersect = (entries) => {
+    console.log("실행됨");
+    const nextPage = currentPage + 1;
+    const startIndex = (nextPage - 1) * 10;
+    const endIndex = nextPage * 10;
+    
+    if (endIndex <= allPosts.length && entries[0].isIntersecting) {
+      setLoading(true);
+      setTimeout(() => {
+        const newVisiblePosts = [...visiblePosts, ...allPosts.slice(startIndex, endIndex)];
+        setVisiblePosts(newVisiblePosts);
+        setCurrentPage(nextPage);
+        setLoading(false);
+      }, 1000);
     }
   };
 
   useEffect(() => {
-    // 스크롤 이벤트 리스너 등록
-    window.addEventListener('scroll', handleScroll);
+    const observer = new IntersectionObserver(handleIntersect, {
+      root: null,
+      rootMargin: '0px',
+      threshold: 0.1,
+    });
 
-    // 컴포넌트 언마운트 시 이벤트 리스너 제거
+    if (intersectionRef.current) {
+      observer.observe(intersectionRef.current);
+    }
+
     return () => {
-      window.removeEventListener('scroll', handleScroll);
+      observer.disconnect();
     };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentPage]);
 
-    return (
-      <div className="post_list_container">
-        {visiblePosts.map((post) => (
-          <div className="post_item" key={post.postId}>
-            <div className="post_header">
-
-              <Link to={`/post/${post.postId}/${post.userId}`} className="post_title">{post.title}</Link>
-              <div className="post_date">
-                {new Date(post.createdAt).toLocaleDateString()}
-              </div>
+  return (
+    <div className="post_list_container">
+      {visiblePosts.map((post) => (
+        <div className="post_item" key={post.postId}>
+          <div className="post_header">
+            <Link to={`/post/${post.postId}/${post.userId}`} className="post_title">{post.title}</Link>
+            <div className="post_date">
+              {new Date(post.createdAt).toLocaleDateString()}
             </div>
-            <div className="post_content">{post.body}</div>
           </div>
-        ))}
-        {loading && <div>Loading...</div>}
-      {currentPage * 5 < allPosts.length && !loading && (
+          <div className="post_content">{post.body}</div>
+        </div>
+      ))}
+      {loading && <div>Loading...</div>}
+      {currentPage * 10 < allPosts.length && !loading && (
         <div>Loading more...</div>
       )}
-      </div>
-    );
-  };
-  
-  PostList.propTypes = {
-    type: PropTypes.string.isRequired,
-  };
+      <div ref={intersectionRef}></div>
+    </div>
+  );
+};
 
-  export default PostList;
+PostList.propTypes = {
+  type: PropTypes.string.isRequired,
+};
+
+export default PostList;

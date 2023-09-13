@@ -7,12 +7,10 @@ import { getPost, getUser, getVote, getComment, postComment } from '../api/api.j
 
 const FreeDetailPage = () => {
   const { postId, userId } = useParams();
-  console.log(postId, userId);
 
   const [post, setPost] = useState({});
   const [user, setUser] = useState({});
   const [vote, setVote] = useState({});
-  // const [comment, setComment] = useState({});
   const [commentText, setCommentText] = useState('');
 
   const [comments, setComments] = useState([]);
@@ -24,15 +22,12 @@ const FreeDetailPage = () => {
   // 추가 데이터 가져오기 함수
   const loadMoreComments = () => {
     if (isLoading || !hasMoreData) {
-      // 이미 데이터를 로딩 중이거나 더 이상 데이터가 없으면 무시
       return;
     }
 
     setIsLoading(true);
     const nextPage = page + 1;
 
-    // 댓글 데이터 가져오기 (페이지네이션 또는 무한 스크롤 방식으로 가져옴)
-    // 페이지 번호를 전달
     getComment(postId, userId, nextPage)
     .then((response) => {
       if (response.data.length === 0) {
@@ -52,7 +47,12 @@ const FreeDetailPage = () => {
 };
 
   const handleCommentTextChange = (event) => {
-    setCommentText(event.target.value);
+    const newText = event.target.value;
+    if (newText.length <= 500) {
+      setCommentText(newText);
+    } else {
+      alert('댓글은 최대 500자까지 입력할 수 있습니다.');
+    }
   };
 
   const handleSubmitComment = () => {
@@ -61,6 +61,7 @@ const FreeDetailPage = () => {
     postComment(postId, userId, commentText)
       .then((response) => {
         console.log('댓글 작성 완료:', response.data);
+        window.location.reload();
       })
       .catch((error) => {
         console.error('댓글 작성 오류:', error);
@@ -100,24 +101,22 @@ const FreeDetailPage = () => {
 
     // 댓글 데이터 가져오기
     getComment(postId, userId)
-      .then((response) => {
-        setComments(response.data);
-      })
-      .catch((error) => {
-        console.error('댓글 데이터 가져오기 오류:', error);
-      });
-  // }, []);
-      // Intersection Observer 초기화
+    .then((response) => {
+      const reversedComments = response.data.reverse();
+      setComments(reversedComments);
+    })
+    .catch((error) => {
+      console.error('댓글 데이터 가져오기 오류:', error);
+    });
+
+    // Intersection Observer 초기화
     observerRef.current = new IntersectionObserver((entries) => {
       const entry = entries[0];
       if (entry.isIntersecting && !isLoading && hasMoreData) {
-        // 스크롤이 화면에 표시되고 이전 요청이 완료되지 않은 경우
-        // 추가 데이터를 가져오는 함수 호출
         loadMoreComments();
       }
     });
 
-    // Intersection Observer를 post_detail_content 요소에 연결
     if (observerRef.current) {
       observerRef.current.observe(document.querySelector('.post_detail_content'));
     }
@@ -128,9 +127,6 @@ const FreeDetailPage = () => {
       }
     };
   }, []);
-
-
-
 
   return (
   <>
