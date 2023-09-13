@@ -50,7 +50,6 @@ function SignUpForm() {
     if (validMessage === '사용가능한 패스워드 입니다' && formData.username !== '' && formData.userid !== '' && formData.password !== '' && formData.passwordConfirm !== '') {
       setShowWarning(false);
 
-      // 회원가입 로직 
       postSignUp(formData.username, formData.userid, formData.password, selected, formData.passwordConfirm)
       .then((resp) => {
         console.log('회원가입 완료!!');
@@ -157,6 +156,7 @@ function SignUpForm() {
             onClick={handleSubmit}
           >회원가입
           </button>
+
           {showWarning && 
           <div style={{fontSize: 11, color: 'red', fontWeight: 550, width: 200, marginTop: 5, textAlign: 'left'}}>
             모든 입력을 채워주세요

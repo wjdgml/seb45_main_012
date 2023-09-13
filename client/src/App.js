@@ -1,18 +1,21 @@
+import React from 'react';
 import './App.css';
-import SignUpPage from './pages/SignUpPage';
-import Header from './components/header';
-import NavBar from './components/NavBar';
-import FreeBoardPage from './pages/FreeBoardPage';
+import FreeBoardPage from './pages/FreeBoardPage.jsx';
+import SignUpPage from './pages/SignUpPage.jsx';
+import FreeDetailPage from './pages/FreeDetailPage.jsx';
+import Header from './components/header.jsx';
+import NavBar from './components/NavBar.jsx';
+import MyPageMain from 'pages/MyPageMain.jsx';
 
 function App() {
   return (
     <div className="App">
-      <SignUpPage />
+      {/* <FreeDetailPage/> */}
+      {/* <SignUpPage /> */}
       {/* <Header /> */}
-      {/* <NavBar />
-      <FreeBoardPage/> */}
-      {/* test */}
-      
+      {/* <NavBar /> */}
+      {/* <FreeBoardPage/> */}
+      {/* <MyPageMain /> */}
     </div>
   );
 }

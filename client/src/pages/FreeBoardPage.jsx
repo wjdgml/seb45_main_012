@@ -1,24 +1,21 @@
+import React from 'react';
 import '../styles/Button.css';
-import '../components/PostList';
-import PostList from '../components/PostList';
+import PostList from '../components/PostList.jsx';
+import NavBar from '../components/NavBar.jsx';
 
 const FreeBoardPage = () => {
-
-    return (
-    <>
-        <div className='page_container'>
-            
-            <div>
-                <button class="custom_board_button confirm_button">자유 게시판</button>
-                {/* <button class="custom_board_button cancel_button">자유 게시판</button> */}
-            </div>
-            <div className='free_board_container'>
-                <PostList/>
-
-            </div>
-        </div>
-    </>
-    )
+  return (
+  <>
+    <div><NavBar /></div>
+      <div className='page_container'>
+          
+      <button className="custom_board_button confirm_button">자유 게시판</button>
+          <div className='free_board_container'>
+              <PostList/>
+          </div>
+      </div>
+  </>
+  )
 }
 
 export default FreeBoardPage;
