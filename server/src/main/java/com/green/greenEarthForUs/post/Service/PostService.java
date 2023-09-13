@@ -20,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.persistence.EntityNotFoundException;
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -46,21 +47,28 @@ public class PostService {
 
     // 게시글 생성
     @Transactional
-    public Post createPost(Long userId, PostPostDto postPostDto) throws IOException { // 유저, 게시글
+    public Post createPost(Long userId, PostPostDto postPostDto, List<MultipartFile> image) throws IOException { // 유저, 게시글
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("User not found with ID: " + userId)); // 유저 조회
-
 
         Post post = mapper.postPostDtoToPost(postPostDto);
         post.setUser(user);
         post.setCreatedAt(LocalDateTime.now()); // 게시글 생성하고
         post.setOpen(postPostDto.isOpen());
 
+        if(image != null){
+            List<String> images = new ArrayList<>();
+            for(MultipartFile file : image) {
+                String imageUrl = imageService.uploadImage(file);
+                images.add(imageUrl);
+            }
+            post.setImageUrls(images);
+        }
 
         Post savedPost = postsRepository.save(post); // 게시글 저장
 
         // 사용자의 등급을 게시글 수에 따라서 추가 땅 -> 새싹 ...
-        userService.updateGradePostCount(user);
+        userService.getUser(user.getUserId());
         return savedPost;
 
     }
@@ -70,6 +78,7 @@ public class PostService {
     public PostResponseDto getPost(Long postId) {
         Post post = postsRepository.findById(postId).orElseThrow(() -> new EntityNotFoundException("Post not found" + postId));
         PostResponseDto responseDto = mapper.postToPostResponseDto(post);
+
         responseDto.setUserId(post.getUser().getUserId());
         return responseDto;
     }
@@ -136,11 +145,12 @@ public class PostService {
         //이미지 삭제하기
         List<String> imageUrl = existingPost.getImageUrls();
         if(imageUrl != null) {
-            for(String image : imageUrl)
-            try {
-                imageService.deleteImage(image);
-            } catch (Exception e) {
-                throw new ImageDeletionException("Failed to delete image: " + imageUrl, e);
+            for(String image : imageUrl) {
+                try {
+                    imageService.deleteImage(image);
+                } catch (Exception e) {
+                    throw new ImageDeletionException("Failed to delete image: " + imageUrl, e);
+                }
             }
         }
 

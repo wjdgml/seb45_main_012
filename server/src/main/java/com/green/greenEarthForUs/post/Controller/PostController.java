@@ -42,16 +42,7 @@ public class PostController {
                                                       @RequestPart(value = "image", required = false) List<MultipartFile> image,
                                                       @RequestPart(value = "json") PostPostDto postPostDto) throws IOException {
 
-        Post createdPost = postService.createPost(userId, postPostDto);
-
-        if(image != null){
-            List<String> images = new ArrayList<>();
-            for(MultipartFile file : image) {
-                String imageUrl = imageService.uploadImage(file);
-                images.add(imageUrl);
-            }
-            createdPost.setImageUrls(images);
-        }
+        Post createdPost = postService.createPost(userId, postPostDto, image);
 
         PostResponseDto responseDto = mapper.postToPostResponseDto(createdPost);
 
