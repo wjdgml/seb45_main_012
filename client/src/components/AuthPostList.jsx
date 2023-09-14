@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import '../styles/AuthPostList.css';
-import { getAuthPosts } from '../api/api';
+import { getAuthPosts } from '../api/api.js';
 
 const AuthPostList = () => {
   const [allAuthPosts, setAllAuthPosts] = useState([]);
