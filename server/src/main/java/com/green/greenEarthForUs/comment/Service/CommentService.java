@@ -4,6 +4,7 @@ package com.green.greenEarthForUs.comment.Service;
 import com.green.greenEarthForUs.Exception.BusinessLogicException;
 import com.green.greenEarthForUs.Exception.ExceptionCode;
 import com.green.greenEarthForUs.comment.DTO.CommentDto;
+import com.green.greenEarthForUs.comment.DTO.CommentResponseDto;
 import com.green.greenEarthForUs.comment.Entity.Comment;
 import com.green.greenEarthForUs.comment.Mapper.CommentMapper;
 import com.green.greenEarthForUs.comment.Repository.CommentRepository;
@@ -45,19 +46,13 @@ public class CommentService {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new EntityNotFoundException("Post not found " + postId)); // user , post 가져오고
 
-        Optional<Comment> optionalComment = commentRepository.findById(commentDto.getId());
-
-        if (!optionalComment.isPresent()) {
-            throw new BusinessLogicException(ExceptionCode.COMMENT_NOT_FOUND);
-        }
-        Comment comment = new Comment();
+        Comment comment = new Comment(); // 초기화
         comment.setUser(user);
         comment.setPost(post);
         comment.setBody(commentDto.getBody());
         comment.setCreatedAt(LocalDateTime.now());
 
         return commentRepository.save(comment);
-
     }
 
     // 게시글 별 댓글 리스트 조회
