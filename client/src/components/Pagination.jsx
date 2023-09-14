@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import '../styles/Pagination.css';
+import { current } from '@reduxjs/toolkit';
 
 const Pagination = ({posts, postsPerPage, pagesPerGroup, currentPage, setCurrentPage }) => {
   const totalPosts = posts.length;
@@ -8,22 +9,20 @@ const Pagination = ({posts, postsPerPage, pagesPerGroup, currentPage, setCurrent
 
   const getPageNumbers = () => {
     const pageNumbers = [];
-    const pageCount = Math.ceil(totalPages / pagesPerGroup);
 
-    for ( let i = 1 ; i <= pageCount ; i++) {
+    for ( let i = 1 ; i <= Math.min(totalPages) ; i++) {
       pageNumbers.push(i);
     }
-
     return pageNumbers;
   }
 
   const pageNumbers = getPageNumbers();
-  
+
   const pageButtons = () => {
     const groupIndex = Math.ceil(currentPage / pagesPerGroup) - 1;
     const startIndex = groupIndex * pagesPerGroup + 1;
     const endIndex = Math.min(startIndex + pagesPerGroup - 1, pageNumbers.length);
-    
+
     return (
       pageNumbers.slice(startIndex-1, endIndex).map((number) => (
         <button
@@ -36,19 +35,39 @@ const Pagination = ({posts, postsPerPage, pagesPerGroup, currentPage, setCurrent
       )))
   };
 
+  const pageGroup = Math.ceil(totalPages / pagesPerGroup);
+  const currentGroup = Math.ceil(currentPage / pagesPerGroup);
+
+  const previousGroup = () => {
+    if (currentGroup > 1) {
+      const nextPage = ( currentGroup - 1 ) * pagesPerGroup;
+      setCurrentPage(nextPage);
+    }
+  }
+
+  const nextGroup = () => {
+    if (currentGroup < pageGroup) {
+      const nextPage = currentGroup * pagesPerGroup + 1;
+      setCurrentPage(nextPage);
+    }
+  }
+
   return (
     <div>
+      {console.log(pageNumbers)}
       <div className='pagination'>
         <button
-          onClick={() => setCurrentPage(Math.max(currentPage -1, 1))}
-          disabled={currentPage === 1}
+          onClick={() => previousGroup()}
+          disabled={currentGroup === 1}
+          className={currentGroup === 1 ? 'disabled' : ''}
         >
           &lt;
         </button>
         {pageButtons()}
         <button
-          onClick={() => setCurrentPage(Math.min(currentPage +1, totalPages))}
-          disabled={currentPage ===totalPages}
+          onClick={() => nextGroup()}
+          disabled={currentGroup === pageGroup}
+          className={currentGroup === pageGroup ? 'disabled' : ''}
         >
           &gt;
         </button>
