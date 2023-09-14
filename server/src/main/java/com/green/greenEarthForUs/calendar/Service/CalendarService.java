@@ -64,7 +64,8 @@ public class CalendarService {
         return findCalendar;
     }
 
-    public List<LocalDate> updateStampedDate(long userId, long postId, long calendarId) {
+    public List<LocalDate> updateStampedDate(long userId, long postId) {
+    long calendarId = userService.getUser(userId).getCalendar().getCalendarId();
 
     Calendar find = calendarRepository.findById(calendarId)
             .orElse(mapper.calendarResponseDtoToCalendar(createCalendar(userId)));
