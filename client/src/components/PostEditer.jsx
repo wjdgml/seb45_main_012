@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import '../styles/PostEditer.css';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
@@ -40,12 +40,13 @@ function PostEditer() {
 
 function PostEditerWithImage() {
   const [formData, setFormData] = useState({
-    type: 'image',
+    type: 'auth',
     title: '',
     body: '',
     open: 'true'
   });
   const [previewImage, setPreviewImage] = useState(null);
+  const imageInputRef = useRef(null);
 
   const handleFileInputChange = (e) => {
     const file = e.target.files[0]; // 선택한 파일의 첫 번째 파일을 가져옴
@@ -59,6 +60,15 @@ function PostEditerWithImage() {
         setPreviewImage(e.target.result);
       };
       reader.readAsDataURL(file);
+
+      e.target.value = null;
+    } 
+  };
+
+  const handleImageClick = () => {
+    // 이미지를 클릭하면 input 필드 클릭 시도
+    if (imageInputRef.current) {
+      imageInputRef.current.click();
     }
   };
 
@@ -81,13 +91,14 @@ function PostEditerWithImage() {
   return (
     <div className="post_editer_with_image">
 
-      <div className="image_upload_form">
+      <div className="image_upload_form" >
         <input
           type="file"
           accept="image/*"
           onChange={handleFileInputChange}
+          ref={imageInputRef}
         />
-        {previewImage && <img src={previewImage} alt="미리보기"/>}
+        {previewImage && <img src={previewImage} alt="미리보기" onClick={handleImageClick} aria-hidden="true" />}
         {/* {console.log(previewImage)} */}
         <div className={`plus_image_icon ${previewImage ? 'clear' : ''}`} >
           <FontAwesomeIcon className='plus_icon' icon={faPlus}/>이미지
