@@ -27,11 +27,11 @@ public class CommentController {
     }
 
     @PostMapping("/{post-id}/{user-id}")
-    public ResponseEntity<CommentDto> createComment(@PathVariable(value = "post-id") Long postId,
+    public ResponseEntity<CommentResponseDto> createComment(@PathVariable(value = "post-id") Long postId,
                                                     @PathVariable(value = "user-id") Long userId,
                                                     @RequestBody CommentDto commentDto) {
-        Comment createdComment = commentService.createComment(postId, userId, commentDto);
-        CommentDto responseDto = mapper.commentToCommentDto(createdComment);
+        Comment creatdComment = commentService.createComment(postId, userId, commentDto);
+        CommentResponseDto responseDto = mapper.commentToResponseDto(creatdComment);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
     }
