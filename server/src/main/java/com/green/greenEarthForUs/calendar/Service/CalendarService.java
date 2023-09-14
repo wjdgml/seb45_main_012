@@ -21,16 +21,14 @@ public class CalendarService {
     private final CalendarRepository calendarRepository;
     private final CalendarMapper mapper;
     private final UserService userService;
-    private final PostService postService;
 
     public CalendarService(CalendarRepository calendarRepository,
                            CalendarMapper mapper,
-                           UserService userService,
-                           PostService postService) {
+                           UserService userService
+                           ) {
         this.calendarRepository = calendarRepository;
         this.mapper = mapper;
         this.userService = userService;
-        this.postService = postService;
     }
 
     public CalendarDto.Response createCalendar(long userId) {
@@ -82,7 +80,6 @@ public class CalendarService {
 
     List<LocalDate> stampedDate = find.getStampedDates();
         stampedDate.add(LocalDate.now());
-
     }
 
 
