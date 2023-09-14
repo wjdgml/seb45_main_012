@@ -25,28 +25,8 @@ function App() {
       {/* <NavBar /> */}
       {/* <FreeBoardPage/> */}
       {/* <MyPageMain /> */}
-      {/* 기존: test */}
     </div>
   );
 }
 
 export default App;
-
-// if (menuName === '전체 게시판') {
-//   navigate('/');
-// }
-// if (menuName === '자유 게시판') {
-//   navigate('/free');
-// }
-// if (menuName === '인증 게시판') {
-//   navigate('/auth');
-// }
-// if (menuName === '환경 정보 게시판') {
-//   navigate('/env');
-// }
-// if (menuName === '내가 쓴 글') {
-//   navigate('/mypage/main');
-// }
-// if (menuName === '내 정보') {
-//   navigate('/mypage/info');
-// }

@@ -39,3 +39,29 @@ export const getComment = (postId, userId) => {
 export const postComment = (postId, userId, commentText) => {
   return instance.post(`/comment/${postId}/${userId}`, { body: commentText });
 };
+
+export const getPosts = (page) => {
+  return instance.get(`/post/free?page=${page}`);
+};
+
+export const postSignUp = (username, userId, password, password_question, password_answer) => {
+  const formData = new FormData();
+
+  formData.append('image', null);
+
+  const jsonData = {
+    userUseId: userId,
+    userName: username,
+    password: password,
+    passwordQuestion: password_question,
+    passwordAnswer: password_answer
+  };
+
+  formData.append('json', new Blob([JSON.stringify(jsonData)], { type: 'application/json' }));
+
+  return instance.post('/user', formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
+}
