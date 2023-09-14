@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import '../styles/Pagination.css';
-import { current } from '@reduxjs/toolkit';
 
 const Pagination = ({posts, postsPerPage, pagesPerGroup, currentPage, setCurrentPage }) => {
   const totalPosts = posts.length;
@@ -53,8 +52,6 @@ const Pagination = ({posts, postsPerPage, pagesPerGroup, currentPage, setCurrent
   }
 
   return (
-    <div>
-      {console.log(pageNumbers)}
       <div className='pagination'>
         <button
           onClick={() => previousGroup()}
@@ -72,7 +69,6 @@ const Pagination = ({posts, postsPerPage, pagesPerGroup, currentPage, setCurrent
           &gt;
         </button>
       </div>
-    </div>
   )
 }
 

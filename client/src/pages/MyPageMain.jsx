@@ -1,45 +1,38 @@
 import React, { useState, useEffect } from 'react';
 import '../styles/Button.css';
-import '../styles/MyPageMain.css'
+import '../styles/MyPageMain.css';
+import axios from 'axios';
 import Pagination from 'components/Pagination.jsx';
-// import Instance from '../axiosConfig';
-// import jwtDecode from 'jwt-decode';
+import jwtDecode from 'jwt-decode';
 
 const MyPageMain = () => {
-  // axios 요청 관련 로직 일단 주석 처리
   // const accessToken = localStorage.getItem('accessToken');
   // const decodedToken = jwtDecode(accessToken);
-  // const memberId = accessToken.memberId;
+  // const memberId = decodedToken.memberId;
 
-  // const [ userData, setUserData ] = useState({});
-  // const [ open, setOpen ] = useState(true);
+  const [ userData, setUserData ] = useState([]);
 
-  // useEffect(() => {
-  //   async function getUserData() {
-  //     try {
-  //       const res = Instance.get('/post/' + memberId);
-  //       setUserData(res.data);
-  //     } catch (err) {
-  //       console.log('error: ', err);
-  //     }
-  //   }
+  useEffect(() => {
+    async function getUserData() {
+      try {
+        const res = await axios.get('http://52.78.145.37:8080/post/customer/10');
+        setUserData(res.data);
+      } catch (err) {
+        console.log('error: ', err);
+      }
+    }
 
-  //   getUserData();
-  // }, []);
+    getUserData();
+  }, []);
 
-  const [ posts, setPosts ] = useState([]);
   const [ filter, setFilter ] = useState('all');
   const [ currentPage, setCurrentPage ] = useState(1);
   const postsPerPage = 5;
 
-  useEffect(() => {
-    setPosts(testData);
-  }, []);
-
-  const filteredPosts = posts.filter((post) => {
-    if ( filter === 'all') return true;
-    else if (filter === 'open') return post.open === true;
-    else if (filter === 'private') return post.open === false;
+  const filteredPosts = userData.filter((post) => {
+    if ( filter === 'all') return ( post.open === "true" || post.open === "false");
+    else if (filter === 'open') return post.open === "true";
+    else if (filter === 'private') return post.open === "false";
   });
 
   const startPostIndex = ( currentPage - 1 ) * postsPerPage;
@@ -120,281 +113,3 @@ const MyPageMain = () => {
 
 
 export default MyPageMain;
-
-
-
-
-// 1) 데이터 하드코딩
-const testData = [
-    {
-        "id": 1,
-        "userId": 1,
-        "type": "free",
-        "title": "1",
-        "body": "공개1",
-        "open": true,
-        "createdAt": "2023-08-29T09:22:18.7444354"
-    },
-    {
-      "id": 2,
-      "userId": 1,
-      "type": "free",
-      "title": "2입니다.",
-      "body": "공개2입니다.",
-      "open": true,
-      "createdAt": "2023-08-29T09:22:18.7444354"
-  },
-  {
-      "id": 3,
-      "userId": 1,
-      "type": "free",
-      "title": "비공개1니다.",
-      "body": "비공개1입니다.",
-      "open": false,
-      "createdAt": "2023-08-29T09:22:18.7444354"
-  },
-  {
-    "id": 27,
-    "userId": 1,
-    "type": "free",
-    "title": "비공개2입니다.",
-    "body": "비공개2입니다.",
-    "open": false,
-    "createdAt": "2023-08-29T09:22:18.7444354"
-},
-{
-    "id": 4,
-    "userId": 1,
-    "type": "free",
-    "title": "공개3입니다.",
-    "body": "공개3입니다.",
-    "open": true,
-    "createdAt": "2023-08-29T09:22:18.7444354"
-},
-{
-  "id": 5,
-  "userId": 1,
-  "type": "free",
-  "title": "공개4입니다.",
-  "body": "공개4입니다.",
-  "open": true,
-  "createdAt": "2023-08-29T09:22:18.7444354"
-},
-{
-  "id": 6,
-  "userId": 1,
-  "type": "free",
-  "title": "공개5입니다.",
-  "body": "공개5입니다.",
-  "open": true,
-  "createdAt": "2023-08-29T09:22:18.7444354"
-},
-{
-  "id": 7,
-  "userId": 1,
-  "type": "free",
-  "title": "공개5.5입니다.",
-  "body": "공개5.5입니다.",
-  "open": true,
-  "createdAt": "2023-08-29T09:22:18.7444354"
-},
-{
-  "id": 8,
-  "userId": 1,
-  "type": "free",
-  "title": "공개6입니다.",
-  "body": "공개6입니다.",
-  "open": true,
-  "createdAt": "2023-08-29T09:22:18.7444354"
-},
-{
-  "id": 9,
-  "userId": 1,
-  "type": "free",
-  "title": "공개7입니다.",
-  "body": "공개7입니다.",
-  "open": true,
-  "createdAt": "2023-08-29T09:22:18.7444354"
-},
-{
-  "id": 10, 
-  "userId": 1,
-  "type": "free",
-  "title": "비공개3입니다.",
-  "body": "비공개3입니다.",
-  "open": false,
-  "createdAt": "2023-08-29T09:22:18.7444354"
-},
-{
-  "id": 11,
-  "userId": 1,
-  "type": "free",
-  "title": "비공개4입니다.",
-  "body": "비공개4입니다.",
-  "open": false,
-  "createdAt": "2023-08-29T09:22:18.7444354"
-},
-{
-  "id": 12,
-  "userId": 1,
-  "type": "free",
-  "title": "비공개5입니다.",
-  "body": "비공개5입니다.",
-  "open": false,
-  "createdAt": "2023-08-29T09:22:18.7444354"
-},
-{
-  "id": 13,
-  "userId": 1,
-  "type": "free",
-  "title": "비공개6입니다.",
-  "body": "비공개6입니다.",
-  "open": false,
-  "createdAt": "2023-08-29T09:22:18.7444354"
-},
-{
-  "id": 14,
-  "userId": 1,
-  "type": "free",
-  "title": "비공개6입니다.",
-  "body": "비공개6입니다.",
-  "open": false,
-  "createdAt": "2023-08-29T09:22:18.7444354"
-},{
-  "id": 15,
-  "userId": 1,
-  "type": "free",
-  "title": "비공개6입니다.",
-  "body": "비공개6입니다.",
-  "open": false,
-  "createdAt": "2023-08-29T09:22:18.7444354"
-},{
-  "id": 16,
-  "userId": 1,
-  "type": "free",
-  "title": "비공개6입니다.",
-  "body": "비공개6입니다.",
-  "open": false,
-  "createdAt": "2023-08-29T09:22:18.7444354"
-},{
-  "id": 17,
-  "userId": 1,
-  "type": "free",
-  "title": "비공개6입니다.",
-  "body": "비공개6입니다.",
-  "open": false,
-  "createdAt": "2023-08-29T09:22:18.7444354"
-},{
-  "id": 28,
-  "userId": 1,
-  "type": "free",
-  "title": "비공개6입니다.",
-  "body": "비공개6입니다.",
-  "open": false,
-  "createdAt": "2023-08-29T09:22:18.7444354"
-},{
-  "id": 29,
-  "userId": 1,
-  "type": "free",
-  "title": "비공개6입니다.",
-  "body": "비공개6입니다.",
-  "open": false,
-  "createdAt": "2023-08-29T09:22:18.7444354"
-},{
-  "id": 30,
-  "userId": 1,
-  "type": "free",
-  "title": "비공개6입니다.",
-  "body": "비공개6입니다.",
-  "open": false,
-  "createdAt": "2023-08-29T09:22:18.7444354"
-},{
-  "id": 31,
-  "userId": 1,
-  "type": "free",
-  "title": "비공개6입니다.",
-  "body": "비공개6입니다.",
-  "open": false,
-  "createdAt": "2023-08-29T09:22:18.7444354"
-},{
-  "id": 18,
-  "userId": 1,
-  "type": "free",
-  "title": "비공개6입니다.",
-  "body": "비공개6입니다.",
-  "open": false,
-  "createdAt": "2023-08-29T09:22:18.7444354"
-},{
-  "id": 19,
-  "userId": 1,
-  "type": "free",
-  "title": "비공개6입니다.",
-  "body": "비공개6입니다.",
-  "open": false,
-  "createdAt": "2023-08-29T09:22:18.7444354"
-},{
-  "id": 20,
-  "userId": 1,
-  "type": "free",
-  "title": "비공개6입니다.",
-  "body": "비공개6입니다.",
-  "open": false,
-  "createdAt": "2023-08-29T09:22:18.7444354"
-},{
-  "id": 21,
-  "userId": 1,
-  "type": "free",
-  "title": "비공개6입니다.",
-  "body": "비공개6입니다.",
-  "open": false,
-  "createdAt": "2023-08-29T09:22:18.7444354"
-},{
-  "id": 25,
-  "userId": 1,
-  "type": "free",
-  "title": "비공개6입니다.",
-  "body": "비공개6입니다.",
-  "open": false,
-  "createdAt": "2023-08-29T09:22:18.7444354"
-},{
-  "id": 26,
-  "userId": 1,
-  "type": "free",
-  "title": "비공개6입니다.",
-  "body": "비공개6입니다.",
-  "open": false,
-  "createdAt": "2023-08-29T09:22:18.7444354"
-},{
-  "id": 27,
-  "userId": 1,
-  "type": "free",
-  "title": "비공개6입니다.",
-  "body": "비공개6입니다.",
-  "open": false,
-  "createdAt": "2023-08-29T09:22:18.7444354"
-},{
-  "id": 22,
-  "userId": 1,
-  "type": "free",
-  "title": "비공개6입니다.",
-  "body": "비공개6입니다.",
-  "open": false,
-  "createdAt": "2023-08-29T09:22:18.7444354"
-},{
-  "id": 23,
-  "userId": 1,
-  "type": "free",
-  "title": "비공개6입니다.",
-  "body": "비공개6입니다.",
-  "open": false,
-  "createdAt": "2023-08-29T09:22:18.7444354"
-},{
-  "id": 24,
-  "userId": 1,
-  "type": "free",
-  "title": "비공개6입니다.",
-  "body": "비공개6입니다.",
-  "open": false,
-  "createdAt": "2023-08-29T09:22:18.7444354"
-},
-];

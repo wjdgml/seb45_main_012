@@ -30,7 +30,6 @@ button {
   cursor: pointer;
 }
 
-/* 활성 버튼 스타일 */
 button.active {
   background-color: #8DC693;
   color: white;
