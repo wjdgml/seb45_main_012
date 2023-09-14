@@ -22,7 +22,7 @@ public class PostResponseDto {
 
     private String open;
 
-    private List<String> imageUrls;
+    private String imageUrl;
 
     private LocalDateTime createdAt;
 

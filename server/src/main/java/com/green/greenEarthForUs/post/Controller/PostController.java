@@ -39,7 +39,7 @@ public class PostController {
     // 게시글 생성
     @PostMapping("/{user-id}")
     public ResponseEntity<PostResponseDto> createPost(@PathVariable(value = "user-id") Long userId,
-                                                      @RequestPart(value = "image", required = false) List<MultipartFile> image,
+                                                      @RequestPart(value = "image", required = false) MultipartFile image,
                                                       @RequestPart(value = "json") PostPostDto postPostDto) throws IOException {
 
         Post createdPost = postService.createPost(userId, postPostDto, image);
@@ -86,7 +86,7 @@ public class PostController {
     @PatchMapping("/{user-id}/{post-id}")
     public ResponseEntity<PostResponseDto> updatePost(@PathVariable(value = "user-id") Long userId,
                                                       @PathVariable(value = "post-id") Long postId,
-                                                      @RequestPart(value = "image", required = false) List<MultipartFile> image,
+                                                      @RequestPart(value = "image", required = false) MultipartFile image,
                                                       @RequestPart(value = "json") PostPatchDto postPatchDto) throws Exception{
 
 

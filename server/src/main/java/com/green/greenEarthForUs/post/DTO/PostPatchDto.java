@@ -15,7 +15,7 @@ public class PostPatchDto {
 
     private String title;
 
-    private List<String> imageUrls;
+    private String imageUrls;
 
     private String body;
 
