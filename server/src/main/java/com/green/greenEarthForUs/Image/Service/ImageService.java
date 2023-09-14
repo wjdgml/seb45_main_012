@@ -50,7 +50,7 @@ public class ImageService {
         String host = url.getHost();
         String path = url.getPath();
 
-        String filePath = path.substring(bucketName.length()+3);
+        String filePath = path.substring(bucketName.length());
         amazonS3.deleteObject(new DeleteObjectRequest(bucketName, filePath));
     }
 
