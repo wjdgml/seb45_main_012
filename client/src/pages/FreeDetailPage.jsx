@@ -10,6 +10,7 @@ const FreeDetailPage = () => {
 
   const [post, setPost] = useState({});
   const [user, setUser] = useState({});
+  const [vote, setVote] = useState({});
   const [commentText, setCommentText] = useState('');
 
   const [allComments, setAllComments] = useState([]);
@@ -55,11 +56,33 @@ const FreeDetailPage = () => {
     // 유저 데이터 가져오기
     getUser(userId)
       .then((response) => {
+        console.log(response.data);
         setUser(response.data);
       })
       .catch((error) => {
         console.error('유저 데이터 가져오기 오류:', error);
       });
+
+    // 투표 데이터 가져오기
+    // let voteId; // 변수를 함수 범위로 이동
+
+    // postVote(postId)
+    //   .then((response) => {
+    //     const voteData = response.data;
+    //     console.log("voteData: ", voteData);
+    //     voteId = voteData.voteId; // voteId를 할당
+    //     // 이제 voteId를 사용하여 getVote 함수 호출
+    //     return getVote(postId, voteId);
+    //   })
+    //   .then((response) => {
+    //     const voteData = response.data;
+    //     // const voteCount = voteData.voteCount;
+    //     setVote(voteData);
+    //   })
+    //   .catch((error) => {
+    //     console.error('투표 생성 또는 데이터 가져오기 오류:', error);
+    //   });
+
 
     // 댓글 데이터 가져오기
     getComment(postId, userId)
@@ -84,7 +107,7 @@ const FreeDetailPage = () => {
           const newVisibleComments = [...visibleComments, ...allComments.slice(endVisibleIndex, endVisibleIndex + 10)];
           setVisibleComments(newVisibleComments);
           setIsLoading(false);
-        }, 1000);
+        },);
       }
     };
   
@@ -115,11 +138,12 @@ const FreeDetailPage = () => {
           <div className="post_detail_header">
             <div>
               <h3 className="post_detail_title">{post.title}</h3>
-              <p>{user.userGrade} {user.username}</p>
+              <p>{user.grade} {user.userName}</p>
             </div>
             <p>{new Date(post.createdAt).toLocaleDateString()}</p>
           </div>
           <p className='post_detail_content'>{post.body}</p>
+          {/* <p className='post_detail_content'>❤️{vote.voteCount}</p> */}
         </div>
         <div className='free_detail_container'>
           <input
@@ -136,7 +160,7 @@ const FreeDetailPage = () => {
             <div key={comment.id} className='post_detail_header'>
               <div>
                 <p>
-                  {user.userGrade} {user.username}
+                  {user.grade} {user.userName}
                 </p>
                 <p>{comment.body}</p>
               </div>
