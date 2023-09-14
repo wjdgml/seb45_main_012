@@ -15,7 +15,7 @@ public class CalendarDto {
     public static class Patch{
         private String body;
         private long calendarId;
-
+        private List<LocalDate> stampedDates;
     }
     @Getter
     @Setter

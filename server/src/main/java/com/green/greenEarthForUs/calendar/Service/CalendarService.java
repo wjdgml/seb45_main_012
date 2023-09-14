@@ -33,7 +33,10 @@ public class CalendarService {
 
     public CalendarDto.Response createCalendar(long userId) {
 
-        userService.getUser(userId);
+
+        if(userService.getUser(userId).getCalendar() !=null){
+            throw new BusinessLogicException(ExceptionCode.CALENDAR_EXISTS);
+        }
 
         Calendar createdCalendar = new Calendar();
         createdCalendar.setUser(userService.getUser(userId));
@@ -47,7 +50,8 @@ public class CalendarService {
 
         Optional.ofNullable(calendar.getBody())
                 .ifPresent(findCalendar::setBody);
-
+        Optional.ofNullable(calendar.getStampedDates())
+                .ifPresent(findCalendar::setStampedDates);
         return mapper.calendarToCalendarResponseDto(calendarRepository.save(findCalendar));
     }
 
@@ -71,13 +75,7 @@ public class CalendarService {
 
     public void updateStampedDate(long userId) {
     User user = userService.getUser(userId);
-    Calendar find;
-    if(user.getCalendar() != null &&(Long) user.getCalendar().getCalendarId() != null)
-    {find = findVerifiedCalendar(user.getCalendar().getCalendarId());
-    }
-    else { find = mapper.calendarResponseDtoToCalendar(createCalendar(userId));
-    }
-
+    Calendar find = findVerifiedCalendar(user.getCalendar().getCalendarId());
     List<LocalDate> stampedDate = find.getStampedDates();
         stampedDate.add(LocalDate.now());
     }
