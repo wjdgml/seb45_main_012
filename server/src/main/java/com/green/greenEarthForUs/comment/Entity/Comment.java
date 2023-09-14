@@ -24,9 +24,6 @@ public class Comment {
     @Column(name= "body")
     private String body;
 
-    @Column(name= "writer")
-    private String writer;
-
     @Column(name= "created_at")
     private LocalDateTime createdAt;
 

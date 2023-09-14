@@ -5,69 +5,95 @@ import com.green.greenEarthForUs.Exception.BusinessLogicException;
 import com.green.greenEarthForUs.Exception.ExceptionCode;
 import com.green.greenEarthForUs.comment.DTO.CommentDto;
 import com.green.greenEarthForUs.comment.Entity.Comment;
+import com.green.greenEarthForUs.comment.Mapper.CommentMapper;
 import com.green.greenEarthForUs.comment.Repository.CommentRepository;
 import com.green.greenEarthForUs.post.Entity.Post;
+import com.green.greenEarthForUs.post.Repository.PostRepository;
 import com.green.greenEarthForUs.user.Entity.User;
+import com.green.greenEarthForUs.user.Repository.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityNotFoundException;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+
 @Service
 public class CommentService {
 
     private final CommentRepository commentRepository;
 
+    private final UserRepository userRepository;
 
-    public CommentService(CommentRepository commentRepository) {
+    private final PostRepository postRepository;
+
+    private final CommentMapper mapper;
+
+    public CommentService(CommentRepository commentRepository, UserRepository userRepository, PostRepository postRepository, CommentMapper mapper) {
         this.commentRepository = commentRepository;
+        this.userRepository = userRepository;
+        this.postRepository = postRepository;
+        this.mapper = mapper;
     }
 
     // 댓글 생성
-    @Transactional
     public Comment createComment(Long postId, Long userId, CommentDto commentDto) {
-        Comment comment = new Comment();
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("User not found " + userId));
 
-        Post post= new Post();
-        post.setPostId(postId);
-        comment.setPost(post);
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new EntityNotFoundException("Post not found " + postId)); // user , post 가져오고
 
-        comment.setBody(commentDto.getBody()); // 댓글 내용 설정
+        Optional<Comment> optionalComment = commentRepository.findById(commentDto.getId());
 
-        User user = new User();
-        user.setUserId(userId);
-        comment.setUser(user);
-
-        return commentRepository.save(comment);
-    }
-
-    // 특정 댓글 조회
-    @Transactional
-    public Comment getComment(Long postId, Long userId, Long commentId) {
-
-        Comment comment = verifyComment(commentId);
-        if (!comment.getPost().getPostId().equals(postId) || !comment.getUser().getUserId().equals(userId)) {
+        if (!optionalComment.isPresent()) {
             throw new BusinessLogicException(ExceptionCode.COMMENT_NOT_FOUND);
         }
-        return comment;
+        Comment comment = new Comment();
+        comment.setUser(user);
+        comment.setPost(post);
+        comment.setBody(commentDto.getBody());
+        comment.setCreatedAt(LocalDateTime.now());
+
+        return commentRepository.save(comment);
+
     }
+
     // 게시글 별 댓글 리스트 조회
     @Transactional
     public List<Comment> getComments(Long postId, Long userId) {
-        return commentRepository.findByPost_PostIdAndUser_UserId(postId, userId);
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new EntityNotFoundException("Post not found" + postId));
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("User not found " + userId));
+
+        Optional<Comment> optionalComment = commentRepository.findById(postId);
+
+        if (!optionalComment.isPresent()) {
+            throw new BusinessLogicException(ExceptionCode.COMMENT_NOT_FOUND);
+        }
+
+        return commentRepository.findByPost_PostIdAndUser_UserId(post.getPostId(), user.getUserId());
     }
 
     // 댓글 수정
     @Transactional
     public Comment updateComment(Long postId, Long userId, Long commentId, CommentDto commentDto) {
-        Comment comment = verifyComment(commentId); // 해당 댓글을 DB에서 조회하고 comment 변수에 저장함
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("User not found " + userId));
 
-        if (!comment.getPost().getPostId().equals(postId) || !comment.getUser().getUserId().equals(userId)) {
-            throw new BusinessLogicException(ExceptionCode.INVALID_COMMENT_ACCESS); // 작성자가 작성한 댓글이 아니면,,
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new EntityNotFoundException("Post not found " + postId));
+
+        Comment comment = commentRepository.findById(commentId).orElseThrow(() -> new EntityNotFoundException("Comment not found" + commentId));
+
+        if (!comment.getUser().getUserId().equals(userId)) {
+            throw new BusinessLogicException(ExceptionCode.INVALID_COMMENT_ACCESS);
         }
 
-        // 댓글 내용을 업데이트합니다.
-        comment.setBody(commentDto.getBody());
+        comment.setBody(comment.getBody());
 
         return commentRepository.save(comment);
     }
@@ -84,13 +110,9 @@ public class CommentService {
         commentRepository.deleteById(commentId);
     }
 
-    // 댓글 조회 (단일)
-    //public Comment findComment(Long commentId) {
-    //return verifyComment(commentId);
-    //}
-
     private Comment verifyComment(Long commentId) {
         Optional<Comment> commentOptional = commentRepository.findById(commentId);
         return commentOptional.orElseThrow(() -> new BusinessLogicException(ExceptionCode.COMMENT_NOT_FOUND));
     }
 }
+
