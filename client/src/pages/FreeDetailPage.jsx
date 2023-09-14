@@ -18,50 +18,6 @@ const FreeDetailPage = () => {
   // const [commentIds, setCommentIds] = useState([]); // 중복 체크를 위한 배열
   const intersectionRef = useRef(null);
 
-  // const handleIntersect = (entries) => {
-  //   if (isLoading || !hasMoreData) {
-  //     return;
-  //   }
-
-  //   if (entries[0].isIntersecting) {
-  //     loadMoreComments();
-  //   }
-  // };
-
-  // const loadMoreComments = () => {
-  //   if (isLoading || !hasMoreData) {
-  //     return;
-  //   }
-
-  //   setIsLoading(true);
-
-  //   getComment(postId, userId)
-  //     .then((response) => {
-  //       if (response.data.length === 0) {
-  //         // 더 이상 데이터가 없으면 무한 스크롤 중단
-  //         setHasMoreData(false);
-  //       } else {
-  //         // 중복된 댓글을 제외하고 추가 데이터를 가져와서 표시
-  //         const newComments = response.data.filter((newComment) => {
-  //           return !commentIds.includes(newComment.id);
-  //         });
-
-  //         // 중복 ID를 commentIds 배열에 추가
-  //         const newCommentIds = newComments.map((comment) => comment.id);
-  //         setCommentIds((prevIds) => [...prevIds, ...newCommentIds]);
-
-  //         // 데이터를 최신순으로 정렬하기 위해 reverse 사용
-  //         newComments.reverse();
-  //         setComments((prevComments) => [...newComments, ...prevComments]);
-  //       }
-  //       setIsLoading(false);
-  //     })
-  //     .catch((error) => {
-  //       console.error('댓글 데이터 가져오기 오류:', error);
-  //       setIsLoading(false);
-  //     });
-  // };
-
   const handleCommentTextChange = (event) => {
     setCommentText(event.target.value);
   };
@@ -118,21 +74,6 @@ const FreeDetailPage = () => {
       .catch((error) => {
         console.error('댓글 데이터 가져오기 오류:', error);
       });
-
-    // // IntersectionObserver 초기화
-    // const observer = new IntersectionObserver(handleIntersect, {
-    //   root: null,
-    //   rootMargin: '0px',
-    //   threshold: 0.1,
-    // });
-
-    // if (intersectionRef.current) {
-    //   observer.observe(intersectionRef.current);
-    // }
-
-    // return () => {
-    //   observer.disconnect();
-    // };
   }, []);
 
   useEffect(() => {
