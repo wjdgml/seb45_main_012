@@ -44,7 +44,7 @@ public class CommentService {
                 .orElseThrow(() -> new EntityNotFoundException("User not found " + userId));
 
         Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new EntityNotFoundException("Post not found " + postId)); // user , post 가져오고
+                .orElseThrow(() -> new EntityNotFoundException("Post not found " + postId)); // user , post
 
         Comment comment = new Comment(); // 초기화
         comment.setUser(user);
@@ -89,12 +89,14 @@ public class CommentService {
         Comment comment = commentRepository.findById(commentId).orElseThrow(() -> new EntityNotFoundException("Comment not found" + commentId));
 
         if (!comment.getUser().getUserId().equals(userId)) {
-            throw new BusinessLogicException(ExceptionCode.INVALID_COMMENT_ACCESS);
+            throw new BusinessLogicException(ExceptionCode.INVALID_COMMENT_ACCESS); //
         }
 
-        comment.setBody(comment.getBody());
+        comment.setBody(commentDto.getBody());
+        comment.setCreatedAt(LocalDateTime.now());
 
         return commentRepository.save(comment);
+       
     }
 
     // 댓글 삭제
