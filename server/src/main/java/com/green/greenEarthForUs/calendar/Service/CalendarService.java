@@ -12,6 +12,7 @@ import com.green.greenEarthForUs.user.service.UserService;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -83,6 +84,10 @@ public class CalendarService {
         }
         if (find != null) {
             List<LocalDate> stampedDate = find.getStampedDates();
+            if (stampedDate == null) {
+                stampedDate = new ArrayList<>(); // stampedDate가 null이면 새로운 ArrayList를 생성
+                find.setStampedDates(stampedDate); // Calendar 객체에 새로운 List 할당
+            }
             stampedDate.add(LocalDate.now());
         }
     }
