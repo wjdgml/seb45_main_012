@@ -40,6 +40,8 @@ public class CalendarService {
 
         Calendar createdCalendar = new Calendar();
         createdCalendar.setUser(user);
+        List<LocalDate> date = new ArrayList<>();
+        createdCalendar.setStampedDates(date);
 
         return mapper.calendarToCalendarResponseDto(calendarRepository.save(createdCalendar));
     }
