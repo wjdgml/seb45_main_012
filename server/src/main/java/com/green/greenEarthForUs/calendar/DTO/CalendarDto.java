@@ -4,23 +4,16 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class CalendarDto {
-    @Getter
-    @AllArgsConstructor
-    public static class Post{
-        private String body;
-        private long userId;
-        private long postId;
-        private LocalDateTime postCreatedAt;
-    }
     @Getter
     public static class Patch{
         private String body;
         private long calendarId;
 
-        public void addCalendarId(long calendarId){this.calendarId = calendarId;}
     }
     @Getter
     @Builder
@@ -28,8 +21,7 @@ public class CalendarDto {
         private String body;
         private long userId;
         private long postId;
-        private String doImage;
-        private LocalDateTime postCreatedAt;
+        private List<LocalDate> stampedDates;
     }
 
 

@@ -26,7 +26,7 @@ public class VoteService {
         Vote findVote = findVerifiedVote(vote.getVoteId());
         long count = findVote.getVoteCount();
         Optional.ofNullable(vote.getVoteType())
-                .ifPresent(voteType -> findVote.setVoteType(voteType));
+                .ifPresent(findVote::setVoteType);
         if(vote.getVoteType().equals("Like")) findVote.setVoteCount(count+1);
         if(vote.getVoteType().equals("DisLike")) findVote.setVoteCount(count-1);
         // 주어진 요청에 좋아요에 변화가 있으면 voteCount를 변경하고 저장하는 로직
@@ -35,9 +35,7 @@ public class VoteService {
 
     public Vote findVoteCount(long voteId){
 
-        return voteRepository.findById(voteId)
-                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.VOTE_NOT_FOUND));
-        //voteCount를 저장소에서 불러오는 요청에 대한 응답.
+        return findVerifiedVote(voteId);
     }
 
     public void deleteVote(long voteId){

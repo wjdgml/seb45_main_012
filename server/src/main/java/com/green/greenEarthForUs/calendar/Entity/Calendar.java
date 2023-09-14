@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -27,7 +28,8 @@ public class Calendar {
     private String doImage;
 
     @Column
-    private LocalDateTime localDateTime;
+    @ElementCollection
+    private List<LocalDate> stampedDates;
 
     @OneToOne
     private User user;
