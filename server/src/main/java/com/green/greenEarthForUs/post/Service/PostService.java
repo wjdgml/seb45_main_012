@@ -173,14 +173,16 @@ public class PostService {
 
 
     private List<String> imagesUpload(List<MultipartFile> images){
-
+        if(images != null) {
             List<String> imageUrls = new ArrayList<>();
-            for(MultipartFile file : images) {
+            for (MultipartFile file : images) {
                 String imageUrl = imageService.uploadImage(file);
                 imageUrls.add(imageUrl);
             }
             return imageUrls;
-
+        }
+        List<String> response = new ArrayList<>();
+        return response;
     }
 }
 
