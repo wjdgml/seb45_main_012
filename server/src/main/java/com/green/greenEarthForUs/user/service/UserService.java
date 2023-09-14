@@ -22,13 +22,21 @@ import static com.green.greenEarthForUs.user.Entity.User.Role.USER;
 import static com.green.greenEarthForUs.user.Entity.User.UserGrade.LAND;
 
 @Service
-@RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
     private final UserMapper mapper;
     private final ImageService imageService;
     private final PasswordEncoder passwordEncoder;
 
+    public UserService(UserRepository userRepository,
+                       UserMapper mapper,
+                       ImageService imageService,
+                       PasswordEncoder passwordEncoder){
+        this.userRepository = userRepository;
+        this.mapper = mapper;
+        this.imageService = imageService;
+        this.passwordEncoder = passwordEncoder;
+    }
 
 
     // 사용자 등록
@@ -136,8 +144,9 @@ public class UserService {
         if(image!=null) {
             String imageUrl = imageService.uploadImage(image);
             return imageUrl;
+        }else {
+            return null;
         }
-        return null;
-    }
+        }
 
 }

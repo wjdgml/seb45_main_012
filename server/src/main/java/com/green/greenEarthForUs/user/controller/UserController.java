@@ -22,11 +22,16 @@ import java.io.IOException;
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping("/user")
-@RequiredArgsConstructor
 public class UserController { // 이미지 데이터를 바이너리 형태로 저장 -< DB에 사진 그냥 넣는거
 
     private UserService userService;
     private UserMapper mapper;
+
+    public UserController(UserService userService,
+                          UserMapper mapper){
+        this.userService = userService;
+        this.mapper = mapper;
+    }
 
 
     // 사용자 등록
@@ -34,9 +39,7 @@ public class UserController { // 이미지 데이터를 바이너리 형태로 �
     public ResponseEntity<UserResponseDto> createUser(@RequestPart(value = "image", required = false) MultipartFile image,
                                                       @RequestPart(value = "json") UserPostDto userPostDto) throws IOException {
 
-
         User createUser = userService.createUser(userPostDto, image);
-
 
         UserResponseDto responseDto = mapper.userToUserResponseDto(createUser);
 
