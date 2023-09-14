@@ -45,7 +45,7 @@ const PostList = (props) => {
           const newVisiblePosts = [...visiblePosts, ...allPosts.slice(endVisibleIndex, endVisibleIndex + 10)];
           setVisiblePosts(newVisiblePosts);
           setLoading(false);
-        }, 1000);
+        }, );
       }
     };
   
