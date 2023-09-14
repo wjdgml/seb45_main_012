@@ -32,3 +32,29 @@ export const postPosts = (type, title, body, open, img = null) => {
   });
 }
 
+export const postSignUp = (username, userId, password, password_question, password_answer) => {
+  const formData = new FormData();
+
+  formData.append('image', null);
+
+  const jsonData = {
+    userUseId: userId,
+    userName: username,
+    password: password,
+    passwordQuestion: password_question,
+    passwordAnswer: password_answer
+  };
+
+  formData.append('json', new Blob([JSON.stringify(jsonData)], { type: 'application/json' }));
+
+  return instance.post('/user', formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
+}
+
+
+
+
+
