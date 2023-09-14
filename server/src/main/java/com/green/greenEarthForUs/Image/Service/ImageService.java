@@ -45,12 +45,12 @@ public class ImageService {
     }
 
     public void deleteImage(String imageUrl) throws Exception {
-
-        URL url = new URL(imageUrl);
-        String name = bucketName+".s3.ap-northeast-2.amazonaws.com";
-        String path = url.getPath();
-
-        String filePath = path.substring(name.length()+2);
+//
+//        URL url = new URL(imageUrl);
+//        String name = bucketName+".s3.ap-northeast-2.amazonaws.com";
+//        String path = url.getPath();
+//
+//        String filePath = path.substring(name.length()+2);
 
         amazonS3.deleteObject(new DeleteObjectRequest(bucketName, imageUrl));
     }
