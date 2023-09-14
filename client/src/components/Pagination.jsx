@@ -9,7 +9,7 @@ const Pagination = ({posts, postsPerPage, pagesPerGroup, currentPage, setCurrent
   const getPageNumbers = () => {
     const pageNumbers = [];
 
-    for ( let i = 1 ; i <= Math.min(totalPages) ; i++) {
+    for ( let i = 1 ; i <= totalPages ; i++) {
       pageNumbers.push(i);
     }
     return pageNumbers;

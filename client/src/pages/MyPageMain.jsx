@@ -6,9 +6,9 @@ import Pagination from 'components/Pagination.jsx';
 import jwtDecode from 'jwt-decode';
 
 const MyPageMain = () => {
-  // const accessToken = localStorage.getItem('accessToken');
-  // const decodedToken = jwtDecode(accessToken);
-  // const memberId = decodedToken.memberId;
+  const accessToken = localStorage.getItem('accessToken');
+  const decodedToken = jwtDecode(accessToken);
+  const memberId = decodedToken.memberId;
 
   const [ userData, setUserData ] = useState([]);
 
