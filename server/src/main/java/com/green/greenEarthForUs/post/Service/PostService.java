@@ -64,9 +64,9 @@ public class PostService {
         post.setOpen(postPostDto.isOpen());
         post.setImageUrls(imagesUpload(images));
 
-        calendarService.updateStampedDate(userId, post.getPostId());//post생성으로 calendar에 date저장
-        Post savedPost = postsRepository.save(post); // 게시글 저장
 
+        Post savedPost = postsRepository.save(post); // 게시글 저장
+        calendarService.updateStampedDate(userId, savedPost.getPostId());//post생성으로 calendar에 date저장
         // 사용자의 등급을 게시글 수에 따라서 추가 땅 -> 새싹 ...
         userService.getUser(user.getUserId());
         return savedPost;
