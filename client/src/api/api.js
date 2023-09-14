@@ -21,8 +21,9 @@ export const postPosts = (type, title, body, open, img = null) => {
 
   formData.append('json', new Blob([JSON.stringify(jsonData)], { type: 'application/json' }));
   
-  formData.append('image', img)
-  formData.append('image', img)
+  formData.append('image', `@"${img}"`);
+  formData.append('image', `@"${img}"`);
+
 
   return instance.post(`/post/10`, formData, {
     headers: {
