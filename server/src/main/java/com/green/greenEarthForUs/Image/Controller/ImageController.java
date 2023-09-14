@@ -26,8 +26,8 @@ public class ImageController {
         return new ResponseEntity<String>(imageUrl, HttpStatus.OK);
     }
 
-    @DeleteMapping("/{image_url}")
-    public ResponseEntity imageDelete(@PathVariable("image_url") String imageUrl) throws Exception {
+    @DeleteMapping("/")
+    public ResponseEntity imageDelete(@RequestBody String imageUrl) throws Exception {
         imageService.deleteImage(imageUrl);
         return ResponseEntity.noContent().build();
     }
