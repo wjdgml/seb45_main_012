@@ -71,7 +71,7 @@ public class CalendarService {
         return findCalendar;
     }
 
-    public CalendarDto.Response updateStampedDate(long userId, long postId) {
+    public void updateStampedDate(long userId, long postId) {
     User user = userService.getUser(userId);
     Calendar find;
     if(user.getCalendar() != null){find = calendarRepository.findById(user.getCalendar().getCalendarId())
@@ -82,10 +82,7 @@ public class CalendarService {
 
     List<LocalDate> stampedDate = find.getStampedDates();
         stampedDate.add(LocalDate.now());
-        CalendarDto.Response response = mapper.calendarToCalendarResponseDto(find);
-        response.setPostId(postId);
 
-        return response;
     }
 
 
