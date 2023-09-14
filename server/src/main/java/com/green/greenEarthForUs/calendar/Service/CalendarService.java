@@ -74,15 +74,17 @@ public class CalendarService {
 
     public void updateStampedDate(long userId) {
 
-    User user = userService.getUser(userId);
+        User user = userService.getUser(userId);
         Calendar find;
-    if(user.getCalendar() != null){
-     find = findVerifiedCalendar(user.getCalendar().getCalendarId());
-    }else{
-        find = mapper.calendarResponseDtoToCalendar(createCalendar(userId));
-    }
-    List<LocalDate> stampedDate = find.getStampedDates();
-        stampedDate.add(LocalDate.now());
+        if (user.getCalendar() != null) {
+            find = findVerifiedCalendar(user.getCalendar().getCalendarId());
+        } else {
+            find = mapper.calendarResponseDtoToCalendar(createCalendar(userId));
+        }
+        if (find != null) {
+            List<LocalDate> stampedDate = find.getStampedDates();
+            stampedDate.add(LocalDate.now());
+        }
     }
 
 
