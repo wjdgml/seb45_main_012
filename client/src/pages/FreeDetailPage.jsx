@@ -15,7 +15,6 @@ const FreeDetailPage = () => {
   const [allComments, setAllComments] = useState([]);
   const [visibleComments, setVisibleComments] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  // const [commentIds, setCommentIds] = useState([]); // 중복 체크를 위한 배열
   const intersectionRef = useRef(null);
 
   const handleCommentTextChange = (event) => {
