@@ -69,11 +69,11 @@ public class CalendarService {
         return findCalendar;
     }
 
-    public void updateStampedDate(long userId, long postId) {
+    public void updateStampedDate(long userId) {
     User user = userService.getUser(userId);
     Calendar find;
-    if(user.getCalendar() != null){find = calendarRepository.findById(user.getCalendar().getCalendarId())
-            .orElseThrow(() -> new BusinessLogicException(ExceptionCode.CALENDAR_NOT_FOUND));
+    if(user.getCalendar() != null)
+    {find = findVerifiedCalendar(user.getCalendar().getCalendarId());
     }
     else { find = mapper.calendarResponseDtoToCalendar(createCalendar(userId));
     }
