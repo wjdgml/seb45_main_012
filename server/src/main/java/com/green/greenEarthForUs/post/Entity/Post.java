@@ -29,8 +29,7 @@ public class Post {
     private Boolean open;
 
     @Column
-    @ElementCollection
-    private List<String> imageUrls;
+    private String imageUrl;
 
     @Column
     private String type; // type 게시글의 유형

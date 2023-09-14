@@ -55,14 +55,14 @@ public class PostService {
 
     // 게시글 생성
     @Transactional
-    public Post createPost(Long userId, PostPostDto postPostDto, List<MultipartFile> images) throws IOException { // 유저, 게시글
+    public Post createPost(Long userId, PostPostDto postPostDto, MultipartFile images) throws IOException { // 유저, 게시글
         User user = userService.getUser(userId); // user검증
 
         Post post = mapper.postPostDtoToPost(postPostDto);
         post.setUser(user);
         post.setCreatedAt(LocalDateTime.now()); // 게시글 생성하고
         post.setOpen(postPostDto.isOpen());
-        post.setImageUrls(imagesUpload(images));
+        post.setImageUrl(imagesUpload(images));
 
 
         Post savedPost = postsRepository.save(post); // 게시글 저장
@@ -113,7 +113,7 @@ public class PostService {
     }
     // 게시글 수정
     @Transactional
-    public PostResponseDto updatePost(Long userId, Long postId, PostPatchDto postPatchDto, List<MultipartFile> images) throws Exception{
+    public PostResponseDto updatePost(Long userId, Long postId, PostPatchDto postPatchDto, MultipartFile images) throws Exception{
 
         Post existingPost = postsRepository.findById(postId)
                 .orElseThrow(() -> new EntityNotFoundException("Post not found with ID: " + postId));
@@ -134,7 +134,7 @@ public class PostService {
         Optional.ofNullable(postPatchDto.getBody())
                         .ifPresent(existingPost::setBody);
         //이미지 저장,
-        existingPost.setImageUrls(imagesUpload(images));
+        existingPost.setImageUrl(imagesUpload(images));
 
         // 업데이트된 게시글 저장
         Post updatedPost = postsRepository.save(existingPost);
@@ -149,15 +149,14 @@ public class PostService {
                 .orElseThrow(() -> new EntityNotFoundException("Post not found with ID: " + postId));
 
         //이미지 삭제하기
-        List<String> imageUrl = existingPost.getImageUrls();
+        String imageUrl = existingPost.getImageUrl();
         if(!imageUrl.isEmpty()) {
-            for(String image : imageUrl) {
-                try {
-                    imageService.deleteImage(image);
+            try {
+                    imageService.deleteImage(imageUrl);
                 } catch (Exception e) {
                     throw new ImageDeletionException("Failed to delete image: " + imageUrl, e);
                 }
-            }
+
         }
 
 
@@ -172,17 +171,13 @@ public class PostService {
     }
 
 
-    private List<String> imagesUpload(List<MultipartFile> images){
+    private String imagesUpload(MultipartFile images){
         if(images != null) {
-            List<String> imageUrls = new ArrayList<>();
-            for (MultipartFile file : images) {
-                String imageUrl = imageService.uploadImage(file);
-                imageUrls.add(imageUrl);
-            }
-            return imageUrls;
+                String imageUrl = imageService.uploadImage(images);
+
+                return imageUrl;
         }
-        List<String> response = new ArrayList<>();
-        return response;
+        return "";
     }
 }
 
