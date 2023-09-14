@@ -2,7 +2,13 @@ package com.green.greenEarthForUs.vote.Service;
 
 import com.green.greenEarthForUs.Exception.BusinessLogicException;
 import com.green.greenEarthForUs.Exception.ExceptionCode;
+import com.green.greenEarthForUs.post.DTO.PostResponseDto;
+import com.green.greenEarthForUs.post.Entity.Post;
+import com.green.greenEarthForUs.post.Mapper.PostMapper;
+import com.green.greenEarthForUs.post.Service.PostService;
+import com.green.greenEarthForUs.vote.DTO.VoteDto;
 import com.green.greenEarthForUs.vote.Entity.Vote;
+import com.green.greenEarthForUs.vote.Mapper.VoteMapper;
 import com.green.greenEarthForUs.vote.Repository.VoteRepository;
 import org.springframework.stereotype.Service;
 
@@ -12,14 +18,28 @@ import java.util.Optional;
 public class VoteService {
 
     private final VoteRepository voteRepository;
+    private final PostService postService;
+    private final PostMapper postMapper;
+    private final VoteMapper mapper;
 
-    public VoteService(VoteRepository voteRepository){
+    public VoteService(VoteRepository voteRepository,
+                       PostService postService,
+                       PostMapper postMapper,
+                       VoteMapper mapper){
         this.voteRepository = voteRepository;
+        this.postService = postService;
+        this.postMapper = postMapper;
+        this.mapper = mapper;
     }
 
-    public Vote createVote(){
+    public VoteDto.Response createVote(long postId){
+        PostResponseDto post = postService.getPost(postId);//post가 유효한지 확인하는 로직
+        Post findPost = postMapper.postResponseDtoToPost(post);
+        if(!findPost.getVote().equals(null)) throw new BusinessLogicException(ExceptionCode.VOTE_EXISTS);
         Vote vote = new Vote();
-        return voteRepository.save(vote);
+        vote.setPost(postMapper.postResponseDtoToPost(post));
+
+        return mapper.voteToVoteResponseDto(voteRepository.save(vote));
     }
 
     public Vote updateVote(Vote vote){
