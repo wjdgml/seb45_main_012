@@ -45,7 +45,7 @@ public class ImageService {
     }
 
     public void deleteImage(String imageUrl) throws Exception {
-        imageUrl = "https://"  + imageUrl;
+
         URL url = new URL(imageUrl);
         String name = bucketName+".s3.ap-northeast-2.amazonaws.com";
         String path = url.getPath();
