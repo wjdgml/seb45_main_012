@@ -20,14 +20,12 @@ const AuthPostList = () => {
   }, []);
 
   return (
-    <div className="auth_post_list_container">
-      <div className="auth_post_grid">
-        {visibleAuthPosts.map((post, index) => (
-          <div className="auth_post_item" key={post.postId}>
-            <img src={post.imageUrls[0]} alt={`${post.postId}`} />
-          </div>
-        ))}
-      </div>
+    <div className="auth_post_grid">
+      {visibleAuthPosts.map((post, index) => (
+        <div className="auth_post_item_container" key={post.postId}>
+          <img src={post.imageUrls[0]} alt={`${post.postId}`} />
+        </div>
+      ))}
     </div>
   );
 };
