@@ -6,6 +6,8 @@ import com.green.greenEarthForUs.calendar.DTO.CalendarDto;
 import com.green.greenEarthForUs.calendar.Mapper.CalendarMapper;
 import com.green.greenEarthForUs.calendar.Repository.CalendarRepository;
 import com.green.greenEarthForUs.calendar.Entity.Calendar;
+import com.green.greenEarthForUs.post.Service.PostService;
+import com.green.greenEarthForUs.user.Entity.User;
 import com.green.greenEarthForUs.user.service.UserService;
 import org.springframework.stereotype.Service;
 
@@ -19,13 +21,16 @@ public class CalendarService {
     private final CalendarRepository calendarRepository;
     private final CalendarMapper mapper;
     private final UserService userService;
+    private final PostService postService;
 
     public CalendarService(CalendarRepository calendarRepository,
                            CalendarMapper mapper,
-                           UserService userService) {
+                           UserService userService,
+                           PostService postService) {
         this.calendarRepository = calendarRepository;
         this.mapper = mapper;
         this.userService = userService;
+        this.postService = postService;
     }
 
     public CalendarDto.Response createCalendar(long userId) {
@@ -33,6 +38,7 @@ public class CalendarService {
         userService.getUser(userId);
 
         Calendar createdCalendar = new Calendar();
+        createdCalendar.setUser(userService.getUser(userId));
 
         return mapper.calendarToCalendarResponseDto(calendarRepository.save(createdCalendar));
     }
@@ -47,8 +53,9 @@ public class CalendarService {
         return mapper.calendarToCalendarResponseDto(calendarRepository.save(findCalendar));
     }
 
-    public Calendar findCalendar(long calendarId) {
-        return findVerifiedCalendar(calendarId);
+    public CalendarDto.Response findCalendar(long calendarId) {
+
+        return mapper.calendarToCalendarResponseDto(findVerifiedCalendar(calendarId));
     }
 
     public void deleteCalendar(long calendarId) {
@@ -64,15 +71,21 @@ public class CalendarService {
         return findCalendar;
     }
 
-    public List<LocalDate> updateStampedDate(long userId, long postId) {
-    long calendarId = userService.getUser(userId).getCalendar().getCalendarId();
-
-    Calendar find = calendarRepository.findById(calendarId)
-            .orElse(mapper.calendarResponseDtoToCalendar(createCalendar(userId)));
+    public CalendarDto.Response updateStampedDate(long userId, long postId) {
+    User user = userService.getUser(userId);
+    Calendar find;
+    if(user.getCalendar() != null){find = calendarRepository.findById(user.getCalendar().getCalendarId())
+            .orElseThrow(() -> new BusinessLogicException(ExceptionCode.CALENDAR_NOT_FOUND));
+    }
+    else { find = mapper.calendarResponseDtoToCalendar(createCalendar(userId));
+    }
 
     List<LocalDate> stampedDate = find.getStampedDates();
         stampedDate.add(LocalDate.now());
-        return stampedDate;
+        CalendarDto.Response response = mapper.calendarToCalendarResponseDto(find);
+        response.setPostId(postId);
+
+        return response;
     }
 
 

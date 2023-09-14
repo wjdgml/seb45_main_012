@@ -49,9 +49,8 @@ public class CalendarController {
 
     @GetMapping("/{calendar_id}")
     public ResponseEntity<CalendarDto.Response> getCalendar(@PathVariable("calendar_id") long calendarId){
-        Calendar findCalendar = calendarService.findCalendar(calendarId);
 
-        return ResponseEntity.ok(mapper.calendarToCalendarResponseDto(findCalendar));
+        return ResponseEntity.ok(calendarService.findCalendar(calendarId));
     }
 
     @DeleteMapping("/{calendar_id}")
