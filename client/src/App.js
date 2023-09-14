@@ -1,17 +1,33 @@
+import React from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import './App.css';
-// import Header from './components/header';
-import NavBar from './components/NavBar';
-// import FreeBoardPage from './pages/FreeBoardPage';
-import AuthBoardPage from './pages/AuthBoardPage';
+// import SignUpPage from './pages/SignUpPage.jsx';
+import AllBoardPage from './pages/AllBoardPage.jsx';
+import FreeBoardPage from './pages/FreeBoardPage.jsx';
+import FreeDetailPage from './pages/FreeDetailPage.jsx';
+import AuthBoardPage from './pages/AuthBoardPage.jsx';
+
+// import Header from './components/header.jsx';
+// import NavBar from './components/NavBar.jsx';
+// import MyPageMain from 'pages/MyPageMain.jsx';
 
 function App() {
   return (
     <div className="App">
+      <Router>
+        <Routes>
+          <Route path="/" element={<AllBoardPage/>} />
+          <Route path="/free" element={<FreeBoardPage/>} />
+          <Route path="/post/:postId/:userId" element={<FreeDetailPage />} />
+          <Route path="/auth" element={<AuthBoardPage/>} />
+        </Routes>
+    </Router>
+      {/* <FreeDetailPage/> */}
+      {/* <SignUpPage /> */}
       {/* <Header /> */}
-      <NavBar />
+      {/* <NavBar /> */}
       {/* <FreeBoardPage/> */}
-      {/* test */}
-      <AuthBoardPage/>
+      {/* <MyPageMain /> */}
     </div>
   );
 }
