@@ -4,6 +4,7 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -27,7 +28,8 @@ public class ImageService {
     }
 
 
-    public String uploadImage(MultipartFile file) throws IOException{
+    @SneakyThrows
+    public String uploadImage(MultipartFile file){
         String filePath = "images/";
         String fileName = filePath + UUID.randomUUID().toString() + "-" + file.getOriginalFilename();
 
@@ -36,6 +38,7 @@ public class ImageService {
         metadata.setContentLength(file.getSize());
 
         InputStream inputStream = file.getInputStream();
+
         amazonS3.putObject(new PutObjectRequest(bucketName, fileName, inputStream, metadata));
 
         return amazonS3.getUrl(bucketName, fileName).toString();

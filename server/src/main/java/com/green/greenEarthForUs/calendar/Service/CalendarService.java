@@ -2,52 +2,96 @@ package com.green.greenEarthForUs.calendar.Service;
 
 import com.green.greenEarthForUs.Exception.BusinessLogicException;
 import com.green.greenEarthForUs.Exception.ExceptionCode;
+import com.green.greenEarthForUs.calendar.DTO.CalendarDto;
+import com.green.greenEarthForUs.calendar.Mapper.CalendarMapper;
 import com.green.greenEarthForUs.calendar.Repository.CalendarRepository;
 import com.green.greenEarthForUs.calendar.Entity.Calendar;
+import com.green.greenEarthForUs.post.Service.PostService;
+import com.green.greenEarthForUs.user.Entity.User;
+import com.green.greenEarthForUs.user.service.UserService;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
 public class CalendarService {
 
     private final CalendarRepository calendarRepository;
+    private final CalendarMapper mapper;
+    private final UserService userService;
 
-    public CalendarService(CalendarRepository calendarRepository){
+    public CalendarService(CalendarRepository calendarRepository,
+                           CalendarMapper mapper,
+                           UserService userService
+                           ) {
         this.calendarRepository = calendarRepository;
+        this.mapper = mapper;
+        this.userService = userService;
     }
 
-    public Calendar createCalendar(Calendar calendar){
+    public CalendarDto.Response createCalendar(long userId) {
+        User user = userService.getUser(userId);
+        if(user.getCalendar() !=null){
+            throw new BusinessLogicException(ExceptionCode.CALENDAR_EXISTS);
+        }
 
-        return calendarRepository.save(calendar);
+        Calendar createdCalendar = new Calendar();
+        createdCalendar.setUser(user);
+        List<LocalDate> date = new ArrayList<>();
+        createdCalendar.setStampedDates(date);
+
+        return mapper.calendarToCalendarResponseDto(calendarRepository.save(createdCalendar));
     }
 
-    public Calendar updateCalendar(Calendar calendar){
-        Calendar findCalendar = findVerifiedCalendar(calendar.getCalendarId());
+    public CalendarDto.Response updateCalendar(CalendarDto.Patch calendar, long userId, long calendarId) {
+        userService.getUser(userId);
+        Calendar findCalendar = findVerifiedCalendar(calendarId);
 
         Optional.ofNullable(calendar.getBody())
-                .ifPresent(body -> findCalendar.setBody(body));
-
-        return calendarRepository.save(findCalendar);
+                .ifPresent(findCalendar::setBody);
+        Optional.ofNullable(calendar.getStampedDates())
+                .ifPresent(findCalendar::setStampedDates);
+        return mapper.calendarToCalendarResponseDto(calendarRepository.save(findCalendar));
     }
 
-    public Calendar findCalendar(long calendarId){
-        return calendarRepository.findById(calendarId)
-                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.CALENDAR_NOT_FOUND));
+    public CalendarDto.Response findCalendar(long calendarId) {
+
+        return mapper.calendarToCalendarResponseDto(findVerifiedCalendar(calendarId));
     }
 
-    public void deleteCalendar(long calendarId){
-        Calendar calendar = findCalendar(calendarId);
-        calendarRepository.delete(calendar);
+    public void deleteCalendar(long calendarId) {
+        calendarRepository.delete(findVerifiedCalendar(calendarId));
     }
 
-    public Calendar findVerifiedCalendar(long calendarId){
+    public Calendar findVerifiedCalendar(long calendarId) {
         Optional<Calendar> optionalCalendar =
                 calendarRepository.findById(calendarId);
         Calendar findCalendar =
                 optionalCalendar.orElseThrow(() ->
                         new BusinessLogicException(ExceptionCode.CALENDAR_NOT_FOUND));
         return findCalendar;
+    }
+
+    public void updateStampedDate(long userId) {
+
+        User user = userService.getUser(userId);
+        Calendar find;
+        if (user.getCalendar() != null) {
+            find = findVerifiedCalendar(user.getCalendar().getCalendarId());
+        } else {
+            find = mapper.calendarResponseDtoToCalendar(createCalendar(userId));
+        }
+        if (find != null) {
+            List<LocalDate> stampedDate = find.getStampedDates();
+            if (stampedDate == null) {
+                stampedDate = new ArrayList<>(); // stampedDate가 null이면 새로운 ArrayList를 생성
+                find.setStampedDates(stampedDate); // Calendar 객체에 새로운 List 할당
+            }
+            stampedDate.add(LocalDate.now());
+        }
     }
 
 

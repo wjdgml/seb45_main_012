@@ -7,6 +7,7 @@ import com.green.greenEarthForUs.calendar.Mapper.CalendarMapper;
 import com.green.greenEarthForUs.calendar.Service.CalendarService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.parameters.P;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -32,33 +33,24 @@ public class CalendarController {
         this.imageService = imageService;
     }
 
-    @PostMapping
-    public ResponseEntity<CalendarDto.Response> postCalendar(@Validated @RequestBody CalendarDto.Post post)throws Exception{
+    @PostMapping("/{user_id}")
+    public ResponseEntity<CalendarDto.Response> postCalendar(@PathVariable("user_id") long userId){
 
-
-
-        Calendar createdCalendar = calendarService.createCalendar(mapper.calendarPostDtoToCalendar(post));
-
-
-        return new ResponseEntity<CalendarDto.Response>(mapper.calendarToCalendarResponseDto(createdCalendar), HttpStatus.CREATED);
+        return new ResponseEntity<CalendarDto.Response>( calendarService.createCalendar(userId), HttpStatus.CREATED);
     }
 
     @PatchMapping("/{user_id}/{calendar_id}")
     public ResponseEntity<CalendarDto.Response> patchCalendar(@PathVariable("user_id") long userId,
                                         @PathVariable("calendar_id") long calendarId,
                                         @Validated @RequestBody CalendarDto.Patch patch){
-        // user 검증 로직 필요
-        patch.addCalendarId(calendarId);
-        Calendar updatedCalendar = calendarService.updateCalendar(mapper.calendarPatchDtoToCalendar(patch));
 
-        return ResponseEntity.ok(mapper.calendarToCalendarResponseDto(updatedCalendar));
+        return ResponseEntity.ok(calendarService.updateCalendar(patch, userId, calendarId));
     }
 
     @GetMapping("/{calendar_id}")
     public ResponseEntity<CalendarDto.Response> getCalendar(@PathVariable("calendar_id") long calendarId){
-        Calendar findCalendar = calendarService.findCalendar(calendarId);
 
-        return ResponseEntity.ok(mapper.calendarToCalendarResponseDto(findCalendar));
+        return ResponseEntity.ok(calendarService.findCalendar(calendarId));
     }
 
     @DeleteMapping("/{calendar_id}")

@@ -36,12 +36,8 @@ public class VoteController {
 
     @PostMapping("/{post_id}")
     public ResponseEntity postVote(@PathVariable("post_id") long postId){
-        postService.getPost(postId);   //post가 유효한지 확인하는 로직
-        Vote createdVote = voteService.createVote();
-        VoteDto.Response vote = mapper.voteToVoteResponseDto(createdVote);
-        vote.setPostId(postId);
 
-        return new ResponseEntity(vote, HttpStatus.CREATED);
+        return new ResponseEntity(voteService.createVote(postId), HttpStatus.CREATED);
     }
 
     @PatchMapping("/{post_id}/{user_id}/{vote_id}")

@@ -1,4 +1,4 @@
-package com.green.greenEarthForUs;
+package com.green.greenEarthForUs.securityConfig;
 
 import com.green.greenEarthForUs.login.handler.UserAccessDeniedHandler;
 import com.green.greenEarthForUs.login.userdetails.CustomUserDetailsService;

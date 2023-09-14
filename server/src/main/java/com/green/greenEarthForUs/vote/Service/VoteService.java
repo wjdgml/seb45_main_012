@@ -2,7 +2,13 @@ package com.green.greenEarthForUs.vote.Service;
 
 import com.green.greenEarthForUs.Exception.BusinessLogicException;
 import com.green.greenEarthForUs.Exception.ExceptionCode;
+import com.green.greenEarthForUs.post.DTO.PostResponseDto;
+import com.green.greenEarthForUs.post.Entity.Post;
+import com.green.greenEarthForUs.post.Mapper.PostMapper;
+import com.green.greenEarthForUs.post.Service.PostService;
+import com.green.greenEarthForUs.vote.DTO.VoteDto;
 import com.green.greenEarthForUs.vote.Entity.Vote;
+import com.green.greenEarthForUs.vote.Mapper.VoteMapper;
 import com.green.greenEarthForUs.vote.Repository.VoteRepository;
 import org.springframework.stereotype.Service;
 
@@ -12,21 +18,35 @@ import java.util.Optional;
 public class VoteService {
 
     private final VoteRepository voteRepository;
+    private final PostService postService;
+    private final PostMapper postMapper;
+    private final VoteMapper mapper;
 
-    public VoteService(VoteRepository voteRepository){
+    public VoteService(VoteRepository voteRepository,
+                       PostService postService,
+                       PostMapper postMapper,
+                       VoteMapper mapper){
         this.voteRepository = voteRepository;
+        this.postService = postService;
+        this.postMapper = postMapper;
+        this.mapper = mapper;
     }
 
-    public Vote createVote(){
+    public VoteDto.Response createVote(long postId){
+        PostResponseDto post = postService.getPost(postId);//post가 유효한지 확인하는 로직
+        Post findPost = postMapper.postResponseDtoToPost(post);
+        if(!findPost.getVote().equals(null)) throw new BusinessLogicException(ExceptionCode.VOTE_EXISTS);
         Vote vote = new Vote();
-        return voteRepository.save(vote);
+        vote.setPost(postMapper.postResponseDtoToPost(post));
+
+        return mapper.voteToVoteResponseDto(voteRepository.save(vote));
     }
 
     public Vote updateVote(Vote vote){
         Vote findVote = findVerifiedVote(vote.getVoteId());
         long count = findVote.getVoteCount();
         Optional.ofNullable(vote.getVoteType())
-                .ifPresent(voteType -> findVote.setVoteType(voteType));
+                .ifPresent(findVote::setVoteType);
         if(vote.getVoteType().equals("Like")) findVote.setVoteCount(count+1);
         if(vote.getVoteType().equals("DisLike")) findVote.setVoteCount(count-1);
         // 주어진 요청에 좋아요에 변화가 있으면 voteCount를 변경하고 저장하는 로직
@@ -35,9 +55,7 @@ public class VoteService {
 
     public Vote findVoteCount(long voteId){
 
-        return voteRepository.findById(voteId)
-                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.VOTE_NOT_FOUND));
-        //voteCount를 저장소에서 불러오는 요청에 대한 응답.
+        return findVerifiedVote(voteId);
     }
 
     public void deleteVote(long voteId){

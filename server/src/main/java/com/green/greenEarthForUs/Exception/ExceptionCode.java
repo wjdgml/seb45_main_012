@@ -3,6 +3,7 @@ package com.green.greenEarthForUs.Exception;
 import lombok.Getter;
 
 public enum ExceptionCode {
+    VOTE_EXISTS(409, "Vote exists"),
     IMAGE_NOT_FOUND(404, "Image Not Found"),
     FILE_UPLOAD_FAIL(404, "File Upload Fail"),
     IMAGE_NOT_SUPPORT(404, "Image Not Support"),

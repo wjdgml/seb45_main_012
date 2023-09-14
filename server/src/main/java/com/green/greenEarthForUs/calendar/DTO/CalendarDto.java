@@ -3,33 +3,29 @@ package com.green.greenEarthForUs.calendar.DTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class CalendarDto {
     @Getter
-    @AllArgsConstructor
-    public static class Post{
-        private String body;
-        private long userId;
-        private long postId;
-        private LocalDateTime postCreatedAt;
-    }
-    @Getter
+    @Setter
     public static class Patch{
         private String body;
         private long calendarId;
-
-        public void addCalendarId(long calendarId){this.calendarId = calendarId;}
+        private List<LocalDate> stampedDates;
     }
     @Getter
+    @Setter
     @Builder
     public static class Response{
+        private long calendarId;
         private String body;
         private long userId;
         private long postId;
-        private String doImage;
-        private LocalDateTime postCreatedAt;
+        private List<LocalDate> stampedDates;
     }
 
 
