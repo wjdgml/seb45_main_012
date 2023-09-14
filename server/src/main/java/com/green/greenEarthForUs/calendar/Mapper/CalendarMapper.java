@@ -11,7 +11,6 @@ public interface CalendarMapper {
 
     Calendar calendarPatchDtoToCalendar(CalendarDto.Patch requestBody);
     @Mapping(source = "user.userId", target = "userId")
-    @Mapping(source = "post.postId", target = "postId")
     CalendarDto.Response calendarToCalendarResponseDto(Calendar calendar);
     Calendar calendarResponseDtoToCalendar(CalendarDto.Response response);
 }
