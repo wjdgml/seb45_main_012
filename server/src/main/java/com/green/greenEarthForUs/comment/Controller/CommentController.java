@@ -28,22 +28,12 @@ public class CommentController {
 
     @PostMapping("/{post-id}/{user-id}")
     public ResponseEntity<CommentDto> createComment(@PathVariable(value = "post-id") Long postId,
-                                                   @PathVariable(value = "user-id") Long userId,
-                                                   @RequestBody CommentDto commentDto) {
+                                                    @PathVariable(value = "user-id") Long userId,
+                                                    @RequestBody CommentDto commentDto) {
         Comment createdComment = commentService.createComment(postId, userId, commentDto);
         CommentDto responseDto = mapper.commentToCommentDto(createdComment);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
-    }
-
-    @GetMapping("/{post-id}/{user-id}/{comment-id}")
-    public ResponseEntity<CommentResponseDto> getComment(@PathVariable(value = "post-id") Long postId,
-                                                         @PathVariable(value = "user-id") Long userId,
-                                                         @PathVariable(value = "comment-id") Long commentId) {
-        Comment comment = commentService.getComment(postId, userId, commentId);
-        CommentResponseDto response =mapper.commentToResponseDto(comment);
-
-        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/{post-id}/{user-id}")
