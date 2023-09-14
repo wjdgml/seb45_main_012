@@ -7,7 +7,6 @@ import PropTypes from 'prop-types';
 const PostList = (props) => {
   const [allPosts, setAllPosts] = useState([]);
   const [visiblePosts, setVisiblePosts] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1);
   const [loading, setLoading] = useState(false);
 
   const intersectionRef = useRef(null);
@@ -36,39 +35,35 @@ const PostList = (props) => {
     }
   }, [props.type]);
 
-  const handleIntersect = (entries) => {
-    console.log("실행됨");
-    const nextPage = currentPage + 1;
-    const startIndex = (nextPage - 1) * 10;
-    const endIndex = nextPage * 10;
-    
-    if (endIndex <= allPosts.length && entries[0].isIntersecting) {
-      setLoading(true);
-      setTimeout(() => {
-        const newVisiblePosts = [...visiblePosts, ...allPosts.slice(startIndex, endIndex)];
-        setVisiblePosts(newVisiblePosts);
-        setCurrentPage(nextPage);
-        setLoading(false);
-      }, 1000);
-    }
-  };
 
   useEffect(() => {
+    const handleIntersect = (entries) => {
+      if (entries[0].isIntersecting) {
+        setLoading(true);
+        setTimeout(() => {
+          const endVisibleIndex = visiblePosts.length;
+          const newVisiblePosts = [...visiblePosts, ...allPosts.slice(endVisibleIndex, endVisibleIndex + 10)];
+          setVisiblePosts(newVisiblePosts);
+          setLoading(false);
+        }, 1000);
+      }
+    };
+  
     const observer = new IntersectionObserver(handleIntersect, {
       root: null,
       rootMargin: '0px',
       threshold: 0.1,
     });
-
+  
     if (intersectionRef.current) {
       observer.observe(intersectionRef.current);
     }
-
+  
     return () => {
       observer.disconnect();
     };
-  }, [currentPage]);
-
+  }, [allPosts, visiblePosts]);
+  
   return (
     <div className="post_list_container">
       {visiblePosts.map((post) => (
@@ -83,9 +78,6 @@ const PostList = (props) => {
         </div>
       ))}
       {loading && <div>Loading...</div>}
-      {currentPage * 10 < allPosts.length && !loading && (
-        <div>Loading more...</div>
-      )}
       <div ref={intersectionRef}></div>
     </div>
   );

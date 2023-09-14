@@ -25,18 +25,15 @@ export const getUser = (userId) => {
   return instance.get(`/user/${userId}`);
 };
 
+export const postVote = (postId) => {
+  return instance.post(`/vote/${postId}`);
+}
 export const getVote = (postId, voteId) => {
   return instance.get(`/vote/${postId}/${voteId}`);
 };
 
-// export const getComment = (postId, userId) => {
-//   return instance.get(`/comment/${postId}/${userId}`);
-// };
-
-export const getComment = (postId, userId, page) => {
-  return instance.get(`/comment/${postId}/${userId}`, {
-    params: { page }
-  });
+export const getComment = (postId, userId) => {
+  return instance.get(`/comment/${postId}/${userId}`);
 };
 
 export const postComment = (postId, userId, commentText) => {
