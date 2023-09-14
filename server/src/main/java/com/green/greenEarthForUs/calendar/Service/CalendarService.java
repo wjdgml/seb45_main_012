@@ -72,7 +72,7 @@ public class CalendarService {
     public void updateStampedDate(long userId) {
     User user = userService.getUser(userId);
     Calendar find;
-    if(user.getCalendar() != null)
+    if(user.getCalendar() != null &&(Long) user.getCalendar().getCalendarId() != null)
     {find = findVerifiedCalendar(user.getCalendar().getCalendarId());
     }
     else { find = mapper.calendarResponseDtoToCalendar(createCalendar(userId));
