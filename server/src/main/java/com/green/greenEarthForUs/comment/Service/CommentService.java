@@ -39,7 +39,7 @@ public class CommentService {
     }
 
     // 댓글 생성
-    public Comment createComment(Long postId, Long userId, CommentDto commentDto) {
+    public CommentResponseDto createComment(Long postId, Long userId, CommentDto commentDto) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("User not found " + userId));
 
@@ -52,7 +52,11 @@ public class CommentService {
         comment.setBody(commentDto.getBody());
         comment.setCreatedAt(LocalDateTime.now());
 
-        return commentRepository.save(comment);
+        Comment save = commentRepository.save(comment);
+
+        CommentResponseDto responseDto = mapper.commentToResponseDto(save);
+
+        return responseDto;
     }
 
     // 게시글 별 댓글 리스트 조회
