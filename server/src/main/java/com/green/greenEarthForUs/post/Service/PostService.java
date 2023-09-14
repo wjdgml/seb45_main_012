@@ -62,8 +62,9 @@ public class PostService {
         post.setUser(user);
         post.setCreatedAt(LocalDateTime.now()); // 게시글 생성하고
         post.setOpen(postPostDto.isOpen());
-
-        post.setImageUrls(imagesUpload(images));
+        if(images!=null) {
+            post.setImageUrls(imagesUpload(images));
+        }
         calendarService.updateStampedDate(userId, post.getPostId(), user.getCalendar().getCalendarId());//post생성으로 calendar에 date저장
         Post savedPost = postsRepository.save(post); // 게시글 저장
 
@@ -173,15 +174,14 @@ public class PostService {
 
 
     private List<String> imagesUpload(List<MultipartFile> images){
-        if(!images.isEmpty()){
+
             List<String> imageUrls = new ArrayList<>();
             for(MultipartFile file : images) {
                 String imageUrl = imageService.uploadImage(file);
                 imageUrls.add(imageUrl);
             }
             return imageUrls;
-        }
-        return null;
+
     }
 }
 
