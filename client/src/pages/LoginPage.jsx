@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
-import '../styles/Login.css';
 import LoginFunc from '../auth/LoginFunc.js';
+import { Link, useNavigate } from 'react-router-dom';
+import '../styles/Login.css';
 
 const LogIn = () => {
+    
+  const navigate = useNavigate();
 
   const [ id, setId ] = useState("");
   const [ password, setPassword ] = useState("");
@@ -20,7 +23,7 @@ const LogIn = () => {
     try {
       const result = await LoginFunc(id, password);
       if (result) {
-        window.location.href = '/';
+        navigate('/');
       }
     }
     catch (err) {
@@ -52,7 +55,7 @@ const LogIn = () => {
         <div className='links'>
           <div>비밀번호 찾기 </div>
           <div className='center'> | </div>
-          <div>회원가입</div>
+          <Link to={'/signup'}>회원가입</Link>
         </div>
       </div>
     </div>
