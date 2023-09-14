@@ -12,7 +12,7 @@ const AuthBoardPage = () => {
                 <button class="custom_board_button confirm_button">인증 게시판</button>
                 {/* <button class="custom_board_button cancel_button">인증 게시판</button> */}
             </div>
-            <div className='board_container'>
+            <div className='auth_board_container'>
                 <AuthPostList/>
 
             </div>
