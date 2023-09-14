@@ -18,13 +18,19 @@ function PostEditer() {
   };
 
   const handleCreatePost = () => {
-    postPosts(formData.type, formData.title, formData.body, formData.open)
-    .then((resp) => {
-      console.log('성공~!!', resp.data);
-    })
-    .catch((err) => {
-      console.error('실패ㅠㅠ', err);
-    });
+
+    if (formData.title !== '' && formData.body !== '') {
+      postPosts(formData.type, formData.title, formData.body, formData.open)
+        .then((resp) => {
+          console.log('성공~!!');
+        })
+        .catch((err) => {
+          console.error('실패ㅠㅠ');
+        });
+    } else {
+      alert('제목과 내용을 모두 입력해주세요.');
+    }
+    
   }
 
   return (
@@ -49,14 +55,12 @@ function PostEditerWithImage() {
   const imageInputRef = useRef(null);
 
   const handleFileInputChange = (e) => {
-    const file = e.target.files[0]; // 선택한 파일의 첫 번째 파일을 가져옴
+    const file = e.target.files[0]; 
     setFormData({ ...formData, file });
 
-      // 이미지 파일을 읽기
     if (file) {
       const reader = new FileReader();
       reader.onload = (e) => {
-        // 읽은 이미지 데이터를 사용하여 미리보기 업데이트
         setPreviewImage(e.target.result);
       };
       reader.readAsDataURL(file);
@@ -66,7 +70,6 @@ function PostEditerWithImage() {
   };
 
   const handleImageClick = () => {
-    // 이미지를 클릭하면 input 필드 클릭 시도
     if (imageInputRef.current) {
       imageInputRef.current.click();
     }
@@ -78,13 +81,19 @@ function PostEditerWithImage() {
   };
 
   const handleCreatePost = () => {
-    postPosts(formData.type, formData.title, formData.body, formData.open, previewImage)
-    .then((resp) => {
-      console.log('성공~!!!!!', resp.data);
-    })
-    .catch((err) => {
-      console.error('실패ㅠㅠ', err);
-    });
+
+    if (formData.title !== '' && formData.body !== '' && previewImage !== null) {
+      postPosts(formData.type, formData.title, formData.body, formData.open, previewImage)
+        .then((resp) => {
+          console.log('성공~!!!!!', resp.data);
+        })
+        .catch((err) => {
+          console.error('실패ㅠㅠ', err);
+        });
+    } else {
+      alert('이미지 업로드와 제목 및 내용을 모두 작성해주세요.');
+    }
+    
   }
   
 
@@ -99,7 +108,6 @@ function PostEditerWithImage() {
           ref={imageInputRef}
         />
         {previewImage && <img src={previewImage} alt="미리보기" onClick={handleImageClick} aria-hidden="true" />}
-        {/* {console.log(previewImage)} */}
         <div className={`plus_image_icon ${previewImage ? 'clear' : ''}`} >
           <FontAwesomeIcon className='plus_icon' icon={faPlus}/>이미지
         </div>

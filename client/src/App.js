@@ -18,7 +18,7 @@ function App() {
       {/* <NavBar /> */}
       {/* <FreeBoardPage/> */}
       {/* <MyPageMain /> */}
-      {/* <EditerPage /> */}
+      <EditerPage />
     </div>
   );
 }

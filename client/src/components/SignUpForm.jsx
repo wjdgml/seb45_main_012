@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import '../styles/SignUpForm.css';
-import { postSignUp } from '../api/api.js';
+import { postSignUp } from 'api/api.js';
 
 function SignUpForm() {
   const [view, setView] = useState(false);
