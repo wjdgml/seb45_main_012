@@ -18,20 +18,22 @@ import java.time.LocalDateTime;
 public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="comment_id")
+    @Column(name = "comment_id")
     private Long commentId;
 
-    @Column(name= "body")
+    @Column(name = "body")
     private String body;
 
-    @Column(name= "created_at")
+    @Column(name = "created_at")
     private LocalDateTime createdAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="user_id")
+    @JoinColumn(name = "user_id")
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name= "post_id")
+    @JoinColumn(name = "post_id")
     private Post post;
 }
+
+
