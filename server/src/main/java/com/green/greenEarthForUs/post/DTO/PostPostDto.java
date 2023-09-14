@@ -8,8 +8,6 @@ import java.util.List;
 @Getter @Setter
 public class PostPostDto { // 생성
 
-    //private Long userId;
-
     private String type;
 
     private String title;
