@@ -14,9 +14,5 @@ public interface CommentMapper {
     @Mapping(source = "user.userId", target = "userId")
     @Mapping(source = "post.postId", target = "postId")
     CommentResponseDto commentToResponseDto(Comment comment);
-    @Mapping(source = "user.userId", target = "userId")
-    @Mapping(source = "post.postId", target = "postId")
-    List<CommentResponseDto> commentListToResponseDtoList(List<Comment> comments);
-
 
 }
