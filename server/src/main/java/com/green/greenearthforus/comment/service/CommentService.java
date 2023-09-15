@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityNotFoundException;
 import java.text.MessageFormat;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -32,6 +33,9 @@ public class CommentService {
     private final PostRepository postRepository;
 
     private final CommentMapper mapper;
+
+    private static final String USER_NOT_FOUND = "User not found";
+    private static final String POST_NOT_FOUND = "Post not found";
 
     public CommentService(CommentRepository commentRepository, UserRepository userRepository, PostRepository postRepository, CommentMapper mapper) {
         this.commentRepository = commentRepository;
@@ -59,8 +63,6 @@ public class CommentService {
         return mapper.commentToResponseDto(save);
     }
 
-    private static final String USER_NOT_FOUND = "User not found";
-    private static final String POST_NOT_FOUND = "Post not found";
 
 
     public List<CommentResponseDto> getCommentsByPostIdAndVerify(Long postId) {
@@ -71,9 +73,12 @@ public class CommentService {
         for(Comment comment : commentList){
             verifyComment(comment.getCommentId());
         }
+        List<CommentResponseDto> response = new ArrayList<>();
+        for(Comment comment : commentList){
+          response.add(mapper.commentToResponseDto(comment));
+        }
 
-       return commentList.stream().map(comment -> mapper.commentToResponseDto(comment))
-                .collect(Collectors.toList());
+       return response;
     }
 
     // 댓글 수정
