@@ -22,10 +22,10 @@ function PostEditer() {
     if (formData.title !== '' && formData.body !== '') {
       postPosts(formData.type, formData.title, formData.body, formData.open)
         .then((resp) => {
-          console.log('성공~!!');
+
         })
         .catch((err) => {
-          console.error('실패ㅠㅠ');
+
         });
     } else {
       alert('제목과 내용을 모두 입력해주세요.');
@@ -44,12 +44,14 @@ function PostEditer() {
   );
 }
 
+
 function PostEditerWithImage() {
   const [formData, setFormData] = useState({
     type: 'auth',
     title: '',
     body: '',
-    open: 'true'
+    open: 'true',
+    img: ''
   });
   const [previewImage, setPreviewImage] = useState(null);
   const imageInputRef = useRef(null);
@@ -66,6 +68,8 @@ function PostEditerWithImage() {
       reader.readAsDataURL(file);
 
       e.target.value = null;
+
+      setFormData({ ...formData, img: file });
     } 
   };
 
@@ -81,14 +85,13 @@ function PostEditerWithImage() {
   };
 
   const handleCreatePost = () => {
-
     if (formData.title !== '' && formData.body !== '' && previewImage !== null) {
-      postPosts(formData.type, formData.title, formData.body, formData.open, previewImage)
+      postPosts(formData.type, formData.title, formData.body, formData.open, formData.img)
         .then((resp) => {
-          console.log('성공~!!!!!', resp.data);
+
         })
         .catch((err) => {
-          console.error('실패ㅠㅠ', err);
+
         });
     } else {
       alert('이미지 업로드와 제목 및 내용을 모두 작성해주세요.');
