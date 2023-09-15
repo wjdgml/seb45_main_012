@@ -33,15 +33,9 @@ const MyPageInfo = () => {
     <>
       <div><NavBar /></div>
       <div className='page_container'>
-        <h3>내 정보</h3>
-        <button
-          className='custom_button confirm_button'
-          onClick={handleImageChangeClick} // 이미지 변경 버튼 클릭 시 이미지 변경 동작 수행
-        >
-          이미지 변경
-        </button>
-        <div className="circle_container">
-          <label htmlFor="imageInput" className="circle_label">
+        <h4>내 정보</h4>
+        <div className='label_input_button_container'>
+          <div className="circle_container">
             <input
               type="file"
               id="imageInput"
@@ -49,17 +43,31 @@ const MyPageInfo = () => {
               accept="image/*"
               onChange={handleImageChange}
             />
-            </label>
+            <div></div>
             <img
               src={previewImageUrl}
-              alt="기본 이미지"
+              alt=""
               className="circle_image"
             />
+          </div>
+          <div className="input_container">
+            <input
+              type="text"
+              id="nicknameInput"
+              className="nickname_input"
+              placeholder="닉네임"
+            />
+          </div>
+          <button className='custom_mypage_button confirm_button'>수정</button>
+        </div>
+
+        <div className='label_input_button_container'>
           
         </div>
       </div>
     </>
   );
+  
 };
 
 export default MyPageInfo;
