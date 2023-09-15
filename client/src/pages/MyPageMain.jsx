@@ -32,7 +32,7 @@ const MyPageMain = () => {
   const [ currentPage, setCurrentPage ] = useState(1);
 
   const filteredPosts = userData.filter((post) => {
-    if ( filter === 'all') return ( post.open === "true" || post.open === "false");
+    if ( filter === 'all') return true;
     if (filter === 'public') return post.open === "true";
     return post.open === "false";
   });
