@@ -69,7 +69,7 @@ const MyPageMain = () => {
               handleFilterChange('all');
             }}
             >
-            전체
+            {viewType.ALL}
           </button>
         </li>
         <li>
@@ -80,7 +80,7 @@ const MyPageMain = () => {
               handleFilterChange('public');
             }}
             >
-            공개
+            {viewType.PUBLIC}
           </button>
         </li>
         <li>
@@ -91,7 +91,7 @@ const MyPageMain = () => {
               handleFilterChange('private');
             }}
             >
-            비공개
+            {viewType.PRIVATE}
           </button>
         </li>
       </ul>
