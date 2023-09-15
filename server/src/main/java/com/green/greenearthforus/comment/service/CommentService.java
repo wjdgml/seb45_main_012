@@ -71,8 +71,10 @@ public class CommentService {
 
         List<Comment> commentList = post.getComments();
         for(Comment comment : commentList){
-            verifyComment(comment.getCommentId());
+            commentRepository.findById(comment.getCommentId())
+                    .orElseThrow(() -> new BusinessLogicException(ExceptionCode.COMMENT_NOT_FOUND));
         }
+
         List<CommentResponseDto> response = new ArrayList<>();
         for(Comment comment : commentList){
           response.add(mapper.commentToResponseDto(comment));
