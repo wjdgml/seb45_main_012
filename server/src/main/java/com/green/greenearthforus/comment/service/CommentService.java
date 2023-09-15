@@ -20,6 +20,7 @@ import java.text.MessageFormat;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class CommentService {
@@ -61,22 +62,16 @@ public class CommentService {
     private static final String USER_NOT_FOUND = "User not found";
     private static final String POST_NOT_FOUND = "Post not found";
 
-    // 게시글 별 댓글 리스트 조회
-    @Transactional
-    public List<Comment> getComments(Long postId, Long userId) {
-        Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new EntityNotFoundException(POST_NOT_FOUND + postId));
 
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new EntityNotFoundException(USER_NOT_FOUND + userId));
+    public List<CommentResponseDto> getCommentsByPostIdAndVerify(Long postId) {
+        List<Comment> commentList = commentRepository.findByPostId(postId);
 
-        Optional<Comment> optionalComment = commentRepository.findById(postId);
-
-        if (optionalComment.isEmpty()) {
-            throw new BusinessLogicException(ExceptionCode.COMMENT_NOT_FOUND);
-        }
-
-        return commentRepository.findByPost_PostIdAndUser_UserId(post.getPostId(), user.getUserId());
+        return commentList.stream()
+                .map(comment -> {
+                    verifyComment(comment.getCommentId());
+                    return new CommentResponseDto(comment);
+                })
+                .collect(Collectors.toList());
     }
 
     // 댓글 수정
