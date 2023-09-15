@@ -1,0 +1,49 @@
+package com.green.greenearthforus.post.entity;
+
+import com.green.greenearthforus.calendar.entity.Calendar;
+import com.green.greenearthforus.user.entity.User;
+import com.green.greenearthforus.vote.entity.Vote;
+import lombok.*;
+
+import javax.persistence.*;
+import java.time.LocalDateTime;
+
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Entity
+public class Post {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "post_id")
+    private Long postId;
+
+    @Column
+    private String body;
+
+    @Column
+    private Boolean open;
+
+    @Column(length = 500)
+    private String imageUrl;
+
+    @Column
+    private String type; // type 게시글의 유형
+
+    @Column
+    private String title;
+
+    @Column
+    private LocalDateTime createdAt;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    @OneToOne
+    private Vote vote;
+
+    @ManyToOne
+    private Calendar calendar;
+}
