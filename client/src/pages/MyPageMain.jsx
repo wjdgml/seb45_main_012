@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import '../styles/Button.css';
 import '../styles/MyPageMain.css';
-import axios from 'axios';
 import Pagination from 'components/Pagination.jsx';
 import jwtDecode from 'jwt-decode';
+import { instance } from 'api/api';
 
 const MyPageMain = () => {
   const accessToken = localStorage.getItem('accessToken');
@@ -15,8 +15,11 @@ const MyPageMain = () => {
   useEffect(() => {
     async function getUserData() {
       try {
-        const res = await axios.get('http://52.78.145.37:8080/post/customer/10');
-        setUserData(res.data);
+        const res = await instance.get('/post/customer/' + memberId);
+        const sortedUserData = res.data.sort((a, b) => {
+          return new Date(b.createdAt) - new Date(a.createdAt);
+        });
+        setUserData(sortedUserData);
       } catch (err) {
         console.log('error: ', err);
       }
@@ -27,27 +30,32 @@ const MyPageMain = () => {
 
   const [ filter, setFilter ] = useState('all');
   const [ currentPage, setCurrentPage ] = useState(1);
-  const postsPerPage = 5;
 
   const filteredPosts = userData.filter((post) => {
     if ( filter === 'all') return ( post.open === "true" || post.open === "false");
-    else if (filter === 'open') return post.open === "true";
+    else if (filter === 'public') return post.open === "true";
     else if (filter === 'private') return post.open === "false";
   });
-
-  const startPostIndex = ( currentPage - 1 ) * postsPerPage;
-  const endPostIndex = Math.min(startPostIndex + postsPerPage);
-  const currentPosts = filteredPosts.slice(startPostIndex, endPostIndex);
 
   const handleFilterChange = ( newFilter ) => {
     setFilter(newFilter);
     setCurrentPage(1);
   }
 
-  const [ selectedButton, setSelectedButton ] = useState('전체');
+  const viewType = {
+    ALL: '전체',
+    PUBLIC: '공개',
+    PRIVATE: '비공개'
+  }
+
+  const [ selectedButton, setSelectedButton ] = useState(viewType.ALL);
   const handleButtonClick = (buttonName) => {
     setSelectedButton(buttonName)
   }
+  const postsPerPage = 5;
+  const startPostIndex = ( currentPage - 1 ) * postsPerPage;
+  const endPostIndex = Math.min(startPostIndex + postsPerPage);
+  const currentPosts = filteredPosts.slice(startPostIndex, endPostIndex);
 
   return (
     <main className="container">
@@ -55,9 +63,9 @@ const MyPageMain = () => {
       <ul>
         <li>
           <button
-            className={`custom_button ${selectedButton === '전체' ? 'active' : ''}`}
+            className={`custom_button ${selectedButton === viewType.ALL ? 'active' : ''}`}
             onClick={() => {
-              handleButtonClick('전체');
+              handleButtonClick(viewType.ALL);
               handleFilterChange('all');
             }}
             >
@@ -66,10 +74,10 @@ const MyPageMain = () => {
         </li>
         <li>
           <button
-            className={`custom_button ${selectedButton === '공개' ? 'active' : ''}`}
+            className={`custom_button ${selectedButton === viewType.PUBLIC ? 'active' : ''}`}
             onClick={() => {
-              handleButtonClick('공개');
-              handleFilterChange('open');
+              handleButtonClick(viewType.PUBLIC);
+              handleFilterChange('public');
             }}
             >
             공개
@@ -77,9 +85,9 @@ const MyPageMain = () => {
         </li>
         <li>
           <button
-            className={`custom_button ${selectedButton === '비공개' ? 'active' : ''}`}
+            className={`custom_button ${selectedButton === viewType.CLOSE ? 'active' : ''}`}
             onClick={() => {
-              handleButtonClick('비공개')
+              handleButtonClick(viewType.PRIVATE)
               handleFilterChange('private');
             }}
             >
