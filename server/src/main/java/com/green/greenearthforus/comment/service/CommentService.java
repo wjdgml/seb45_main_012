@@ -58,14 +58,17 @@ public class CommentService {
         return mapper.commentToResponseDto(save);
     }
 
+    private static final String USER_NOT_FOUND = "User not found";
+    private static final String POST_NOT_FOUND = "Post not found";
+
     // 게시글 별 댓글 리스트 조회
     @Transactional
     public List<Comment> getComments(Long postId, Long userId) {
         Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new EntityNotFoundException("Post not found" + postId));
+                .orElseThrow(() -> new EntityNotFoundException(POST_NOT_FOUND + postId));
 
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new EntityNotFoundException("User not found " + userId));
+                .orElseThrow(() -> new EntityNotFoundException(USER_NOT_FOUND + userId));
 
         Optional<Comment> optionalComment = commentRepository.findById(postId);
 
@@ -80,10 +83,10 @@ public class CommentService {
     @Transactional
     public Comment updateComment(Long postId, Long userId, Long commentId, CommentDto commentDto) {
          userRepository.findById(userId)
-                .orElseThrow(() -> new EntityNotFoundException("User not found " + userId));
+                 .orElseThrow(() -> new EntityNotFoundException(USER_NOT_FOUND + userId));
 
-        postRepository.findById(postId)
-                .orElseThrow(() -> new EntityNotFoundException("Post not found " + postId));
+         postRepository.findById(postId)
+                .orElseThrow(() -> new EntityNotFoundException(POST_NOT_FOUND + postId));
 
         Comment comment = commentRepository.findById(commentId).orElseThrow(() -> new EntityNotFoundException("Comment not found" + commentId));
 

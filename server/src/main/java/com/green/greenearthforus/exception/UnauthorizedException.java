@@ -8,8 +8,4 @@ public class UnauthorizedException extends RuntimeException{
         super(message);
     }
 
-    public String getExceptionCode() {
-        // 빈 문자열로 초기화
-        return "";
-    }
 }

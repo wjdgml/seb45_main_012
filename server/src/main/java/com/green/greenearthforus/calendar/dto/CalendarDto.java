@@ -8,6 +8,9 @@ import java.time.LocalDate;
 import java.util.List;
 
 public class CalendarDto {
+   private CalendarDto(){
+       throw new IllegalStateException("calednar dto");
+   }
     @Getter
     @Setter
     public static class Patch{
@@ -25,6 +28,4 @@ public class CalendarDto {
         private long postId;
         private List<LocalDate> stampedDates;
     }
-
-
 }

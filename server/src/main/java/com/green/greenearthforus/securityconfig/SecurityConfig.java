@@ -1,7 +1,6 @@
 package com.green.greenearthforus.securityconfig;
 
 import com.green.greenearthforus.login.handler.UserAccessDeniedHandler;
-import com.green.greenearthforus.login.userdetails.CustomUserDetailsService;
 import com.green.greenearthforus.login.util.UserAuthenticationEntryPoint;
 import com.green.greenearthforus.login.util.CustomAuthorityUtils;
 import com.green.greenearthforus.login.filter.JwtAuthenticationFilter;

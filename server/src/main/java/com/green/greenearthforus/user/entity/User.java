@@ -36,7 +36,7 @@ public class User {
 
     @Enumerated(EnumType.STRING) // Post 횟수에 따라서 땅(0개) → 새싹(1개) → 조금 더 자란 새싹(5개) → 꽃봉오리(10개) → 꽃(20개)
     private UserGrade grade; // 씨앗 -> 새싹 -> 점점 자라는 느낌 누적 게시글 기준 ..
-
+    @Column(length = 500)
     private String imageUrl; // 이미지 저장할 필드 추가하기
 
     private String gradeImageFile;

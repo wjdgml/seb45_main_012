@@ -25,7 +25,7 @@ public class Post {
     @Column
     private Boolean open;
 
-    @Column
+    @Column(length = 500)
     private String imageUrl;
 
     @Column

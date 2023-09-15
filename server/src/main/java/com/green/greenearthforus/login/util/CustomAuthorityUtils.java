@@ -32,11 +32,11 @@ public class CustomAuthorityUtils {
                 .collect(Collectors.toList());
     }
 
-    public List<String> createRoles(String id){
-        if(id.equals(adminId)){
-            return ADMIN_ROLES_STRING;
-        }
-        return USER_ROLES_STRING;
-    }
+//    public List<String> createRoles(String id){
+//        if(id.equals(adminId)){
+//            return ADMIN_ROLES_STRING;
+//        }
+//        return USER_ROLES_STRING;
+//    }
 
 }
