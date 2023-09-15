@@ -33,8 +33,8 @@ const MyPageMain = () => {
 
   const filteredPosts = userData.filter((post) => {
     if ( filter === 'all') return ( post.open === "true" || post.open === "false");
-    else if (filter === 'public') return post.open === "true";
-    else if (filter === 'private') return post.open === "false";
+    if (filter === 'public') return post.open === "true";
+    return post.open === "false";
   });
 
   const handleFilterChange = ( newFilter ) => {
