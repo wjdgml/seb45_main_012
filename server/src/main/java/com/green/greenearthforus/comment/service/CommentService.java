@@ -64,7 +64,10 @@ public class CommentService {
 
 
     public List<CommentResponseDto> getCommentsByPostIdAndVerify(Long postId) {
-        List<Comment> commentList = commentRepository.findByPostId(postId);
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new EntityNotFoundException("Post not found " + postId)); // user , post
+
+        List<Comment> commentList = post.getComments();
 
         return commentList.stream()
                 .map(comment -> {
@@ -112,5 +115,6 @@ public class CommentService {
         Optional<Comment> commentOptional = commentRepository.findById(commentId);
         return commentOptional.orElseThrow(() -> new BusinessLogicException(ExceptionCode.COMMENT_NOT_FOUND));
     }
+
 }
 
