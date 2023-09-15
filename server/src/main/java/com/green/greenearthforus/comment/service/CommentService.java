@@ -68,12 +68,11 @@ public class CommentService {
                 .orElseThrow(() -> new EntityNotFoundException("Post not found " + postId)); // user , post
 
         List<Comment> commentList = post.getComments();
+        for(Comment comment : commentList){
+            verifyComment(comment.getCommentId());
+        }
 
-        return commentList.stream()
-                .map(comment -> {
-                    verifyComment(comment.getCommentId());
-                    return mapper.commentToResponseDto(comment);
-                })
+       return commentList.stream().map(comment -> mapper.commentToResponseDto(comment))
                 .collect(Collectors.toList());
     }
 
