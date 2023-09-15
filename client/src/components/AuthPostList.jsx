@@ -17,13 +17,13 @@ const AuthPostList = () => {
         });
         setAllAuthPosts(sortedData);
         setVisibleAuthPosts(sortedData.slice(0, 6));
-        console.log(visibleAuthPosts);
       })
       .catch((error) => console.error('Error:', error));
   }, []);
 
   // 페이지를 변경할 때 visibleAuthPosts 업데이트
   useEffect(() => {
+    // console.log(visibleAuthPosts[0].imageUrl);
     updateVisiblePosts(currentPage, allAuthPosts);
   }, [currentPage, allAuthPosts]);
 
@@ -76,7 +76,7 @@ const AuthPostList = () => {
       <div className="auth_post_grid">
         {visibleAuthPosts.map((post, index) => (
           <div className="auth_post_item_container" key={post.postId}>
-            <img src={post.imageUrls} alt={`${post.postId}`} />
+            <img src={post.imageUrl} alt={`${post.postId}`} />
           </div>
         ))}
       </div>
