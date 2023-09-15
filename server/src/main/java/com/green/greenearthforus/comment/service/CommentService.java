@@ -72,7 +72,7 @@ public class CommentService {
         return commentList.stream()
                 .map(comment -> {
                     verifyComment(comment.getCommentId());
-                    return new CommentResponseDto(comment);
+                    return mapper.commentToResponseDto(comment);
                 })
                 .collect(Collectors.toList());
     }
