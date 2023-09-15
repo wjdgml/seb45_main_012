@@ -66,16 +66,16 @@ const EnvPostList = () => {
 
   return (
     <>
-      <div className="auth_post_grid">
+      <div className="env_post_grid">
         {visibleEnvPosts.map((post, index) => (
-          <div className="auth_post_item_container" key={post.postId}>
+          <div className="env_post_item_container" key={post.postId}>
             <img src={post.imageUrls} alt={`${post.postId}`} />
           </div>
         ))}
       </div>
       <div className="pagination">
-        {!isPrevButtonDisabled && <button onClick={() => handlePageClick(1)}>&lt;&lt;</button>}
-        {!isPrevButtonDisabled && <button onClick={() => handlePageClick(currentPage - 1)}>&lt;</button>}
+        {!isPrevButtonDisabled && visibleEnvPosts.length > 0 && <button onClick={() => handlePageClick(1)}>&lt;&lt;</button>}
+        {!isPrevButtonDisabled && visibleEnvPosts.length > 0 && <button onClick={() => handlePageClick(currentPage - 1)}>&lt;</button>}
         {getPageNumbers().map((pageNumber) => (
           <button
             key={pageNumber}
@@ -85,8 +85,8 @@ const EnvPostList = () => {
             {pageNumber}
           </button>
         ))}
-        {!isNextButtonDisabled && <button onClick={() => handlePageClick(currentPage + 1)}>&gt;</button>}
-        {!isNextButtonDisabled && (
+        {!isNextButtonDisabled && visibleEnvPosts.length > 0 && <button onClick={() => handlePageClick(currentPage + 1)}>&gt;</button>}
+        {!isNextButtonDisabled && visibleEnvPosts.length > 0 && (
           <button onClick={() => handlePageClick(Math.ceil(allEnvPosts.length / itemsPerPage))}>
             &gt;&gt;
           </button>
