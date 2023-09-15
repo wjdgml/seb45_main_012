@@ -1,12 +1,14 @@
 package com.green.greenearthforus.post.entity;
 
 import com.green.greenearthforus.calendar.entity.Calendar;
+import com.green.greenearthforus.comment.entity.Comment;
 import com.green.greenearthforus.user.entity.User;
 import com.green.greenearthforus.vote.entity.Vote;
 import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -46,4 +48,7 @@ public class Post {
 
     @ManyToOne
     private Calendar calendar;
+
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
+    private List<Comment> comments;
 }
