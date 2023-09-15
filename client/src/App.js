@@ -5,6 +5,7 @@ import './App.css';
 import AllBoardPage from './pages/AllBoardPage.jsx';
 import FreeBoardPage from './pages/FreeBoardPage.jsx';
 import FreeDetailPage from './pages/FreeDetailPage.jsx';
+import MyPageInfo from './pages/MyPageInfo.jsx';
 // import Header from './components/header.jsx';
 // import NavBar from './components/NavBar.jsx';
 // import MyPageMain from 'pages/MyPageMain.jsx';
@@ -17,6 +18,7 @@ function App() {
           <Route path="/" element={<AllBoardPage/>} />
           <Route path="/free" element={<FreeBoardPage/>} />
           <Route path="/post/:postId/:userId" element={<FreeDetailPage />} />
+          <Route path="/mypage/info" element={<MyPageInfo/>} />
         </Routes>
     </Router>
       {/* <FreeDetailPage/> */}
