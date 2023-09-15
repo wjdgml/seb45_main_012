@@ -14,6 +14,7 @@ import com.green.greenearthforus.user.entity.User;
 import com.green.greenearthforus.user.repository.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.BindException;
 
 import javax.persistence.EntityNotFoundException;
 import java.text.MessageFormat;
@@ -70,10 +71,7 @@ public class CommentService {
                 .orElseThrow(() -> new EntityNotFoundException("Post not found " + postId)); // user , post
 
         List<Comment> commentList = post.getComments();
-        for(Comment comment : commentList){
-            commentRepository.findById(comment.getCommentId())
-                    .orElseThrow(() -> new BusinessLogicException(ExceptionCode.COMMENT_NOT_FOUND));
-        }
+        if(commentList.isEmpty()) throw new BusinessLogicException(ExceptionCode.COMMENT_NOT_FOUND);
 
         List<CommentResponseDto> response = new ArrayList<>();
         for(Comment comment : commentList){
