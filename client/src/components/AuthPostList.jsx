@@ -23,7 +23,6 @@ const AuthPostList = () => {
 
   // 페이지를 변경할 때 visibleAuthPosts 업데이트
   useEffect(() => {
-    // console.log(visibleAuthPosts[5].imageUrl);
     updateVisiblePosts(currentPage, allAuthPosts);
   }, [currentPage, allAuthPosts]);
 
