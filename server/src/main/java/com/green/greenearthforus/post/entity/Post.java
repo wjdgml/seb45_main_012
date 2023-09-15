@@ -49,6 +49,6 @@ public class Post {
     @ManyToOne
     private Calendar calendar;
 
-    @OneToMany
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     private List<Comment> comments;
 }

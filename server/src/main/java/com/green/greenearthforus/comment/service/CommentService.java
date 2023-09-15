@@ -14,12 +14,10 @@ import com.green.greenearthforus.user.entity.User;
 import com.green.greenearthforus.user.repository.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.validation.BindException;
 
 import javax.persistence.EntityNotFoundException;
 import java.text.MessageFormat;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -34,9 +32,6 @@ public class CommentService {
     private final PostRepository postRepository;
 
     private final CommentMapper mapper;
-
-    private static final String USER_NOT_FOUND = "User not found";
-    private static final String POST_NOT_FOUND = "Post not found";
 
     public CommentService(CommentRepository commentRepository, UserRepository userRepository, PostRepository postRepository, CommentMapper mapper) {
         this.commentRepository = commentRepository;
@@ -64,6 +59,8 @@ public class CommentService {
         return mapper.commentToResponseDto(save);
     }
 
+    private static final String USER_NOT_FOUND = "User not found";
+    private static final String POST_NOT_FOUND = "Post not found";
 
 
     public List<CommentResponseDto> getCommentsByPostIdAndVerify(Long postId) {
@@ -73,12 +70,11 @@ public class CommentService {
         List<Comment> commentList = post.getComments();
         if(commentList.isEmpty()) throw new BusinessLogicException(ExceptionCode.COMMENT_NOT_FOUND);
 
-        List<CommentResponseDto> response = new ArrayList<>();
-        for(Comment comment : commentList){
-          response.add(mapper.commentToResponseDto(comment));
-        }
-
-       return response;
+       return commentList.stream().map(comment -> {
+           verifyComment(comment.getCommentId());
+           return mapper.commentToResponseDto(comment);
+               })
+                .collect(Collectors.toList());
     }
 
     // 댓글 수정
