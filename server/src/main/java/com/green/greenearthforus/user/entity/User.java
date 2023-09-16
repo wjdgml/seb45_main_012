@@ -58,7 +58,7 @@ public class User {
     // 사용자를 삭제할 때 관련 게시물, 이미지도 자동적으로 삭제됨
     private List<Post> posts;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Vote> votes;
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)

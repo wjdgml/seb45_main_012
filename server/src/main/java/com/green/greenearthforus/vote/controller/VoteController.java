@@ -50,13 +50,16 @@ public class VoteController {
 
         //이전에 좋아요를 투표했는지 확인 후 좋아요가 중복이면 count를 하나 빼는 로직.
         long count = voteService.findVoteCount(voteId).getVoteCount();
-        if(verifiedVoteUserId(userId, voteId)) voteService.findVoteCount(voteId).setVoteCount(count-1);
-
+        VoteDto.Response response;
+        if(verifiedVoteUserId(userId, voteId)){
+        Vote findVote = voteService.findVerifiedVote(voteId);
+        findVote.setVoteCount(count-1);
+        response = mapper.voteToVoteResponseDto(findVote);
+        }else{
         patch.addVoteId(voteId);
         Vote updateVote = voteService.updateVote(mapper.votePatchDToToVote(patch));
-        VoteDto.Response response = mapper.voteToVoteResponseDto(updateVote);
-        response.setPostId(postId);
-        response.setUserId(userId);
+        response = mapper.voteToVoteResponseDto(updateVote);
+        }
         return ResponseEntity.ok(response);
     }
 
