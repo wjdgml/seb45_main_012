@@ -4,6 +4,8 @@ import com.green.greenearthforus.exception.BusinessLogicException;
 import com.green.greenearthforus.exception.ExceptionCode;
 import com.green.greenearthforus.post.entity.Post;
 import com.green.greenearthforus.post.repository.PostRepository;
+import com.green.greenearthforus.user.entity.User;
+import com.green.greenearthforus.user.repository.UserRepository;
 import com.green.greenearthforus.user.service.UserService;
 import com.green.greenearthforus.vote.dto.VoteDto;
 import com.green.greenearthforus.vote.entity.Vote;
@@ -12,8 +14,10 @@ import com.green.greenearthforus.vote.mapper.VoteMapper;
 import com.green.greenearthforus.vote.repository.VoteRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class VoteService {
@@ -22,15 +26,18 @@ public class VoteService {
     private final PostRepository postRepository;
     private final VoteMapper mapper;
     private final UserService userService;
+    private final UserRepository userRepository;
 
     public VoteService(VoteRepository voteRepository,
                        PostRepository postRepository,
                        VoteMapper mapper,
+                       UserRepository userRepository,
                        UserService userService){
         this.voteRepository = voteRepository;
         this.postRepository = postRepository;
         this.mapper = mapper;
         this.userService = userService;
+        this.userRepository = userRepository;
     }
 
     public VoteDto.Response createVote(long postId){
@@ -45,19 +52,32 @@ public class VoteService {
         return mapper.voteToVoteResponseDto(voteRepository.save(vote));
     }
 
-    public Vote updateVote(Vote vote, long userId){
-        Vote findVote = findVerifiedVote(vote.getVoteId());
-        VoteUser voteUser = new VoteUser();
-        voteUser.setUser(userService.getUser(userId));
-        voteUser.setVote(findVote);
-        findVote.getVoteUsers().add(voteUser);
-        userService.getUser(userId).getVoteUsers().add(voteUser);
-        long count = findVote.getVoteCount();
-        Optional.ofNullable(vote.getVoteType())
-                .ifPresent(findVote::setVoteType);
-        if(Objects.equals(Objects.requireNonNull(vote.getVoteType()), "Like")) findVote.setVoteCount(count+1);
-        // 주어진 요청에 좋아요에 변화가 있으면 voteCount를 변경하고 저장하는 로직
-        return voteRepository.save(findVote);
+    public VoteDto.Response updateVote(Vote vote, long userId){
+        long count = findVoteCount(vote.getVoteId()).getVoteCount();
+        VoteDto.Response response;
+        if(Boolean.TRUE.equals(verifiedVoteUserId(userId, vote.getVoteId()))){
+            Vote findVote = findVerifiedVote(vote.getVoteId());
+            findVote.setVoteCount(count-1);
+            voteRepository.save(findVote);
+            response = mapper.voteToVoteResponseDto(findVote);
+        }else {
+            Vote findVote = findVerifiedVote(vote.getVoteId());
+            User user = userService.getUser(userId);
+            VoteUser voteUser = new VoteUser();
+            voteUser.setUser(user);
+            voteUser.setVote(findVote);
+            findVote.getVoteUsers().add(voteUser);
+            userService.getUser(userId).getVoteUsers().add(voteUser);
+            userRepository.save(user);
+            Optional.ofNullable(vote.getVoteType())
+                    .ifPresent(findVote::setVoteType);
+            if (Objects.equals(Objects.requireNonNull(vote.getVoteType()), "Like")) findVote.setVoteCount(count + 1);
+            // 주어진 요청에 좋아요에 변화가 있으면 voteCount를 변경하고 저장하는 로직
+            voteRepository.save(findVote);
+            response = mapper.voteToVoteResponseDto(findVote);
+        }
+        return response;
+
     }
 
     public Vote findVoteCount(long voteId){
@@ -75,6 +95,25 @@ public class VoteService {
                 voteRepository.findById(voteId);
         return optionalVote.orElseThrow(() ->
                 new BusinessLogicException(ExceptionCode.VOTE_NOT_FOUND));
+    }
+
+    public Boolean verifiedVoteUserId(long userId, long voteId){
+        User user =  userService.getUser(userId);
+        Vote vote = findVerifiedVote(voteId);
+        if(user.getVoteUsers() == null || vote.getVoteUsers() == null){ return false;}
+
+        List<VoteUser> findVoteUser =user.getVoteUsers().stream()
+                .filter(voteUser -> voteUser.getVote().getVoteId() == voteId)
+                .collect(Collectors.toList());
+
+        if(!(findVoteUser.isEmpty())) {
+            user.getVoteUsers().removeAll(findVoteUser);
+            vote.getVoteUsers().removeAll(findVoteUser);
+            userRepository.save(user);
+            voteRepository.save(vote);
+            return true;}
+
+        return false;
     }
 
 }

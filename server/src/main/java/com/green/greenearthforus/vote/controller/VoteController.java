@@ -60,20 +60,8 @@ public class VoteController {
                                     @PathVariable("vote_id") long voteId,
                                     @Validated @RequestBody VoteDto.Patch patch){
         postService.getPost(postId);   //post가 유효한지 확인하는 로직
-
-        //이전에 좋아요를 투표했는지 확인 후 좋아요가 중복이면 count를 하나 빼는 로직.
-        long count = voteService.findVoteCount(voteId).getVoteCount();
-        VoteDto.Response response;
-        if(Boolean.TRUE.equals(verifiedVoteUserId(userId, voteId))){
-        Vote findVote = voteService.findVerifiedVote(voteId);
-        findVote.setVoteCount(count-1);
-        voteRepository.save(findVote);
-        response = mapper.voteToVoteResponseDto(findVote);
-        }else{
         patch.addVoteId(voteId);
-        Vote updateVote = voteService.updateVote(mapper.votePatchDToToVote(patch), userId);
-        response = mapper.voteToVoteResponseDto(updateVote);
-        }
+        VoteDto.Response response = voteService.updateVote(mapper.votePatchDToToVote(patch), userId);
         response.setUserId(userId);
         return ResponseEntity.ok(response);
     }
@@ -102,25 +90,6 @@ public class VoteController {
     }
 
 
-//     유저가 이미 좋아요를 눌렀는지 확인하는 로직
 
-    public Boolean verifiedVoteUserId(long userId, long voteId){
-        User user =  userService.getUser(userId);
-        Vote vote = voteService.findVerifiedVote(voteId);
-        if(user.getVoteUsers() == null || vote.getVoteUsers() == null){ return false;}
-
-        List<VoteUser> findVoteUser =user.getVoteUsers().stream()
-                .filter(voteUser -> voteUser.getVote().getVoteId() == voteId)
-                .collect(Collectors.toList());
-
-        if(!(findVoteUser.isEmpty())) {
-            user.getVoteUsers().removeAll(findVoteUser);
-            vote.getVoteUsers().removeAll(findVoteUser);
-            userRepository.save(user);
-            voteRepository.save(vote);
-            return true;}
-
-        return false;
-    }
 
 }
