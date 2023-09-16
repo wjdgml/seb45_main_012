@@ -47,7 +47,6 @@ public class VoteService {
     public Vote updateVote(Vote vote, long userId, long postId){
         Vote findVote = findVerifiedVote(vote.getVoteId());
         findVote.setUser(userService.getUser(userId));
-        findVote.setPost(postRepository.findById(postId).orElseThrow(() -> new BusinessLogicException(ExceptionCode.USER_NOT_FOUND)));
         long count = findVote.getVoteCount();
         Optional.ofNullable(vote.getVoteType())
                 .ifPresent(findVote::setVoteType);
