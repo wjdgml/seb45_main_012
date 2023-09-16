@@ -10,6 +10,7 @@ import org.mapstruct.MappingConstants;
 public interface VoteMapper {
     Vote votePatchDToToVote(VoteDto.Patch requestBody);
     @Mapping(source = "user.userId", target = "userId")
+    @Mapping(source = "post.postId", target = "postId")
     VoteDto.Response voteToVoteResponseDto(Vote vote);
 
 }
