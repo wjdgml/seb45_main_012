@@ -103,8 +103,10 @@ public class VoteController {
                 .filter(voteUser -> voteUser.getVote().getVoteId() == voteId)
                 .collect(Collectors.toList());
 
-        if(!(findVoteUser.isEmpty())) {user.getVoteUsers().remove(findVoteUser.get(0));
-        vote.getVoteUsers().remove(findVoteUser.get(0)); return true;}
+        if(!(findVoteUser.isEmpty())) {
+            user.getVoteUsers().removeAll(findVoteUser);
+            vote.getVoteUsers().removeAll(findVoteUser);
+            return true;}
 
         return false;
     }
