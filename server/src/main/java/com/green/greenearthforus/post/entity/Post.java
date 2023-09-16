@@ -43,7 +43,7 @@ public class Post {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "post", cascade = CascadeType.ALL)
     private Vote vote;
 
     @ManyToOne

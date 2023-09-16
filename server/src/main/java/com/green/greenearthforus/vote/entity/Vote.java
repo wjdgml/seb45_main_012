@@ -22,6 +22,7 @@ public class Vote {
     private String voteType;
 
     @OneToOne
+    @JoinColumn(name = "post_id")
     private Post post;
 
     @ManyToOne
