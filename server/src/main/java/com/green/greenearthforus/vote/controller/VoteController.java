@@ -1,10 +1,7 @@
 package com.green.greenearthforus.vote.controller;
 
-import com.green.greenearthforus.exception.BusinessLogicException;
-import com.green.greenearthforus.exception.ExceptionCode;
 import com.green.greenearthforus.post.service.PostService;
 import com.green.greenearthforus.user.entity.User;
-import com.green.greenearthforus.user.repository.UserRepository;
 import com.green.greenearthforus.user.service.UserService;
 import com.green.greenearthforus.vote.dto.VoteDto;
 import com.green.greenearthforus.vote.entity.Vote;
@@ -31,17 +28,19 @@ public class VoteController {
     private final VoteMapper mapper;
     private final UserService userService;
     private final PostService postService;
+    private final VoteRepository voteRepository;
 
 
     public VoteController(VoteService voteService,
                           VoteMapper mapper,
                           PostService postService,
-                          UserService userService
-                          ){
+                          UserService userService,
+                          VoteRepository repository){
         this.voteService = voteService;
         this.mapper = mapper;
         this.postService = postService;
         this.userService = userService;
+        this.voteRepository = repository;
     }
 
     @PostMapping("/{post_id}")
@@ -50,6 +49,7 @@ public class VoteController {
         return new ResponseEntity<>(voteService.createVote(postId), HttpStatus.CREATED);
     }
 
+    @Transactional
     @PatchMapping("/{post_id}/{user_id}/{vote_id}")
     public ResponseEntity<VoteDto.Response> patchVote(@PathVariable("post_id") long postId,
                                     @PathVariable("user_id") long userId,
@@ -63,6 +63,7 @@ public class VoteController {
         if(Boolean.TRUE.equals(verifiedVoteUserId(userId, voteId))){
         Vote findVote = voteService.findVerifiedVote(voteId);
         findVote.setVoteCount(count-1);
+        voteRepository.save(findVote);
         response = mapper.voteToVoteResponseDto(findVote);
         }else{
         patch.addVoteId(voteId);
