@@ -103,7 +103,7 @@ public class VoteController {
 
 
 //     유저가 이미 좋아요를 눌렀는지 확인하는 로직
-    @Transactional
+
     public Boolean verifiedVoteUserId(long userId, long voteId){
         User user =  userService.getUser(userId);
         Vote vote = voteService.findVerifiedVote(voteId);
