@@ -67,10 +67,7 @@ public class VoteService {
             if(!(findVoteUser.isEmpty())) {
                 user.getVoteUsers().removeAll(findVoteUser);
                 findVote.getVoteUsers().removeAll(findVoteUser);
-                userRepository.save(user);
-                voteRepository.save(vote);
-
-            findVote.setVoteCount(count-1);
+                findVote.setVoteCount(count-1);
             }else {
                 VoteUser voteUser = new VoteUser();
                 voteUser.setUser(user);
@@ -95,7 +92,7 @@ public class VoteService {
             if (Objects.equals(Objects.requireNonNull(vote.getVoteType()), "Like")){
                 findVote.setVoteCount(count + 1);}
         }
-
+        userRepository.save(user);
         response = mapper.voteToVoteResponseDto(voteRepository.save(findVote));
         return response;
     }
