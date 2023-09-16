@@ -4,6 +4,7 @@ import com.green.greenearthforus.exception.BusinessLogicException;
 import com.green.greenearthforus.exception.ExceptionCode;
 import com.green.greenearthforus.post.entity.Post;
 import com.green.greenearthforus.post.repository.PostRepository;
+import com.green.greenearthforus.user.service.UserService;
 import com.green.greenearthforus.vote.dto.VoteDto;
 import com.green.greenearthforus.vote.entity.Vote;
 import com.green.greenearthforus.vote.mapper.VoteMapper;
@@ -19,13 +20,16 @@ public class VoteService {
     private final VoteRepository voteRepository;
     private final PostRepository postRepository;
     private final VoteMapper mapper;
+    private final UserService userService;
 
     public VoteService(VoteRepository voteRepository,
                        PostRepository postRepository,
-                       VoteMapper mapper){
+                       VoteMapper mapper,
+                       UserService userService){
         this.voteRepository = voteRepository;
         this.postRepository = postRepository;
         this.mapper = mapper;
+        this.userService = userService;
     }
 
     public VoteDto.Response createVote(long postId){
@@ -40,8 +44,10 @@ public class VoteService {
         return mapper.voteToVoteResponseDto(voteRepository.save(vote));
     }
 
-    public Vote updateVote(Vote vote){
+    public Vote updateVote(Vote vote, long userId, long postId){
         Vote findVote = findVerifiedVote(vote.getVoteId());
+        findVote.setUser(userService.getUser(userId));
+        findVote.setPost(postRepository.findById(postId).orElseThrow(() -> new BusinessLogicException(ExceptionCode.USER_NOT_FOUND)));
         long count = findVote.getVoteCount();
         Optional.ofNullable(vote.getVoteType())
                 .ifPresent(findVote::setVoteType);

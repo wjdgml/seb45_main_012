@@ -57,7 +57,7 @@ public class VoteController {
         response = mapper.voteToVoteResponseDto(findVote);
         }else{
         patch.addVoteId(voteId);
-        Vote updateVote = voteService.updateVote(mapper.votePatchDToToVote(patch));
+        Vote updateVote = voteService.updateVote(mapper.votePatchDToToVote(patch), userId, postId);
         response = mapper.voteToVoteResponseDto(updateVote);
         }
         return ResponseEntity.ok(response);
