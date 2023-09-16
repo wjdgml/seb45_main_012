@@ -4,7 +4,6 @@ import com.green.greenearthforus.exception.ImageDeletionException;
 import com.green.greenearthforus.exception.UnauthorizedException;
 import com.green.greenearthforus.image.service.ImageService;
 import com.green.greenearthforus.calendar.service.CalendarService;
-import com.green.greenearthforus.post.dto.PostGetResponseDto;
 import com.green.greenearthforus.post.dto.PostPatchDto;
 import com.green.greenearthforus.post.dto.PostPostDto;
 import com.green.greenearthforus.post.dto.PostResponseDto;
@@ -69,10 +68,10 @@ public class PostService {
 
     // 단일 게시글 조회
     @Transactional
-    public PostGetResponseDto getPost(Long postId) {
+    public PostResponseDto getPost(Long postId) {
         Post post = postsRepository.findById(postId).orElseThrow(() -> new EntityNotFoundException("Post not found" + postId));
 
-        PostGetResponseDto responseDto = mapper.postToPostGetResponseDto(post);
+        PostResponseDto responseDto = mapper.postToPostResponseDto(post);
         if(post.getVote()!=null){
         responseDto.setVoteId(post.getVote().getVoteId());}
 

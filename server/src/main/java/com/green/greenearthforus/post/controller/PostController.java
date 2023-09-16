@@ -2,7 +2,6 @@ package com.green.greenearthforus.post.controller;
 
 import com.green.greenearthforus.exception.ImageDeletionException;
 import com.green.greenearthforus.image.service.ImageService;
-import com.green.greenearthforus.post.dto.PostGetResponseDto;
 import com.green.greenearthforus.post.dto.PostPatchDto;
 import com.green.greenearthforus.post.dto.PostPostDto;
 import com.green.greenearthforus.post.dto.PostResponseDto;
@@ -47,8 +46,8 @@ public class PostController {
 
     // 단일 게시글 조회
     @GetMapping("/{post-id}")
-    public ResponseEntity<PostGetResponseDto> getPost(@PathVariable(value="post-id") Long postId) {
-        PostGetResponseDto responseDto = postService.getPost(postId);
+    public ResponseEntity<PostResponseDto> getPost(@PathVariable(value="post-id") Long postId) {
+        PostResponseDto responseDto = postService.getPost(postId);
 
         if (responseDto != null) {
             return ResponseEntity.ok(responseDto);

@@ -1,6 +1,5 @@
 package com.green.greenearthforus.post.mapper;
 
-import com.green.greenearthforus.post.dto.PostGetResponseDto;
 import com.green.greenearthforus.post.dto.PostPostDto;
 import com.green.greenearthforus.post.dto.PostResponseDto;
 import com.green.greenearthforus.post.entity.Post;
@@ -11,10 +10,8 @@ import org.mapstruct.Mapping;
 public interface PostMapper {
     Post postResponseDtoToPost(PostResponseDto responseDto);
     @Mapping(source = "user.userId", target = "userId")
-    PostResponseDto postToPostResponseDto(Post post);
-    @Mapping(source = "user.userId", target = "userId")
     @Mapping(source = "vote.voteId", target = "voteId")
-    PostGetResponseDto postToPostGetResponseDto(Post post);
+    PostResponseDto postToPostResponseDto(Post post);
     Post postPostDtoToPost(PostPostDto postPostDto);
 }
 

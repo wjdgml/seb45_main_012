@@ -2,12 +2,8 @@ package com.green.greenearthforus.vote.service;
 
 import com.green.greenearthforus.exception.BusinessLogicException;
 import com.green.greenearthforus.exception.ExceptionCode;
-import com.green.greenearthforus.post.dto.PostGetResponseDto;
-import com.green.greenearthforus.post.dto.PostResponseDto;
 import com.green.greenearthforus.post.entity.Post;
-import com.green.greenearthforus.post.mapper.PostMapper;
 import com.green.greenearthforus.post.repository.PostRepository;
-import com.green.greenearthforus.post.service.PostService;
 import com.green.greenearthforus.vote.dto.VoteDto;
 import com.green.greenearthforus.vote.entity.Vote;
 import com.green.greenearthforus.vote.mapper.VoteMapper;
