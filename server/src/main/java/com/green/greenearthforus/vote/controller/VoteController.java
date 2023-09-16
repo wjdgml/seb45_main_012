@@ -93,12 +93,14 @@ public class VoteController {
 //     유저가 이미 좋아요를 눌렀는지 확인하는 로직
     private Boolean verifiedVoteUserId(long userId, long voteId){
         User user =  userService.getUser(userId);
+        Vote vote = voteService.findVerifiedVote(voteId);
         if(user.getVoteUsers() == null) return false;
         List<VoteUser> voteUserList = user.getVoteUsers();
 
-        for(VoteUser vote : voteUserList){
-            if(vote.getVote().getVoteId() == voteId){
-                user.getVoteUsers().remove(vote);
+        for(VoteUser voteUser : voteUserList){
+            if(voteUser.getVote().getVoteId() == voteId){
+                user.getVoteUsers().remove(voteUser);
+                vote.getVoteUsers().remove(voteUser);
                 return true;
             }
         }

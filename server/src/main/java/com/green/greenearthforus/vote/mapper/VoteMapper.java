@@ -9,7 +9,7 @@ import org.mapstruct.MappingConstants;
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 public interface VoteMapper {
     Vote votePatchDToToVote(VoteDto.Patch requestBody);
-    @Mapping(source = "user.userId", target = "userId")
+
     @Mapping(source = "post.postId", target = "postId")
     VoteDto.Response voteToVoteResponseDto(Vote vote);
 

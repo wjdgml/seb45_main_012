@@ -7,6 +7,7 @@ import com.green.greenearthforus.post.repository.PostRepository;
 import com.green.greenearthforus.user.service.UserService;
 import com.green.greenearthforus.vote.dto.VoteDto;
 import com.green.greenearthforus.vote.entity.Vote;
+import com.green.greenearthforus.vote.entity.VoteUser;
 import com.green.greenearthforus.vote.mapper.VoteMapper;
 import com.green.greenearthforus.vote.repository.VoteRepository;
 import org.springframework.stereotype.Service;
@@ -46,7 +47,11 @@ public class VoteService {
 
     public Vote updateVote(Vote vote, long userId, long postId){
         Vote findVote = findVerifiedVote(vote.getVoteId());
-        findVote.setVoteUsers((userService.getUser(userId)).getVoteUsers());
+        VoteUser voteUser = new VoteUser();
+        voteUser.setUser(userService.getUser(userId));
+        voteUser.setVote(findVote);
+        findVote.getVoteUsers().add(voteUser);
+        userService.getUser(userId).getVoteUsers().add(voteUser);
         long count = findVote.getVoteCount();
         Optional.ofNullable(vote.getVoteType())
                 .ifPresent(findVote::setVoteType);
