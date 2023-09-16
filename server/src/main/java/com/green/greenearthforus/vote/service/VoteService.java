@@ -54,10 +54,11 @@ public class VoteService {
     }
 
     public VoteDto.Response updateVote(Vote vote, long userId){
-        long count = findVoteCount(vote.getVoteId()).getVoteCount();
+
         VoteDto.Response response;
         User user =  userService.getUser(userId);
         Vote findVote = findVerifiedVote(vote.getVoteId());
+        long count = findVote.getVoteCount();
         List<VoteUser> findVoteUser;
         if(user.getVoteUsers() != null && findVote.getVoteUsers() != null) {
             findVoteUser = user.getVoteUsers().stream()
@@ -74,7 +75,6 @@ public class VoteService {
                 voteUser.setVote(findVote);
                 findVote.getVoteUsers().add(voteUser);
                 user.getVoteUsers().add(voteUser);
-                userRepository.save(user);
                 Optional.ofNullable(vote.getVoteType())
                         .ifPresent(findVote::setVoteType);
                 if (Objects.equals(Objects.requireNonNull(vote.getVoteType()), "Like")){
@@ -86,7 +86,6 @@ public class VoteService {
             voteUser.setVote(findVote);
             findVote.getVoteUsers().add(voteUser);
             user.getVoteUsers().add(voteUser);
-            userRepository.save(user);
             Optional.ofNullable(vote.getVoteType())
                     .ifPresent(findVote::setVoteType);
             if (Objects.equals(Objects.requireNonNull(vote.getVoteType()), "Like")){
