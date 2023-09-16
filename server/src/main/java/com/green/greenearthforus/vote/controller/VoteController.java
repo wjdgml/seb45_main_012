@@ -14,6 +14,7 @@ import com.green.greenearthforus.vote.repository.VoteRepository;
 import com.green.greenearthforus.vote.service.VoteService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -61,7 +62,6 @@ public class VoteController {
                                     @Validated @RequestBody VoteDto.Patch patch){
         postService.getPost(postId);   //post가 유효한지 확인하는 로직
 
-
         //이전에 좋아요를 투표했는지 확인 후 좋아요가 중복이면 count를 하나 빼는 로직.
         long count = voteService.findVoteCount(voteId).getVoteCount();
         VoteDto.Response response;
@@ -103,7 +103,8 @@ public class VoteController {
 
 
 //     유저가 이미 좋아요를 눌렀는지 확인하는 로직
-    private Boolean verifiedVoteUserId(long userId, long voteId){
+    @Transactional
+    public Boolean verifiedVoteUserId(long userId, long voteId){
         User user =  userService.getUser(userId);
         Vote vote = voteService.findVerifiedVote(voteId);
         if(user.getVoteUsers() == null || vote.getVoteUsers() == null){ return false;}
@@ -115,8 +116,6 @@ public class VoteController {
         if(!(findVoteUser.isEmpty())) {
             user.getVoteUsers().removeAll(findVoteUser);
             vote.getVoteUsers().removeAll(findVoteUser);
-            userRepository.save(user);
-            voteRepository.save(vote);
             return true;}
 
         return false;
