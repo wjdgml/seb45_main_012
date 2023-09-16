@@ -60,8 +60,7 @@ public class User {
     @OneToMany
     private List<Vote> votes;
 
-    @OneToOne
-    @JoinColumn(name = "calendar_id")
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private Calendar calendar;
 
 
