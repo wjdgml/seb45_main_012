@@ -60,7 +60,7 @@ public class User {
     @OneToMany
     private List<Vote> votes;
 
-    @OneToOne
+    @OneToOne(mappedBy = "post", cascade = CascadeType.ALL)
     private Calendar calendar;
 
 
