@@ -7,6 +7,7 @@ import com.green.greenearthforus.user.entity.User;
 import com.green.greenearthforus.user.service.UserService;
 import com.green.greenearthforus.vote.dto.VoteDto;
 import com.green.greenearthforus.vote.entity.Vote;
+import com.green.greenearthforus.vote.entity.VoteUser;
 import com.green.greenearthforus.vote.mapper.VoteMapper;
 import com.green.greenearthforus.vote.service.VoteService;
 import org.springframework.http.HttpStatus;
@@ -92,12 +93,12 @@ public class VoteController {
 //     유저가 이미 좋아요를 눌렀는지 확인하는 로직
     private Boolean verifiedVoteUserId(long userId, long voteId){
         User user =  userService.getUser(userId);
-        if(user.getVotes() == null) return false;
-        List<Vote> voteUserList = user.getVotes();
+        if(user.getVoteUsers() == null) return false;
+        List<VoteUser> voteUserList = user.getVoteUsers();
 
-        for(Vote vote : voteUserList){
-            if(vote.getVoteId() == voteId){
-                user.getVotes().remove(vote);
+        for(VoteUser vote : voteUserList){
+            if(vote.getVote().getVoteId() == voteId){
+                user.getVoteUsers().remove(vote);
                 return true;
             }
         }

@@ -46,7 +46,7 @@ public class VoteService {
 
     public Vote updateVote(Vote vote, long userId, long postId){
         Vote findVote = findVerifiedVote(vote.getVoteId());
-        findVote.setUser(userService.getUser(userId));
+        findVote.setVoteUsers((userService.getUser(userId)).getVoteUsers());
         long count = findVote.getVoteCount();
         Optional.ofNullable(vote.getVoteType())
                 .ifPresent(findVote::setVoteType);
