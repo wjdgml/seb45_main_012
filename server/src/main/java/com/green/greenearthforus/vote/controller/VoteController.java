@@ -50,8 +50,7 @@ public class VoteController {
 
         //이전에 좋아요를 투표했는지 확인 후 좋아요가 중복이면 count를 하나 빼는 로직.
         long count = voteService.findVoteCount(voteId).getVoteCount();
-        String type = verifiedVoteUserId(userId, voteId);
-        if(type.equals("Like")) voteService.findVoteCount(voteId).setVoteCount(count-1);
+        if(verifiedVoteUserId(userId, voteId)) voteService.findVoteCount(voteId).setVoteCount(count-1);
 
         patch.addVoteId(voteId);
         Vote updateVote = voteService.updateVote(mapper.votePatchDToToVote(patch));
@@ -86,16 +85,16 @@ public class VoteController {
 
 
 //     유저가 이미 좋아요를 눌렀는지 확인하는 로직
-    private String verifiedVoteUserId(long userId, long voteId){
+    private Boolean verifiedVoteUserId(long userId, long voteId){
         User user =  userService.getUser(userId);
         List<Vote> voteUserList = user.getVotes();
-        String voteType = "";
+
         for(Vote vote : voteUserList){
             if(vote.getVoteId() == voteId){
-                voteType = vote.getVoteType();
+                return true;
             }
         }
-        return voteType;
+        return false;
     }
 
 }
