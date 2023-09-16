@@ -2,9 +2,11 @@ package com.green.greenearthforus.vote.service;
 
 import com.green.greenearthforus.exception.BusinessLogicException;
 import com.green.greenearthforus.exception.ExceptionCode;
+import com.green.greenearthforus.post.dto.PostGetResponseDto;
 import com.green.greenearthforus.post.dto.PostResponseDto;
 import com.green.greenearthforus.post.entity.Post;
 import com.green.greenearthforus.post.mapper.PostMapper;
+import com.green.greenearthforus.post.repository.PostRepository;
 import com.green.greenearthforus.post.service.PostService;
 import com.green.greenearthforus.vote.dto.VoteDto;
 import com.green.greenearthforus.vote.entity.Vote;
@@ -19,26 +21,25 @@ import java.util.Optional;
 public class VoteService {
 
     private final VoteRepository voteRepository;
-    private final PostService postService;
-    private final PostMapper postMapper;
+    private final PostRepository postRepository;
     private final VoteMapper mapper;
 
     public VoteService(VoteRepository voteRepository,
-                       PostService postService,
-                       PostMapper postMapper,
+                       PostRepository postRepository,
                        VoteMapper mapper){
         this.voteRepository = voteRepository;
-        this.postService = postService;
-        this.postMapper = postMapper;
+        this.postRepository = postRepository;
         this.mapper = mapper;
     }
 
     public VoteDto.Response createVote(long postId){
-        PostResponseDto post = postService.getPost(postId);//post가 유효한지 확인하는 로직
-        Post findPost = postMapper.postResponseDtoToPost(post);
+        Post findPost = postRepository.findById(postId)
+                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.VOTE_NOT_FOUND));//post가 유효한지 확인하는 로직
+
         if(findPost.getVote() != null) throw new BusinessLogicException(ExceptionCode.VOTE_EXISTS);
+
         Vote vote = new Vote();
-        vote.setPost(postMapper.postResponseDtoToPost(post));
+        vote.setPost(findPost);
 
         return mapper.voteToVoteResponseDto(voteRepository.save(vote));
     }
