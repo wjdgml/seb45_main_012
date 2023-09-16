@@ -16,6 +16,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.ListIterator;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")
@@ -63,6 +64,7 @@ public class VoteController {
         Vote updateVote = voteService.updateVote(mapper.votePatchDToToVote(patch), userId, postId);
         response = mapper.voteToVoteResponseDto(updateVote);
         }
+        response.setUserId(userId);
         return ResponseEntity.ok(response);
     }
 
@@ -94,13 +96,16 @@ public class VoteController {
     private Boolean verifiedVoteUserId(long userId, long voteId){
         User user =  userService.getUser(userId);
         Vote vote = voteService.findVerifiedVote(voteId);
-        if(user.getVoteUsers() == null) return false;
-        List<VoteUser> voteUserList = user.getVoteUsers();
+        if(user.getVoteUsers() == null || vote.getVoteUsers() == null){ return false;}
 
-        for(VoteUser voteUser : voteUserList){
-            if(voteUser.getVote().getVoteId() == voteId){
-                user.getVoteUsers().remove(voteUser);
-                vote.getVoteUsers().remove(voteUser);
+        List<VoteUser> voteUserList = user.getVoteUsers();
+        ListIterator<VoteUser> iterator = voteUserList.listIterator();
+
+        while (iterator.hasNext()) {
+            VoteUser voteUser = iterator.next();
+            if (voteUser.getVote().getVoteId() == voteId) {
+                iterator.remove(); // 컬렉션에서 해당 요소를 안전하게 제거
+                vote.getVoteUsers().remove(voteUser); // 다른 컬렉션에서도 제거
                 return true;
             }
         }
