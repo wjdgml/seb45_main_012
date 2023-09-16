@@ -56,28 +56,34 @@ public class VoteService {
     public VoteDto.Response updateVote(Vote vote, long userId){
         long count = findVoteCount(vote.getVoteId()).getVoteCount();
         VoteDto.Response response;
+        User user =  userService.getUser(userId);
+        Vote findVote = findVerifiedVote(vote.getVoteId());
+        List<VoteUser> findVoteUser =user.getVoteUsers().stream()
+                .filter(voteUser -> voteUser.getVote().getVoteId() == findVote.getVoteId())
+                .collect(Collectors.toList());
 
-        if(Boolean.TRUE.equals(verifiedVoteUserId(userId, vote.getVoteId()))){
-            Vote findVote = findVerifiedVote(vote.getVoteId());
+            if(!(findVoteUser.isEmpty())) {
+                user.getVoteUsers().removeAll(findVoteUser);
+                vote.getVoteUsers().removeAll(findVoteUser);
+                userRepository.save(user);
+                voteRepository.save(vote);
+
+
             findVote.setVoteCount(count-1);
-            voteRepository.save(findVote);
-            response = mapper.voteToVoteResponseDto(findVote);
-        }else {
-            Vote findVote = findVerifiedVote(vote.getVoteId());
-            User user = userService.getUser(userId);
+            }else {
             VoteUser voteUser = new VoteUser();
             voteUser.setUser(user);
             voteUser.setVote(findVote);
             findVote.getVoteUsers().add(voteUser);
-            userService.getUser(userId).getVoteUsers().add(voteUser);
+            user.getVoteUsers().add(voteUser);
             userRepository.save(user);
             Optional.ofNullable(vote.getVoteType())
                     .ifPresent(findVote::setVoteType);
             if (Objects.equals(Objects.requireNonNull(vote.getVoteType()), "Like")) findVote.setVoteCount(count + 1);
             // 주어진 요청에 좋아요에 변화가 있으면 voteCount를 변경하고 저장하는 로직
-            voteRepository.save(findVote);
-            response = mapper.voteToVoteResponseDto(findVote);
-        }
+            }
+        voteRepository.save(findVote);
+        response = mapper.voteToVoteResponseDto(findVote);
         return response;
 
     }
@@ -98,22 +104,11 @@ public class VoteService {
         return optionalVote.orElseThrow(() ->
                 new BusinessLogicException(ExceptionCode.VOTE_NOT_FOUND));
     }
-    @Transactional
+
     public Boolean verifiedVoteUserId(long userId, long voteId){
-        User user =  userService.getUser(userId);
-        Vote vote = findVerifiedVote(voteId);
-        if(user.getVoteUsers() == null || vote.getVoteUsers() == null){ return false;}
 
-        List<VoteUser> findVoteUser =user.getVoteUsers().stream()
-                .filter(voteUser -> voteUser.getVote().getVoteId() == voteId)
-                .collect(Collectors.toList());
 
-        if(!(findVoteUser.isEmpty())) {
-            user.getVoteUsers().removeAll(findVoteUser);
-            vote.getVoteUsers().removeAll(findVoteUser);
-            userRepository.save(user);
-            voteRepository.save(vote);
-            return true;}
+
 
         return false;
     }
