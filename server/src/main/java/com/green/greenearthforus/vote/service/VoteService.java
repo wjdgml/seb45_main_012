@@ -58,9 +58,11 @@ public class VoteService {
         VoteDto.Response response;
         User user =  userService.getUser(userId);
         Vote findVote = findVerifiedVote(vote.getVoteId());
-        List<VoteUser> findVoteUser =user.getVoteUsers().stream()
-                .filter(voteUser -> voteUser.getVote().getVoteId() == findVote.getVoteId())
-                .collect(Collectors.toList());
+        List<VoteUser> findVoteUser;
+        if(user.getVoteUsers() != null && findVote.getVoteUsers() != null) {
+            findVoteUser = user.getVoteUsers().stream()
+                    .filter(voteUser -> voteUser.getVote().getVoteId() == findVote.getVoteId())
+                    .collect(Collectors.toList());
 
             if(!(findVoteUser.isEmpty())) {
                 user.getVoteUsers().removeAll(findVoteUser);
@@ -68,8 +70,19 @@ public class VoteService {
                 userRepository.save(user);
                 voteRepository.save(vote);
 
-
             findVote.setVoteCount(count-1);
+            }else {
+                VoteUser voteUser = new VoteUser();
+                voteUser.setUser(user);
+                voteUser.setVote(findVote);
+                findVote.getVoteUsers().add(voteUser);
+                user.getVoteUsers().add(voteUser);
+                userRepository.save(user);
+                Optional.ofNullable(vote.getVoteType())
+                        .ifPresent(findVote::setVoteType);
+                if (Objects.equals(Objects.requireNonNull(vote.getVoteType()), "Like"))
+                    findVote.setVoteCount(count + 1);
+            }
             }else {
             VoteUser voteUser = new VoteUser();
             voteUser.setUser(user);
@@ -79,9 +92,9 @@ public class VoteService {
             userRepository.save(user);
             Optional.ofNullable(vote.getVoteType())
                     .ifPresent(findVote::setVoteType);
-            if (Objects.equals(Objects.requireNonNull(vote.getVoteType()), "Like")) findVote.setVoteCount(count + 1);
-
-            }
+            if (Objects.equals(Objects.requireNonNull(vote.getVoteType()), "Like"))
+                findVote.setVoteCount(count + 1);
+        }
 
         response = mapper.voteToVoteResponseDto(voteRepository.save(findVote));
         return response;
