@@ -80,10 +80,10 @@ public class VoteService {
             Optional.ofNullable(vote.getVoteType())
                     .ifPresent(findVote::setVoteType);
             if (Objects.equals(Objects.requireNonNull(vote.getVoteType()), "Like")) findVote.setVoteCount(count + 1);
-            // 주어진 요청에 좋아요에 변화가 있으면 voteCount를 변경하고 저장하는 로직
+
             }
-        voteRepository.save(findVote);
-        response = mapper.voteToVoteResponseDto(findVote);
+
+        response = mapper.voteToVoteResponseDto(voteRepository.save(findVote));
         return response;
 
     }
