@@ -32,21 +32,16 @@ public class VoteController {
     private final UserService userService;
     private final PostService postService;
 
-    private final UserRepository userRepository;
-    private final VoteRepository voteRepository;
 
     public VoteController(VoteService voteService,
                           VoteMapper mapper,
                           PostService postService,
-                          UserService userService,
-                          UserRepository userRepository,
-                          VoteRepository voteRepository){
+                          UserService userService
+                          ){
         this.voteService = voteService;
         this.mapper = mapper;
         this.postService = postService;
         this.userService = userService;
-        this.userRepository = userRepository;
-        this.voteRepository = voteRepository;
     }
 
     @PostMapping("/{post_id}")
