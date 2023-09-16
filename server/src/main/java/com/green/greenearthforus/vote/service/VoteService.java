@@ -76,4 +76,5 @@ public class VoteService {
         return optionalVote.orElseThrow(() ->
                 new BusinessLogicException(ExceptionCode.VOTE_NOT_FOUND));
     }
+
 }

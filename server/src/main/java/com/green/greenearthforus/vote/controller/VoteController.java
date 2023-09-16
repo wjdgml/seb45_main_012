@@ -4,11 +4,13 @@ import com.green.greenearthforus.exception.BusinessLogicException;
 import com.green.greenearthforus.exception.ExceptionCode;
 import com.green.greenearthforus.post.service.PostService;
 import com.green.greenearthforus.user.entity.User;
+import com.green.greenearthforus.user.repository.UserRepository;
 import com.green.greenearthforus.user.service.UserService;
 import com.green.greenearthforus.vote.dto.VoteDto;
 import com.green.greenearthforus.vote.entity.Vote;
 import com.green.greenearthforus.vote.entity.VoteUser;
 import com.green.greenearthforus.vote.mapper.VoteMapper;
+import com.green.greenearthforus.vote.repository.VoteRepository;
 import com.green.greenearthforus.vote.service.VoteService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,14 +31,21 @@ public class VoteController {
     private final UserService userService;
     private final PostService postService;
 
+    private final UserRepository userRepository;
+    private final VoteRepository voteRepository;
+
     public VoteController(VoteService voteService,
                           VoteMapper mapper,
                           PostService postService,
-                          UserService userService){
+                          UserService userService,
+                          UserRepository userRepository,
+                          VoteRepository voteRepository){
         this.voteService = voteService;
         this.mapper = mapper;
         this.postService = postService;
         this.userService = userService;
+        this.userRepository = userRepository;
+        this.voteRepository = voteRepository;
     }
 
     @PostMapping("/{post_id}")
@@ -106,6 +115,8 @@ public class VoteController {
         if(!(findVoteUser.isEmpty())) {
             user.getVoteUsers().removeAll(findVoteUser);
             vote.getVoteUsers().removeAll(findVoteUser);
+            userRepository.save(user);
+            voteRepository.save(vote);
             return true;}
 
         return false;
