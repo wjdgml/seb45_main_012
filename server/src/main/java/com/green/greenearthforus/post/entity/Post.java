@@ -47,7 +47,6 @@ public class Post {
     private Vote vote;
 
     @ManyToOne
-    @JoinColumn(name = "calendar_id")
     private Calendar calendar;
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)

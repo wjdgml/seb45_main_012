@@ -32,7 +32,7 @@ public class Calendar {
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private User user;
 
-    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
+    @OneToMany
     private List<Post> post;
 
 
