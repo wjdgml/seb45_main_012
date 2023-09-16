@@ -2,6 +2,7 @@ package com.green.greenearthforus.vote.controller;
 
 import com.green.greenearthforus.post.service.PostService;
 import com.green.greenearthforus.user.entity.User;
+import com.green.greenearthforus.user.repository.UserRepository;
 import com.green.greenearthforus.user.service.UserService;
 import com.green.greenearthforus.vote.dto.VoteDto;
 import com.green.greenearthforus.vote.entity.Vote;
@@ -29,18 +30,21 @@ public class VoteController {
     private final UserService userService;
     private final PostService postService;
     private final VoteRepository voteRepository;
+    private final UserRepository userRepository;
 
 
     public VoteController(VoteService voteService,
                           VoteMapper mapper,
                           PostService postService,
                           UserService userService,
-                          VoteRepository repository){
+                          VoteRepository repository,
+                          UserRepository userRepository){
         this.voteService = voteService;
         this.mapper = mapper;
         this.postService = postService;
         this.userService = userService;
         this.voteRepository = repository;
+        this.userRepository = userRepository;
     }
 
     @PostMapping("/{post_id}")
@@ -67,7 +71,7 @@ public class VoteController {
         response = mapper.voteToVoteResponseDto(findVote);
         }else{
         patch.addVoteId(voteId);
-        Vote updateVote = voteService.updateVote(mapper.votePatchDToToVote(patch), userId, postId);
+        Vote updateVote = voteService.updateVote(mapper.votePatchDToToVote(patch), userId);
         response = mapper.voteToVoteResponseDto(updateVote);
         }
         response.setUserId(userId);
@@ -112,6 +116,8 @@ public class VoteController {
         if(!(findVoteUser.isEmpty())) {
             user.getVoteUsers().removeAll(findVoteUser);
             vote.getVoteUsers().removeAll(findVoteUser);
+            userRepository.save(user);
+            voteRepository.save(vote);
             return true;}
 
         return false;

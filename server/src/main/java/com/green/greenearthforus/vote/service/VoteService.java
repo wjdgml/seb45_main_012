@@ -45,7 +45,7 @@ public class VoteService {
         return mapper.voteToVoteResponseDto(voteRepository.save(vote));
     }
 
-    public Vote updateVote(Vote vote, long userId, long postId){
+    public Vote updateVote(Vote vote, long userId){
         Vote findVote = findVerifiedVote(vote.getVoteId());
         VoteUser voteUser = new VoteUser();
         voteUser.setUser(userService.getUser(userId));
