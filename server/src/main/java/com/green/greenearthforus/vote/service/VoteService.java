@@ -13,6 +13,7 @@ import com.green.greenearthforus.vote.entity.VoteUser;
 import com.green.greenearthforus.vote.mapper.VoteMapper;
 import com.green.greenearthforus.vote.repository.VoteRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Objects;
@@ -55,6 +56,7 @@ public class VoteService {
     public VoteDto.Response updateVote(Vote vote, long userId){
         long count = findVoteCount(vote.getVoteId()).getVoteCount();
         VoteDto.Response response;
+
         if(Boolean.TRUE.equals(verifiedVoteUserId(userId, vote.getVoteId()))){
             Vote findVote = findVerifiedVote(vote.getVoteId());
             findVote.setVoteCount(count-1);
@@ -96,7 +98,7 @@ public class VoteService {
         return optionalVote.orElseThrow(() ->
                 new BusinessLogicException(ExceptionCode.VOTE_NOT_FOUND));
     }
-
+    @Transactional
     public Boolean verifiedVoteUserId(long userId, long voteId){
         User user =  userService.getUser(userId);
         Vote vote = findVerifiedVote(voteId);
