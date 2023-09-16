@@ -56,7 +56,7 @@ public class VoteController {
         //이전에 좋아요를 투표했는지 확인 후 좋아요가 중복이면 count를 하나 빼는 로직.
         long count = voteService.findVoteCount(voteId).getVoteCount();
         VoteDto.Response response;
-        if(verifiedVoteUserId(userId, voteId)){
+        if(Boolean.TRUE.equals(verifiedVoteUserId(userId, voteId))){
         Vote findVote = voteService.findVerifiedVote(voteId);
         findVote.setVoteCount(count-1);
         response = mapper.voteToVoteResponseDto(findVote);
@@ -98,24 +98,11 @@ public class VoteController {
         User user =  userService.getUser(userId);
         Vote vote = voteService.findVerifiedVote(voteId);
         if(user.getVoteUsers() == null || vote.getVoteUsers() == null){ return false;}
-        List<VoteUser> userList = user.getVoteUsers();
-        List<VoteUser> voteList = vote.getVoteUsers();
-        VoteUser lock;
-        for(VoteUser find : userList){
-            for(VoteUser check : voteList){
-                if(find.equals(check)) {
-                    lock = find;
-                    userList.remove(lock);
-                    voteList.remove(lock);
-                    return true;
-                }
-            }
-        }
-//
-//        List<VoteUser> findVoteUser =user.getVoteUsers().stream()
-//                .filter(voteUser -> voteUser.getVote().getVoteId() == voteId)
-//                .collect(Collectors.toList());
-//        if(!(findVoteUser.isEmpty())) return true;
+
+        List<VoteUser> findVoteUser =user.getVoteUsers().stream()
+                .filter(voteUser -> voteUser.getVote().getVoteId() == voteId)
+                .collect(Collectors.toList());
+        if(!(findVoteUser.isEmpty())) return true;
 
         return false;
     }

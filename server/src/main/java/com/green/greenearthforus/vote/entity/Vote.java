@@ -26,7 +26,7 @@ public class Vote {
     @JoinColumn(name = "post_id")
     private Post post;
 
-    @OneToMany(mappedBy = "vote")
+    @OneToMany(mappedBy = "vote", cascade = CascadeType.ALL)
     private List<VoteUser> voteUsers;
 
 }
