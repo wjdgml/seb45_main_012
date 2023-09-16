@@ -94,6 +94,7 @@ public class VoteController {
 
         for(Vote vote : voteUserList){
             if(vote.getVoteId() == voteId){
+                user.getVotes().remove(vote);
                 return true;
             }
         }
