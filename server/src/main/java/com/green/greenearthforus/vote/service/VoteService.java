@@ -85,7 +85,6 @@ public class VoteService {
 
         response = mapper.voteToVoteResponseDto(voteRepository.save(findVote));
         return response;
-
     }
 
     public Vote findVoteCount(long voteId){
@@ -103,14 +102,6 @@ public class VoteService {
                 voteRepository.findById(voteId);
         return optionalVote.orElseThrow(() ->
                 new BusinessLogicException(ExceptionCode.VOTE_NOT_FOUND));
-    }
-
-    public Boolean verifiedVoteUserId(long userId, long voteId){
-
-
-
-
-        return false;
     }
 
 }
