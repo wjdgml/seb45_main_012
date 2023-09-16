@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.ListIterator;
+import java.util.stream.Collectors;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")
@@ -98,17 +99,11 @@ public class VoteController {
         Vote vote = voteService.findVerifiedVote(voteId);
         if(user.getVoteUsers() == null || vote.getVoteUsers() == null){ return false;}
 
-        List<VoteUser> voteUserList = user.getVoteUsers();
-        ListIterator<VoteUser> iterator = voteUserList.listIterator();
+        List<VoteUser> findVoteUser =user.getVoteUsers().stream()
+                .filter(voteUser -> voteUser.getVote().getVoteId() == voteId)
+                .collect(Collectors.toList());
+        if(!findVoteUser.isEmpty()) return true;
 
-        while (iterator.hasNext()) {
-            VoteUser voteUser = iterator.next();
-            if (voteUser.getVote().getVoteId() == voteId) {
-                iterator.remove(); // 컬렉션에서 해당 요소를 안전하게 제거
-                vote.getVoteUsers().remove(voteUser); // 다른 컬렉션에서도 제거
-                return true;
-            }
-        }
         return false;
     }
 
