@@ -43,12 +43,13 @@ public class Post {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToOne(mappedBy = "post", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     private Vote vote;
 
     @ManyToOne
+    @JoinColumn(name = "calendar_id")
     private Calendar calendar;
 
-    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> comments;
 }

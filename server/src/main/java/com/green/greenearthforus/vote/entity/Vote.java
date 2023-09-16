@@ -26,6 +26,7 @@ public class Vote {
     private Post post;
 
     @ManyToOne
+    @JoinColumn(name = "user_id")
     private User user;
 
 }
