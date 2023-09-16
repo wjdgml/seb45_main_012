@@ -98,11 +98,24 @@ public class VoteController {
         User user =  userService.getUser(userId);
         Vote vote = voteService.findVerifiedVote(voteId);
         if(user.getVoteUsers() == null || vote.getVoteUsers() == null){ return false;}
-
-        List<VoteUser> findVoteUser =user.getVoteUsers().stream()
-                .filter(voteUser -> voteUser.getVote().getVoteId() == voteId)
-                .collect(Collectors.toList());
-        if(!findVoteUser.isEmpty()) return true;
+        List<VoteUser> userList = user.getVoteUsers();
+        List<VoteUser> voteList = vote.getVoteUsers();
+        VoteUser lock;
+        for(VoteUser find : userList){
+            for(VoteUser check : voteList){
+                if(find.equals(check)) {
+                    lock = find;
+                    userList.remove(lock);
+                    voteList.remove(lock);
+                    return true;
+                }
+            }
+        }
+//
+//        List<VoteUser> findVoteUser =user.getVoteUsers().stream()
+//                .filter(voteUser -> voteUser.getVote().getVoteId() == voteId)
+//                .collect(Collectors.toList());
+//        if(!(findVoteUser.isEmpty())) return true;
 
         return false;
     }
