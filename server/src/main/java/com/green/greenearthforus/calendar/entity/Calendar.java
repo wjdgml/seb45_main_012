@@ -29,7 +29,7 @@ public class Calendar {
     @ElementCollection
     private List<LocalDate> stampedDates;
 
-    @OneToOne(mappedBy = "post", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private User user;
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
