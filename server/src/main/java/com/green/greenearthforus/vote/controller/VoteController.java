@@ -1,5 +1,7 @@
 package com.green.greenearthforus.vote.controller;
 
+import com.green.greenearthforus.exception.BusinessLogicException;
+import com.green.greenearthforus.exception.ExceptionCode;
 import com.green.greenearthforus.post.service.PostService;
 import com.green.greenearthforus.user.entity.User;
 import com.green.greenearthforus.user.service.UserService;
@@ -90,6 +92,7 @@ public class VoteController {
 //     유저가 이미 좋아요를 눌렀는지 확인하는 로직
     private Boolean verifiedVoteUserId(long userId, long voteId){
         User user =  userService.getUser(userId);
+        if(user.getVotes() == null) throw new BusinessLogicException(ExceptionCode.VOTE_NOT_FOUND);
         List<Vote> voteUserList = user.getVotes();
 
         for(Vote vote : voteUserList){
