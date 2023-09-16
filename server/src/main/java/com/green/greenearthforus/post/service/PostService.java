@@ -73,7 +73,9 @@ public class PostService {
         Post post = postsRepository.findById(postId).orElseThrow(() -> new EntityNotFoundException("Post not found" + postId));
 
         PostGetResponseDto responseDto = mapper.postToPostGetResponseDto(post);
-        responseDto.setVoteId(post.getVote().getVoteId());
+        if(post.getVote()!=null){
+        responseDto.setVoteId(post.getVote().getVoteId());}
+
         responseDto.setUserId(post.getUser().getUserId());
         return responseDto;
     }
