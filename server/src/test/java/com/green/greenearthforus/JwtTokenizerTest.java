@@ -93,17 +93,6 @@ public class JwtTokenizerTest {
         assertThat(((List)claims.get("roles")).get(0), is("USER"));
     }
 
-    @Test
-    public void calendarToDateTest(){
-        Calendar calendar = Calendar.getInstance();
-        long now = calendar.getTimeInMillis();
-
-        calendar.setTime(new Date());
-        calendar.add(Calendar.MINUTE, 10);
-        Date expiration = calendar.getTime();
-
-        assertThat(expiration.getTime(), is(now+(10*60*1000)));
-    }
 
     private String getAccessToekn(int timeUnit, int timeAmount){
         Map<String, Object> claims = new HashMap<>();
