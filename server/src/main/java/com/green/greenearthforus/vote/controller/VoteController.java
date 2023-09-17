@@ -53,7 +53,7 @@ public class VoteController {
         return new ResponseEntity<>(voteService.createVote(postId), HttpStatus.CREATED);
     }
 
-    @Transactional
+
     @PatchMapping("/{post_id}/{user_id}/{vote_id}")
     public ResponseEntity<VoteDto.Response> patchVote(@PathVariable("post_id") long postId,
                                     @PathVariable("user_id") long userId,

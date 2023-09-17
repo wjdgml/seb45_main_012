@@ -60,6 +60,7 @@ public class VoteService {
         Vote findVote = findVerifiedVote(vote.getVoteId());
         long count = findVote.getVoteCount();
         List<VoteUser> findVoteUser;
+
         if(user.getVoteUsers() != null && findVote.getVoteUsers() != null) {
             findVoteUser = user.getVoteUsers().stream()
                     .filter(voteUser -> voteUser.getVote().getVoteId() == findVote.getVoteId())

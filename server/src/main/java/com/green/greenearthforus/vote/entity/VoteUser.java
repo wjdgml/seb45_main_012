@@ -23,4 +23,7 @@ public class VoteUser {
     @JoinColumn(name = "vote_id")
     private Vote vote;
 
+    @Column
+    private boolean like;
+
 }
