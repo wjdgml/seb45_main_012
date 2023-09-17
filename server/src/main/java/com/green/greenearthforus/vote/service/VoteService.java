@@ -33,7 +33,7 @@ public class VoteService {
                        PostRepository postRepository,
                        VoteMapper mapper,
                        UserRepository userRepository,
-                       UserService userService){
+                       UserService userService) {
         this.voteRepository = voteRepository;
         this.postRepository = postRepository;
         this.mapper = mapper;
@@ -41,11 +41,11 @@ public class VoteService {
         this.userRepository = userRepository;
     }
 
-    public VoteDto.Response createVote(long postId){
+    public VoteDto.Response createVote(long postId) {
         Post findPost = postRepository.findById(postId)
                 .orElseThrow(() -> new BusinessLogicException(ExceptionCode.VOTE_NOT_FOUND));//post가 유효한지 확인하는 로직
 
-        if(findPost.getVote() != null) throw new BusinessLogicException(ExceptionCode.VOTE_EXISTS);
+        if (findPost.getVote() != null) throw new BusinessLogicException(ExceptionCode.VOTE_EXISTS);
 
         Vote vote = new Vote();
         vote.setPost(findPost);
@@ -53,46 +53,35 @@ public class VoteService {
         return mapper.voteToVoteResponseDto(voteRepository.save(vote));
     }
 
-    public VoteDto.Response updateVote(Vote vote, long userId){
+    public VoteDto.Response updateVote(Vote vote, long userId) {
 
         VoteDto.Response response;
-        User user =  userService.getUser(userId);
+        User user = userService.getUser(userId);
         Vote findVote = findVerifiedVote(vote.getVoteId());
         long count = findVote.getVoteCount();
         VoteUser findVoteUser;
 
-        if(user.getVoteUsers() != null && findVote.getVoteUsers() != null) {
+        if (user.getVoteUsers() != null && findVote.getVoteUsers() != null) {
             findVoteUser = user.getVoteUsers().stream()
                     .filter(voteUser -> voteUser.getVote().getVoteId() == findVote.getVoteId())
-                    .findFirst().orElseThrow(()-> new BusinessLogicException(ExceptionCode.VOTE_NOT_FOUND));
-
-            if(findVoteUser.isLike()) {
+                    .findFirst().orElseThrow(() -> new BusinessLogicException(ExceptionCode.VOTE_NOT_FOUND));
+            if (findVoteUser.isLike()) {
                 findVoteUser.setLike(false);
-                findVote.setVoteCount(count-1);
-            }else {
-                VoteUser voteUser = new VoteUser();
-                voteUser.setUser(user);
-                voteUser.setVote(findVote);
-                voteUser.setLike(true);
-                findVote.getVoteUsers().add(voteUser);
-                user.getVoteUsers().add(voteUser);
-                Optional.ofNullable(vote.getVoteType())
-                        .ifPresent(findVote::setVoteType);
-                if (Objects.equals(Objects.requireNonNull(vote.getVoteType()), "Like")){
-                    findVote.setVoteCount(count + 1);}
+                findVote.setVoteCount(count - 1);
+            } else {
+                findVoteUser.setLike(true);
+                findVote.setVoteCount(count + 1);
             }
-            }else {
+        } else {
             VoteUser voteUser = new VoteUser();
             voteUser.setUser(user);
             voteUser.setVote(findVote);
             voteUser.setLike(true);
             findVote.getVoteUsers().add(voteUser);
             user.getVoteUsers().add(voteUser);
-            Optional.ofNullable(vote.getVoteType())
-                    .ifPresent(findVote::setVoteType);
-            if (Objects.equals(Objects.requireNonNull(vote.getVoteType()), "Like")){
-                findVote.setVoteCount(count + 1);}
+            findVote.setVoteCount(count + 1);
         }
+
         userRepository.save(user);
         response = mapper.voteToVoteResponseDto(voteRepository.save(findVote));
         return response;
