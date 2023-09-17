@@ -67,6 +67,8 @@ public class VoteService {
                     .findFirst().orElseThrow(() -> new BusinessLogicException(ExceptionCode.VOTE_NOT_FOUND));
             if (findVoteUser.getIsLike()==null) {
                 findVoteUser.setIsLike(true);
+                findVote.getVoteUsers().add(findVoteUser);
+                user.getVoteUsers().add(findVoteUser);
                 findVote.setVoteCount(count + 1);
             } else {
                 findVoteUser.setIsLike(false);
