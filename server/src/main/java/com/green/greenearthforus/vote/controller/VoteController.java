@@ -61,7 +61,7 @@ public class VoteController {
                                     @Validated @RequestBody VoteDto.Patch patch){
         postService.getPost(postId);   //post가 유효한지 확인하는 로직
         patch.addVoteId(voteId);
-        VoteDto.Response response = voteService.updateVote(mapper.votePatchDToToVote(patch), userId);
+        VoteDto.Response response = voteService.updateVote(mapper.votePatchDToToVote(patch), userId, voteId);
         response.setUserId(userId);
         return ResponseEntity.ok(response);
     }

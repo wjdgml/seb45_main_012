@@ -53,11 +53,11 @@ public class VoteService {
         return mapper.voteToVoteResponseDto(voteRepository.save(vote));
     }
 
-    public VoteDto.Response updateVote(Vote vote, long userId) {
+    public VoteDto.Response updateVote(Vote vote, long userId, long voteId) {
 
         VoteDto.Response response;
         User user = userService.getUser(userId);
-        Vote findVote = findVerifiedVote(vote.getVoteId());
+        Vote findVote = findVerifiedVote(voteId);
         long count = findVote.getVoteCount();
         VoteUser findVoteUser;
 
