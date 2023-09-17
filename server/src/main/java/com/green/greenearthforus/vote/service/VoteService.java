@@ -53,7 +53,7 @@ public class VoteService {
         return mapper.voteToVoteResponseDto(voteRepository.save(vote));
     }
 
-    public VoteDto.Response updateVote(Vote vote, long userId, long voteId) {
+    public VoteDto.Response updateVote(long userId, long voteId) {
 
         VoteDto.Response response;
         User user = userService.getUser(userId);

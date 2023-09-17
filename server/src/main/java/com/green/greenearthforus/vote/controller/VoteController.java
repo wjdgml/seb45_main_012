@@ -57,11 +57,11 @@ public class VoteController {
     @PatchMapping("/{post_id}/{user_id}/{vote_id}")
     public ResponseEntity<VoteDto.Response> patchVote(@PathVariable("post_id") long postId,
                                     @PathVariable("user_id") long userId,
-                                    @PathVariable("vote_id") long voteId,
-                                    @Validated @RequestBody VoteDto.Patch patch){
+                                    @PathVariable("vote_id") long voteId
+                                    ){
         postService.getPost(postId);   //post가 유효한지 확인하는 로직
-        patch.addVoteId(voteId);
-        VoteDto.Response response = voteService.updateVote(mapper.votePatchDToToVote(patch), userId, voteId);
+
+        VoteDto.Response response = voteService.updateVote(userId, voteId);
         response.setUserId(userId);
         return ResponseEntity.ok(response);
     }
