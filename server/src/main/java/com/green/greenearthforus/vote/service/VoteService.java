@@ -65,12 +65,12 @@ public class VoteService {
             findVoteUser = user.getVoteUsers().stream()
                     .filter(voteUser -> voteUser.getVote().getVoteId() == findVote.getVoteId())
                     .findFirst().orElseThrow(() -> new BusinessLogicException(ExceptionCode.VOTE_NOT_FOUND));
-            if (findVoteUser.getIsLike()) {
-                findVoteUser.setIsLike(false);
-                findVote.setVoteCount(count - 1);
-            } else {
+            if (findVoteUser.getIsLike()==null) {
                 findVoteUser.setIsLike(true);
                 findVote.setVoteCount(count + 1);
+            } else {
+                findVoteUser.setIsLike(false);
+                findVote.setVoteCount(count - 1);
             }
         } else {
             VoteUser voteUser = new VoteUser();
@@ -81,7 +81,6 @@ public class VoteService {
             user.getVoteUsers().add(voteUser);
             findVote.setVoteCount(count + 1);
         }
-
         userRepository.save(user);
         response = mapper.voteToVoteResponseDto(voteRepository.save(findVote));
         return response;
