@@ -59,20 +59,22 @@ public class VoteService {
         User user = userService.getUser(userId);
         Vote findVote = findVerifiedVote(voteId);
         long count = findVote.getVoteCount();
-        VoteUser findVoteUser;
+        Optional<VoteUser> findVoteUser;
 
         if (user.getVoteUsers() != null && findVote.getVoteUsers() != null) {
             findVoteUser = user.getVoteUsers().stream()
                     .filter(voteUser -> voteUser.getVote().getVoteId() == findVote.getVoteId())
-                    .findFirst().orElseThrow(() -> new BusinessLogicException(ExceptionCode.VOTE_NOT_FOUND));
-            if (findVoteUser.getIsLike()==null  || !(findVoteUser.getIsLike())) {
-                findVoteUser.setIsLike(true);
-                findVote.getVoteUsers().add(findVoteUser);
-                user.getVoteUsers().add(findVoteUser);
-                findVote.setVoteCount(count + 1);
-            } else {
-                findVoteUser.setIsLike(false);
-                findVote.setVoteCount(count - 1);
+                    .findFirst();
+            if(findVoteUser.isPresent()) {
+                if (findVoteUser.get().getIsLike() == null || !(findVoteUser.get().getIsLike())) {
+                    findVoteUser.get().setIsLike(true);
+                    findVote.getVoteUsers().add(findVoteUser.get());
+                    user.getVoteUsers().add(findVoteUser.get());
+                    findVote.setVoteCount(count + 1);
+                } else {
+                    findVoteUser.get().setIsLike(false);
+                    findVote.setVoteCount(count - 1);
+                }
             }
         } else {
             VoteUser voteUser = new VoteUser();
