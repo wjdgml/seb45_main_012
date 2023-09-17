@@ -65,7 +65,7 @@ public class VoteService {
             findVoteUser = user.getVoteUsers().stream()
                     .filter(voteUser -> voteUser.getVote().getVoteId() == findVote.getVoteId())
                     .findFirst();
-            if(findVoteUser.isPresent()) {
+
                 if (findVoteUser.get().getIsLike() == null || !(findVoteUser.get().getIsLike())) {
                     findVoteUser.get().setIsLike(true);
                     findVote.getVoteUsers().add(findVoteUser.get());
@@ -77,7 +77,7 @@ public class VoteService {
                     user.getVoteUsers().add(findVoteUser.get());
                     findVote.setVoteCount(count - 1);
                 }
-            }
+
         } else {
             VoteUser voteUser = new VoteUser();
             voteUser.setUser(user);
