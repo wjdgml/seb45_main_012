@@ -65,7 +65,7 @@ public class VoteService {
             findVoteUser = user.getVoteUsers().stream()
                     .filter(voteUser -> voteUser.getVote().getVoteId() == findVote.getVoteId())
                     .findFirst().orElseThrow(() -> new BusinessLogicException(ExceptionCode.VOTE_NOT_FOUND));
-            if (findVoteUser.getIsLike()==null) {
+            if (findVoteUser.getIsLike()==null  || !(findVoteUser.getIsLike())) {
                 findVoteUser.setIsLike(true);
                 findVote.getVoteUsers().add(findVoteUser);
                 user.getVoteUsers().add(findVoteUser);
