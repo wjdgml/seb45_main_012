@@ -59,21 +59,21 @@ public class VoteService {
         User user =  userService.getUser(userId);
         Vote findVote = findVerifiedVote(vote.getVoteId());
         long count = findVote.getVoteCount();
-        List<VoteUser> findVoteUser;
+        VoteUser findVoteUser;
 
         if(user.getVoteUsers() != null && findVote.getVoteUsers() != null) {
             findVoteUser = user.getVoteUsers().stream()
                     .filter(voteUser -> voteUser.getVote().getVoteId() == findVote.getVoteId())
-                    .collect(Collectors.toList());
+                    .findFirst().orElseThrow(()-> new BusinessLogicException(ExceptionCode.VOTE_NOT_FOUND));
 
-            if(!(findVoteUser.isEmpty())) {
-                user.getVoteUsers().removeAll(findVoteUser);
-                findVote.getVoteUsers().removeAll(findVoteUser);
+            if(findVoteUser.isLike()) {
+                findVoteUser.setLike(false);
                 findVote.setVoteCount(count-1);
             }else {
                 VoteUser voteUser = new VoteUser();
                 voteUser.setUser(user);
                 voteUser.setVote(findVote);
+                voteUser.setLike(true);
                 findVote.getVoteUsers().add(voteUser);
                 user.getVoteUsers().add(voteUser);
                 Optional.ofNullable(vote.getVoteType())
@@ -85,6 +85,7 @@ public class VoteService {
             VoteUser voteUser = new VoteUser();
             voteUser.setUser(user);
             voteUser.setVote(findVote);
+            voteUser.setLike(true);
             findVote.getVoteUsers().add(voteUser);
             user.getVoteUsers().add(voteUser);
             Optional.ofNullable(vote.getVoteType())
