@@ -73,6 +73,8 @@ public class VoteService {
                     findVote.setVoteCount(count + 1);
                 } else {
                     findVoteUser.get().setIsLike(false);
+                    findVote.getVoteUsers().add(findVoteUser.get());
+                    user.getVoteUsers().add(findVoteUser.get());
                     findVote.setVoteCount(count - 1);
                 }
             }
