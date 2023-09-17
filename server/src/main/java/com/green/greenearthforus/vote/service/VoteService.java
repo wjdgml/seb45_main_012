@@ -65,18 +65,18 @@ public class VoteService {
             findVoteUser = user.getVoteUsers().stream()
                     .filter(voteUser -> voteUser.getVote().getVoteId() == findVote.getVoteId())
                     .findFirst().orElseThrow(() -> new BusinessLogicException(ExceptionCode.VOTE_NOT_FOUND));
-            if (findVoteUser.isLike()) {
-                findVoteUser.setLike(false);
+            if (findVoteUser.getIsLike()) {
+                findVoteUser.setIsLike(false);
                 findVote.setVoteCount(count - 1);
             } else {
-                findVoteUser.setLike(true);
+                findVoteUser.setIsLike(true);
                 findVote.setVoteCount(count + 1);
             }
         } else {
             VoteUser voteUser = new VoteUser();
             voteUser.setUser(user);
             voteUser.setVote(findVote);
-            voteUser.setLike(true);
+            voteUser.setIsLike(true);
             findVote.getVoteUsers().add(voteUser);
             user.getVoteUsers().add(voteUser);
             findVote.setVoteCount(count + 1);
