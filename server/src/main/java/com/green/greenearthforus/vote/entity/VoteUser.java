@@ -24,6 +24,6 @@ public class VoteUser {
     private Vote vote;
 
     @Column
-    private boolean like;
+    private boolean likes;
 
 }
