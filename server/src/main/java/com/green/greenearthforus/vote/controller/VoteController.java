@@ -89,6 +89,14 @@ public class VoteController {
         return ResponseEntity.noContent().build();
     }
 
+    @DeleteMapping("/all")
+    public ResponseEntity<Void> deleteAll(){
+
+        voteRepository.deleteAll();
+        return ResponseEntity.noContent().build();
+    }
+
+
 
 
 

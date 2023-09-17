@@ -99,4 +99,10 @@ public class PostController {
 
         return ResponseEntity.noContent().build();
     }
+
+    @DeleteMapping("/all")
+    public ResponseEntity<Void> deleteAll(){
+        postService.deleteAll();
+        return ResponseEntity.noContent().build();
+    }
 }

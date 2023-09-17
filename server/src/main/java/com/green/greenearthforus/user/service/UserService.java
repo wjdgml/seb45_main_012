@@ -87,6 +87,10 @@ public class UserService {
         userRepository.delete(existing);
     }
 
+    public void deleteAll(){
+        userRepository.deleteAll();
+    }
+
 
     public void updateGradePostCount(User user) {
 

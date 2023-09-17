@@ -164,6 +164,9 @@ public class PostService {
         postsRepository.delete(existingPost);
     }
 
+    public void deleteAll(){
+        postsRepository.deleteAll();
+    }
 
     private String imagesUpload(MultipartFile images){
         if(images != null) {
