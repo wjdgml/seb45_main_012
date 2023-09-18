@@ -70,7 +70,10 @@ public class PostService {
     @Transactional
     public PostResponseDto getPost(Long postId) {
         Post post = postsRepository.findById(postId).orElseThrow(() -> new EntityNotFoundException("Post not found" + postId));
+
         PostResponseDto responseDto = mapper.postToPostResponseDto(post);
+        if(post.getVote()!=null){
+        responseDto.setVoteId(post.getVote().getVoteId());}
 
         responseDto.setUserId(post.getUser().getUserId());
         return responseDto;
@@ -161,6 +164,9 @@ public class PostService {
         postsRepository.delete(existingPost);
     }
 
+    public void deleteAll(){
+        postsRepository.deleteAll();
+    }
 
     private String imagesUpload(MultipartFile images){
         if(images != null) {

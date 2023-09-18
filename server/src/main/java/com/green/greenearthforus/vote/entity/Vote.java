@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Getter
@@ -22,9 +23,10 @@ public class Vote {
     private String voteType;
 
     @OneToOne
+    @JoinColumn(name = "post_id")
     private Post post;
 
-    @ManyToOne
-    private User user;
+    @OneToMany(mappedBy = "vote", cascade = CascadeType.ALL)
+    private List<VoteUser> voteUsers;
 
 }

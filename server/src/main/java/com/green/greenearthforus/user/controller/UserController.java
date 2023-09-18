@@ -85,4 +85,10 @@ public class UserController { // 이미지 데이터를 바이너리 형태로 �
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    @DeleteMapping("/all")
+    public ResponseEntity<Void> deleteAll(){
+
+        userService.deleteAll();
+        return ResponseEntity.noContent().build();
+    }
 }

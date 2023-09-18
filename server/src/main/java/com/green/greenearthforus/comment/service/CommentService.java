@@ -111,6 +111,10 @@ public class CommentService {
         commentRepository.deleteById(commentId);
     }
 
+    public void deleteAll(){
+        commentRepository.deleteAll();
+    }
+
     private Comment verifyComment(Long commentId) {
         Optional<Comment> commentOptional = commentRepository.findById(commentId);
         return commentOptional.orElseThrow(() -> new BusinessLogicException(ExceptionCode.COMMENT_NOT_FOUND));
