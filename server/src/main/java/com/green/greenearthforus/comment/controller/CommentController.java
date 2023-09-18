@@ -61,4 +61,10 @@ public class CommentController {
 
         return ResponseEntity.noContent().build();
     }
+
+    @DeleteMapping("/all")
+    public ResponseEntity<Void> deleteAll(){
+        commentService.deleteAll();
+        return ResponseEntity.noContent().build();
+    }
 }

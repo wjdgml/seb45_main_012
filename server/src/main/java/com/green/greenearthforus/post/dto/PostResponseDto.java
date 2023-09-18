@@ -12,7 +12,7 @@ public class PostResponseDto {
     private Long postId;
 
     private Long userId;
-
+    private Long voteId;
     private String type;
 
     private String title;

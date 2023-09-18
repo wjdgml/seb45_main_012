@@ -47,4 +47,10 @@ public class CalendarController {
         return ResponseEntity.noContent().build();
     }
 
+    @DeleteMapping("/all")
+    public ResponseEntity<Void> deleteAll(){
+        calendarService.deleteAll();
+        return ResponseEntity.noContent().build();
+    }
+
 }

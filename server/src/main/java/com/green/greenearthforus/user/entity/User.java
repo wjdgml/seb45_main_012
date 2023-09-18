@@ -1,8 +1,10 @@
 package com.green.greenearthforus.user.entity;
 
 import com.green.greenearthforus.calendar.entity.Calendar;
+import com.green.greenearthforus.comment.entity.Comment;
 import com.green.greenearthforus.post.entity.Post; // javax.persistence.*(
 import com.green.greenearthforus.vote.entity.Vote;
+import com.green.greenearthforus.vote.entity.VoteUser;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -57,11 +59,14 @@ public class User {
     // 사용자를 삭제할 때 관련 게시물, 이미지도 자동적으로 삭제됨
     private List<Post> posts;
 
-    @OneToMany
-    private List<Vote> votes;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<VoteUser> voteUsers;
 
-    @OneToOne
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private Calendar calendar;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Comment> comment;
 
 
     public enum Role {

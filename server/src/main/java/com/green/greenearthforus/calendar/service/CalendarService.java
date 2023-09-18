@@ -65,6 +65,10 @@ public class CalendarService {
         calendarRepository.delete(findVerifiedCalendar(calendarId));
     }
 
+    public void deleteAll(){
+        calendarRepository.deleteAll();
+    }
+
     public Calendar findVerifiedCalendar(long calendarId) {
         Optional<Calendar> optionalCalendar =
                 calendarRepository.findById(calendarId);
